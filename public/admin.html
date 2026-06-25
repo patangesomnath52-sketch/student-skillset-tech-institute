@@ -1,235 +1,219 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel – Student Skillset</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    :root {
-      --sidebar-width: 260px;
-      --primary: #6c5ce7;
-      --secondary: #00cec9;
-      --bg: #0a0a1a;
-      --surface: rgba(255,255,255,0.05);
-      --border: rgba(255,255,255,0.1);
-      --radius: 16px;
-      --transition: 0.3s;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Poppins',sans-serif; background:var(--bg); color:#fff; display:flex; min-height:100vh; }
-    /* Sidebar */
+    /* Admin-specific styles that respect the theme */
+    .admin-layout { display: flex; min-height: 100vh; padding-top: 100px; }
     .sidebar {
-      width: var(--sidebar-width);
-      background: rgba(10,10,30,0.8);
-      backdrop-filter: blur(20px);
-      border-right: 1px solid var(--border);
-      padding: 2rem 1.5rem;
-      position: fixed;
-      top:0; left:0; bottom:0;
-      overflow-y: auto;
-      transition: transform var(--transition);
-      z-index: 100;
-    }
-    .sidebar h3 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.5rem;
-      margin-bottom: 2rem;
-      background: linear-gradient(45deg, var(--primary), var(--secondary));
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      width: 260px; background: var(--surface); border-right: 1px solid var(--border);
+      padding: 2rem 1.5rem; position: fixed; top: 100px; left: 0; bottom: 0;
+      overflow-y: auto; z-index: 100;
     }
     .sidebar a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      margin-bottom: 8px;
-      transition: var(--transition);
+      display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+      border-radius: 12px; color: var(--text); text-decoration: none;
+      margin-bottom: 8px; transition: 0.3s; font-size: 0.95rem;
     }
-    .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.1); color:#fff; }
+    .sidebar a:hover, .sidebar a.active { background: var(--surface-hover); color: var(--secondary); }
     .sidebar i { width: 20px; }
-    /* Main content */
-    .main {
-      margin-left: var(--sidebar-width);
-      flex: 1;
-      padding: 2rem;
-      transition: margin-left var(--transition);
+    .main-content { margin-left: 260px; flex: 1; padding: 2rem; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .stat-card { text-align: center; padding: 1.5rem; }
+    .stat-card h2 { font-size: 2.5rem; color: var(--secondary); }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); color: var(--text); }
+    th { color: var(--secondary); }
+    select { padding: 6px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); }
+    .badge {
+      padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;
+      display: inline-block;
     }
-    .section { display:none; }
-    .section.active { display:block; }
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .grid-3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; }
-    .stat { text-align:center; }
-    .stat h2 { font-size:2.5rem; color:var(--secondary); }
-    table { width:100%; border-collapse:collapse; }
-    th, td { padding:12px; text-align:left; border-bottom:1px solid var(--border); }
-    th { color:var(--secondary); }
-    button {
-      background: var(--primary);
-      border: none;
-      color: white;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    button:hover { opacity: 0.8; transform: translateY(-2px); }
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 0.5rem 0;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: white;
-      font-family: inherit;
-    }
+    .badge-pending { background: #ffc107; color: #000; }
+    .badge-reviewed { background: #17a2b8; color: #fff; }
+    .badge-approved { background: #28a745; color: #fff; }
     .modal {
-      display: none;
-      position: fixed; top:0; left:0; width:100%; height:100%;
-      background: rgba(0,0,0,0.7); backdrop-filter:blur(10px);
-      justify-content:center; align-items:center; z-index:200;
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
+      justify-content: center; align-items: center; z-index: 200;
     }
     .modal-content {
-      background: rgba(20,20,40,0.9);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 2rem;
-      max-width: 500px;
-      width: 90%;
+      background: var(--glass-bg); backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border); border-radius: var(--radius);
+      padding: 2rem; max-width: 500px; width: 90%;
     }
-    .close { float:right; cursor:pointer; font-size:1.5rem; }
-    .hidden { display:none; }
-    @media (max-width:768px) {
-      .sidebar { transform: translateX(-100%); }
-      .main { margin-left:0; }
+    .close { float: right; cursor: pointer; font-size: 1.5rem; color: var(--text); }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; height: auto; position: relative; top: 0; }
+      .main-content { margin-left: 0; }
+      .admin-layout { flex-direction: column; }
     }
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <h3>Skillset Admin</h3>
-    <a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-    <a href="#" data-section="admissions"><i class="fas fa-users"></i> Admissions</a>
-    <a href="#" data-section="courses"><i class="fas fa-book"></i> Courses</a>
-    <a href="#" data-section="gallery"><i class="fas fa-images"></i> Gallery</a>
-    <a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a>
-    <hr style="border-color:var(--border); margin:1rem 0;">
-    <a href="/"><i class="fas fa-arrow-left"></i> Back to Site</a>
-  </aside>
+  <!-- Navbar -->
+  <nav id="navbar">
+    <a href="index.html" class="logo">SKILLSET</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Site Home</a></li>
+      <li><a href="admin.html" class="btn-outline" style="padding:0.4rem 1.2rem;">Admin</a></li>
+    </ul>
+  </nav>
 
-  <!-- Main Content -->
-  <main class="main" id="mainContent">
-    <!-- Dashboard -->
-    <section id="dashboard" class="section active">
-      <h2>Dashboard Overview</h2>
-      <div class="grid-3">
-        <div class="card stat"><i class="fas fa-user-graduate fa-2x" style="color:var(--secondary);"></i><h2 id="totalStudents">0</h2><p>Students</p></div>
-        <div class="card stat"><i class="fas fa-book-open fa-2x" style="color:var(--secondary);"></i><h2 id="totalCourses">0</h2><p>Courses</p></div>
-        <div class="card stat"><i class="fas fa-images fa-2x" style="color:var(--secondary);"></i><h2 id="totalImages">0</h2><p>Gallery</p></div>
+  <!-- Login Screen -->
+  <div id="loginScreen" style="display:flex; justify-content:center; align-items:center; min-height:100vh; padding-top:100px;">
+    <div class="glass-card" style="max-width:400px; width:90%; text-align:center;">
+      <h2>Admin Login</h2>
+      <div class="form-group">
+        <input type="password" id="adminPassword" placeholder="Enter admin password" style="margin-top:1rem;">
       </div>
-    </section>
+      <button class="btn" onclick="login()" style="width:100%;">Login</button>
+      <p id="loginError" style="color:red; margin-top:1rem; display:none;">Wrong password</p>
+    </div>
+  </div>
 
-    <!-- Admissions -->
-    <section id="admissions" class="section">
-      <h2>Manage Admissions</h2>
-      <div class="card">
-        <div style="display:flex; gap:10px; margin-bottom:1rem;">
-          <input type="text" id="admSearch" placeholder="Search name/mobile/email" oninput="loadAdmissions()">
-          <select id="admStatus" onchange="loadAdmissions()">
-            <option value="">All Status</option>
-            <option value="pending">Pending</option>
-            <option value="reviewed">Reviewed</option>
-            <option value="approved">Approved</option>
-          </select>
-        </div>
-        <table id="admTable">
-          <thead><tr><th>Name</th><th>Mobile</th><th>Course</th><th>Status</th><th>Docs</th><th>Actions</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
+  <!-- Admin Dashboard (hidden until login) -->
+  <div id="dashboard" style="display:none;">
+    <div class="admin-layout">
+      <aside class="sidebar">
+        <a href="#" class="active" data-section="overview"><i class="fas fa-tachometer-alt"></i> Overview</a>
+        <a href="#" data-section="admissions"><i class="fas fa-users"></i> Admissions</a>
+        <a href="#" data-section="courses"><i class="fas fa-book"></i> Courses</a>
+        <a href="#" data-section="gallery"><i class="fas fa-images"></i> Gallery</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </aside>
 
-    <!-- Courses -->
-    <section id="courses" class="section">
-      <h2>Manage Courses</h2>
-      <button onclick="openCourseModal()">+ Add New Course</button>
-      <div class="card" style="margin-top:1rem;">
-        <table id="courseTable">
-          <thead><tr><th>Image</th><th>Title</th><th>Duration</th><th>Actions</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
+      <main class="main-content">
+        <!-- Overview -->
+        <section id="overview" class="section active">
+          <h2>Dashboard Overview</h2>
+          <div class="card-grid">
+            <div class="card stat-card"><i class="fas fa-user-graduate fa-2x" style="color:var(--secondary);"></i><h2 id="totalStudents">0</h2><p>Students</p></div>
+            <div class="card stat-card"><i class="fas fa-book-open fa-2x" style="color:var(--secondary);"></i><h2 id="totalCourses">0</h2><p>Courses</p></div>
+            <div class="card stat-card"><i class="fas fa-images fa-2x" style="color:var(--secondary);"></i><h2 id="totalImages">0</h2><p>Gallery</p></div>
+          </div>
+        </section>
 
-    <!-- Gallery -->
-    <section id="gallery" class="section">
-      <h2>Gallery Management</h2>
-      <button onclick="openGalleryModal()">+ Upload Image</button>
-      <div class="card" style="margin-top:1rem;">
-        <div id="galleryGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1rem;"></div>
-      </div>
-    </section>
+        <!-- Admissions -->
+        <section id="admissions" class="section">
+          <h2>Manage Admissions</h2>
+          <div class="card" style="margin-top:1rem;">
+            <div style="display:flex; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
+              <input type="text" id="admSearch" placeholder="Search name/mobile/email" oninput="loadAdmissions()" style="flex:1;">
+              <select id="admStatus" onchange="loadAdmissions()">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="reviewed">Reviewed</option>
+                <option value="approved">Approved</option>
+              </select>
+            </div>
+            <div style="overflow-x:auto;">
+              <table id="admTable">
+                <thead><tr><th>Name</th><th>Mobile</th><th>Course</th><th>Status</th><th>Docs</th><th>Actions</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
 
-    <!-- Settings -->
-    <section id="settings" class="section">
-      <h2>Settings</h2>
-      <div class="card">
-        <p>Admin Password: <strong>skillset2024</strong> (change in Render env)</p>
-        <p>Environment: Render (Cloudinary, MongoDB Atlas)</p>
-      </div>
-    </section>
-  </main>
+        <!-- Courses -->
+        <section id="courses" class="section">
+          <h2>Manage Courses</h2>
+          <button class="btn" onclick="openCourseModal()">+ Add New Course</button>
+          <div class="card" style="margin-top:1rem;">
+            <table id="courseTable">
+              <thead><tr><th>Title</th><th>Duration</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
 
-  <!-- Modals for Courses/Gallery -->
+        <!-- Gallery -->
+        <section id="gallery" class="section">
+          <h2>Gallery Management</h2>
+          <button class="btn" onclick="openGalleryModal()">+ Upload Image</button>
+          <div class="card" style="margin-top:1rem;">
+            <div id="galleryGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1rem;"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Course Modal -->
   <div class="modal" id="courseModal">
     <div class="modal-content">
       <span class="close" onclick="closeCourseModal()">&times;</span>
       <h3 id="courseModalTitle">Add Course</h3>
       <form id="courseForm">
         <input type="hidden" id="courseId">
-        <label>Title</label><input type="text" id="courseTitle" required>
-        <label>Slug</label><input type="text" id="courseSlug" required>
-        <label>Duration</label><input type="text" id="courseDuration">
-        <label>Description</label><textarea id="courseDesc" rows="3"></textarea>
-        <label>Image</label><input type="file" id="courseImage" accept="image/*">
-        <label>Certificate <input type="checkbox" id="courseCert" checked></label>
-        <button type="submit">Save</button>
+        <div class="form-group"><label>Title</label><input type="text" id="courseTitle" required></div>
+        <div class="form-group"><label>Slug</label><input type="text" id="courseSlug" required></div>
+        <div class="form-group"><label>Duration</label><input type="text" id="courseDuration"></div>
+        <div class="form-group"><label>Description</label><textarea id="courseDesc" rows="3"></textarea></div>
+        <div class="form-group"><label>Image</label><input type="file" id="courseImage" accept="image/*"></div>
+        <button type="submit" class="btn" style="width:100%;">Save</button>
       </form>
     </div>
   </div>
 
+  <!-- Gallery Modal -->
   <div class="modal" id="galleryModal">
     <div class="modal-content">
       <span class="close" onclick="closeGalleryModal()">&times;</span>
       <h3>Upload Image</h3>
       <form id="galleryForm">
-        <label>Category</label>
-        <select id="galleryCategory">
-          <option>Classroom</option><option>Lab</option><option>Students</option><option>Workshops</option><option>Certificates</option><option>Events</option>
-        </select>
-        <label>Image</label><input type="file" id="galleryImageFile" accept="image/*" required>
-        <button type="submit">Upload</button>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="galleryCategory">
+            <option>Classroom</option><option>Lab</option><option>Students</option>
+            <option>Workshops</option><option>Certificates</option><option>Events</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Image</label><input type="file" id="galleryImageFile" accept="image/*" required></div>
+        <button type="submit" class="btn" style="width:100%;">Upload</button>
       </form>
     </div>
   </div>
 
+  <script src="js/main.js"></script>
   <script>
-    // Navigation
+    // ---------- AUTH ----------
+    const ADMIN_PASSWORD = 'skillset2024';
+
+    function login() {
+      const password = document.getElementById('adminPassword').value;
+      if (password === ADMIN_PASSWORD) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        loadOverview();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('adminLoggedIn');
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+
+    // Auto-login if already logged in
+    if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadOverview();
+    }
+
+    // ---------- NAVIGATION ----------
     document.querySelectorAll('.sidebar a[data-section]').forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
@@ -237,54 +221,63 @@
         document.getElementById(this.dataset.section).classList.add('active');
         document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
         this.classList.add('active');
-        // Refresh data for that section
+        if (this.dataset.section === 'overview') loadOverview();
         if (this.dataset.section === 'admissions') loadAdmissions();
         if (this.dataset.section === 'courses') loadCourses();
         if (this.dataset.section === 'gallery') loadGallery();
-        if (this.dataset.section === 'dashboard') loadDashboard();
       });
     });
 
-    // Load Dashboard Stats
-    async function loadDashboard() {
-      const admRes = await fetch('/api/admissions');
-      const admissions = await admRes.json();
-      document.getElementById('totalStudents').textContent = admissions.length;
-      const courseRes = await fetch('/api/courses');
-      const courses = await courseRes.json();
-      document.getElementById('totalCourses').textContent = courses.length;
-      const galleryRes = await fetch('/api/gallery');
-      const images = await galleryRes.json();
-      document.getElementById('totalImages').textContent = images.length;
+    // ---------- OVERVIEW ----------
+    async function loadOverview() {
+      try {
+        const [admRes, courseRes, galleryRes] = await Promise.all([
+          fetch('/api/admissions'),
+          fetch('/api/courses'),
+          fetch('/api/gallery')
+        ]);
+        const admissions = await admRes.json();
+        const courses = await courseRes.json();
+        const images = await galleryRes.json();
+        document.getElementById('totalStudents').textContent = admissions.length || 0;
+        document.getElementById('totalCourses').textContent = courses.length || 0;
+        document.getElementById('totalImages').textContent = images.length || 0;
+      } catch (err) {
+        console.error('Error loading overview:', err);
+      }
     }
 
-    // ADMISSIONS
+    // ---------- ADMISSIONS ----------
     async function loadAdmissions() {
-      const search = document.getElementById('admSearch').value;
-      const status = document.getElementById('admStatus').value;
-      const res = await fetch(`/api/admissions?search=${encodeURIComponent(search)}&status=${status}`);
-      const data = await res.json();
-      const tbody = document.querySelector('#admTable tbody');
-      tbody.innerHTML = data.map(adm => `
-        <tr>
-          <td>${adm.fullName}</td>
-          <td>${adm.mobile}</td>
-          <td>${adm.course}</td>
-          <td>
-            <select onchange="updateAdmissionStatus('${adm._id}', this.value)">
-              <option value="pending" ${adm.status==='pending'?'selected':''}>Pending</option>
-              <option value="reviewed" ${adm.status==='reviewed'?'selected':''}>Reviewed</option>
-              <option value="approved" ${adm.status==='approved'?'selected':''}>Approved</option>
-            </select>
-          </td>
-          <td>
-            ${adm.photo ? `<a href="${adm.photo}" target="_blank">Photo</a> ` : ''}
-            ${adm.aadhaar ? `<a href="${adm.aadhaar}" target="_blank">Aadhaar</a> ` : ''}
-            ${adm.marksheet ? `<a href="${adm.marksheet}" target="_blank">Marksheet</a>` : ''}
-          </td>
-          <td><button onclick="deleteAdmission('${adm._id}')">Delete</button></td>
-        </tr>
-      `).join('');
+      try {
+        const search = document.getElementById('admSearch').value;
+        const status = document.getElementById('admStatus').value;
+        const res = await fetch(`/api/admissions?search=${encodeURIComponent(search)}&status=${status}`);
+        const data = await res.json();
+        const tbody = document.querySelector('#admTable tbody');
+        tbody.innerHTML = data.map(adm => `
+          <tr>
+            <td>${adm.fullName || ''}</td>
+            <td>${adm.mobile || ''}</td>
+            <td>${adm.course || ''}</td>
+            <td>
+              <select onchange="updateAdmissionStatus('${adm._id}', this.value)">
+                <option value="pending" ${adm.status==='pending'?'selected':''}>Pending</option>
+                <option value="reviewed" ${adm.status==='reviewed'?'selected':''}>Reviewed</option>
+                <option value="approved" ${adm.status==='approved'?'selected':''}>Approved</option>
+              </select>
+            </td>
+            <td>
+              ${adm.photo ? `<a href="${adm.photo}" target="_blank">Photo</a> ` : ''}
+              ${adm.aadhaar ? `<a href="${adm.aadhaar}" target="_blank">Aadhaar</a> ` : ''}
+              ${adm.marksheet ? `<a href="${adm.marksheet}" target="_blank">Marksheet</a>` : ''}
+            </td>
+            <td><button class="btn" onclick="deleteAdmission('${adm._id}')" style="background:red;">Delete</button></td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Error loading admissions:', err);
+      }
     }
 
     async function updateAdmissionStatus(id, status) {
@@ -299,25 +292,29 @@
       if (confirm('Delete this application?')) {
         await fetch(`/api/admissions/${id}`, { method: 'DELETE' });
         loadAdmissions();
+        loadOverview();
       }
     }
 
-    // COURSES
+    // ---------- COURSES ----------
     async function loadCourses() {
-      const res = await fetch('/api/courses');
-      const courses = await res.json();
-      const tbody = document.querySelector('#courseTable tbody');
-      tbody.innerHTML = courses.map(c => `
-        <tr>
-          <td><img src="${c.image}" width="60" style="border-radius:8px;"></td>
-          <td>${c.title}</td>
-          <td>${c.duration}</td>
-          <td>
-            <button onclick="editCourse('${c._id}')">Edit</button>
-            <button onclick="deleteCourse('${c._id}')">Delete</button>
-          </td>
-        </tr>
-      `).join('');
+      try {
+        const res = await fetch('/api/courses');
+        const courses = await res.json();
+        const tbody = document.querySelector('#courseTable tbody');
+        tbody.innerHTML = courses.map(c => `
+          <tr>
+            <td>${c.title || ''}</td>
+            <td>${c.duration || ''}</td>
+            <td>
+              <button class="btn" onclick="editCourse('${c._id}')">Edit</button>
+              <button class="btn" onclick="deleteCourse('${c._id}')" style="background:red;">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Error loading courses:', err);
+      }
     }
 
     function openCourseModal(course = null) {
@@ -329,7 +326,6 @@
         document.getElementById('courseSlug').value = course.slug;
         document.getElementById('courseDuration').value = course.duration;
         document.getElementById('courseDesc').value = course.description;
-        document.getElementById('courseCert').checked = course.certificate;
       } else {
         document.getElementById('courseModalTitle').textContent = 'Add Course';
         document.getElementById('courseForm').reset();
@@ -347,7 +343,6 @@
       formData.append('slug', document.getElementById('courseSlug').value);
       formData.append('duration', document.getElementById('courseDuration').value);
       formData.append('description', document.getElementById('courseDesc').value);
-      formData.append('certificate', document.getElementById('courseCert').checked);
       const imageFile = document.getElementById('courseImage').files[0];
       if (imageFile) formData.append('image', imageFile);
 
@@ -356,33 +351,39 @@
       await fetch(url, { method, body: formData });
       closeCourseModal();
       loadCourses();
+      loadOverview();
     });
 
     async function editCourse(id) {
-      const res = await fetch(`/api/courses`);
+      const res = await fetch('/api/courses');
       const courses = await res.json();
       const course = courses.find(c => c._id === id);
-      openCourseModal(course);
+      if (course) openCourseModal(course);
     }
 
     async function deleteCourse(id) {
       if (confirm('Delete this course?')) {
         await fetch(`/api/courses/${id}`, { method: 'DELETE' });
         loadCourses();
+        loadOverview();
       }
     }
 
-    // GALLERY
+    // ---------- GALLERY ----------
     async function loadGallery() {
-      const res = await fetch('/api/gallery');
-      const images = await res.json();
-      const grid = document.getElementById('galleryGrid');
-      grid.innerHTML = images.map(img => `
-        <div style="position:relative; border-radius:12px; overflow:hidden;">
-          <img src="${img.url}" width="100%" height="120" style="object-fit:cover;">
-          <button onclick="deleteImage('${img._id}')" style="position:absolute; top:5px; right:5px; background:red;">X</button>
-        </div>
-      `).join('');
+      try {
+        const res = await fetch('/api/gallery');
+        const images = await res.json();
+        const grid = document.getElementById('galleryGrid');
+        grid.innerHTML = images.map(img => `
+          <div style="position:relative; border-radius:12px; overflow:hidden;">
+            <img src="${img.url}" width="100%" height="120" style="object-fit:cover;">
+            <button class="btn" onclick="deleteImage('${img._id}')" style="position:absolute; top:5px; right:5px; background:red; padding:4px 8px; font-size:0.8rem;">X</button>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Error loading gallery:', err);
+      }
     }
 
     function openGalleryModal() { document.getElementById('galleryModal').style.display = 'flex'; }
@@ -396,28 +397,16 @@
       await fetch('/api/gallery', { method: 'POST', body: formData });
       closeGalleryModal();
       loadGallery();
+      loadOverview();
     });
 
     async function deleteImage(id) {
       if (confirm('Delete this image?')) {
         await fetch(`/api/gallery/${id}`, { method: 'DELETE' });
         loadGallery();
+        loadOverview();
       }
     }
-
-    // Init
-    loadDashboard();
   </script>
-  <script type="module">
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-  const auth = getAuth();
-
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = '/signin.html'; // Redirect to login if not signed in
-    }
-  });
-</script>
-<script src="js/main.js"></script>
 </body>
 </html>
