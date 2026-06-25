@@ -1,7 +1,6 @@
 /**
  * ============================================================
  * STUDENT SKILLSET TECH INSTITUTE – MAIN JAVASCRIPT
- * All pages share this file for consistent behavior.
  * ============================================================
  */
 
@@ -61,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function () {
             navLinks.classList.toggle('active');
         });
 
-        // Close menu when a link is clicked
         navLinks.querySelectorAll('a').forEach(function (link) {
             link.addEventListener('click', function () {
                 navLinks.classList.remove('active');
@@ -132,7 +130,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Reset on click so user can re-select the same file
         input.addEventListener('click', function () {
             this.value = '';
         });
@@ -257,10 +254,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ============================================================
-    // 9. ADDITIONAL UTILITIES (optional)
+    // 9. SMOOTH SCROLL FOR ANCHOR LINKS (optional)
     // ============================================================
-
-    // Example: smooth scroll for anchor links (if any)
     document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
         anchor.addEventListener('click', function (e) {
             const targetId = this.getAttribute('href');

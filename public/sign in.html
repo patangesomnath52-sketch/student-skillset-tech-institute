@@ -25,7 +25,9 @@
     <button id="googleBtn"><i class="fab fa-google"></i> Login with Google</button>
     <p id="errorMsg"></p>
   </div>
-
+<button class="theme-toggle" aria-label="Toggle dark/light mode">
+    <i id="themeIcon" class="fas fa-moon"></i>
+</button>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
