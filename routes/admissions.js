@@ -91,5 +91,13 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
+// Add this to routes/admissions.js
+router.get('/student', async (req, res) => {
+  try {
+    const student = await Admission.findOne({ email: req.query.email });
+    res.json(student);
+  } catch (err) {
+    res.status(500).json({ error: "Could not fetch student data" });
+  }
+});
 module.exports = router;
