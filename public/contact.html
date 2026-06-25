@@ -1,330 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Contact Us – Student Skillset Tech Institute</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        :root {
-            --primary: #6c5ce7;
-            --secondary: #00cec9;
-            --accent: #fd79a8;
-            --bg: #0a0a1a;
-            --glass-bg: rgba(255,255,255,0.08);
-            --glass-border: rgba(255,255,255,0.2);
-            --radius: 24px;
-            --radius-sm: 14px;
-        }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0c0c1d, #1a1a3e);
-            color: #fff;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        .container { max-width:1300px; margin:0 auto; padding:0 20px; }
-        /* Navbar – same as all other pages */
-        nav {
-            position: fixed; top:20px; left:50%; transform:translateX(-50%);
-            width:90%; max-width:1200px; z-index:1000;
-            background: rgba(10,10,26,0.7); backdrop-filter:blur(20px);
-            border-radius:60px; padding:0.8rem 2rem;
-            display:flex; align-items:center; justify-content:space-between;
-            border:1px solid rgba(255,255,255,0.08);
-        }
-        nav.scrolled { background:rgba(10,10,26,0.9); box-shadow:0 10px 40px rgba(0,0,0,0.5); }
-        .logo {
-            font-family:'Montserrat',sans-serif; font-weight:900; font-size:1.6rem;
-            background:linear-gradient(45deg,var(--primary),var(--secondary));
-            -webkit-background-clip: text; background-clip: text; /* ensure standard property present */
-            -webkit-text-fill-color: transparent; color: transparent;
-            text-decoration:none;
-        }
-        .nav-links { display:flex; list-style:none; gap:1.2rem; align-items:center; }
-        .nav-links a { color:#fff; text-decoration:none; font-weight:500; font-size:0.9rem; position:relative; padding:0.3rem 0; }
-        .nav-links a::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:2px; background:var(--secondary); transition:width 0.3s; }
-        .nav-links a:hover { color:var(--secondary); }
-        .nav-links a:hover::after { width:100%; }
-        .dropdown { position:relative; }
-        .dropdown-toggle::after { content:" ▾"; font-size:0.8rem; }
-        .dropdown-menu {
-            position:absolute; top:100%; left:0; background:rgba(10,10,26,0.9); backdrop-filter:blur(20px);
-            border-radius:16px; padding:0.8rem 0; min-width:220px; display:none; flex-direction:column;
-            border:1px solid rgba(255,255,255,0.1); margin-top:10px; z-index:1001;
-        }
-        .dropdown:hover .dropdown-menu { display:flex; }
-        .dropdown-menu a { padding:0.6rem 1.5rem; font-size:0.85rem; white-space:nowrap; }
-        .dropdown-menu a:hover { background:rgba(255,255,255,0.05); }
-        .btn {
-            padding:0.7rem 1.8rem; border-radius:50px; font-weight:600;
-            background:linear-gradient(135deg,var(--primary),#a29bfe);
-            color:white; box-shadow:0 4px 15px rgba(108,92,231,0.4);
-            border:none; cursor:pointer; transition:0.3s; text-decoration:none;
-        }
-        .btn:hover { transform:translateY(-3px); box-shadow:0 10px 25px rgba(108,92,231,0.6); }
-        .btn-outline { background:transparent; border:2px solid white; box-shadow:none; }
-        .btn-outline:hover { background:white; color:var(--bg); }
-        .page-content { padding-top:130px; padding-bottom:3rem; }
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .contact-info {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 2rem;
-        }
-        .contact-info h2 { margin-bottom: 1.5rem; font-family: 'Montserrat',sans-serif; }
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: rgba(255,255,255,0.03);
-            border-radius: 12px;
-            transition: 0.3s;
-        }
-        .info-item:hover { background: rgba(255,255,255,0.08); }
-        .info-item i { font-size: 1.5rem; color: var(--secondary); width: 40px; text-align: center; }
-        .info-item a { color: #fff; text-decoration: none; }
-        .info-item a:hover { text-decoration: underline; }
-        .map-container {
-            border-radius: var(--radius);
-            overflow: hidden;
-            margin-top: 2rem;
-        }
-        iframe { width: 100%; height: 250px; border:0; }
-
-        /* Inquiry Form */
-        .inquiry-form {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 2rem;
-        }
-        .form-group { margin-bottom: 1.2rem; }
-        label { display:block; margin-bottom:0.3rem; color:var(--secondary); font-weight:500; }
-        input, select, textarea {
-            width:100%; padding:12px 16px;
-            background:rgba(255,255,255,0.05);
-            border:1px solid rgba(255,255,255,0.2);
-            border-radius:var(--radius-sm);
-            color:white; font-family:inherit; font-size:1rem;
-        }
-        input:focus, textarea:focus, select:focus {
-            border-color: var(--secondary);
-            outline: none;
-            box-shadow: 0 0 10px rgba(0,206,201,0.2);
-        }
-        .whatsapp-float {
-            position:fixed; bottom:30px; right:30px; background:#25D366; color:white;
-            width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-            font-size:2rem; box-shadow:0 10px 25px rgba(37,211,102,0.4); z-index:999;
-            animation:pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%{box-shadow:0 0 0 0 rgba(37,211,102,0.7);}
-            70%{box-shadow:0 0 0 20px rgba(37,211,102,0);}
-            100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
-        }
-        .whatsapp-float:hover { transform:scale(1.1); }
-        footer {
-            background:rgba(0,0,0,0.3); backdrop-filter:blur(15px);
-            padding:3rem 2rem; margin-top:3rem; border-top:1px solid rgba(255,255,255,0.05);
-        }
-        .footer-grid { display:flex; justify-content:space-between; flex-wrap:wrap; gap:2rem; }
-        .footer-grid a { color:white; text-decoration:none; }
-        @media (max-width: 768px) {
-            .contact-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us – Student Skillset</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav id="navbar">
-        <a href="index.html" class="logo">SKILLSET</a>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li class="dropdown">
-                <a href="courses.html" class="dropdown-toggle">Courses</a>
-                <div class="dropdown-menu">
-                    <a href="courses.html?course=ccc">CCC</a>
-                    <a href="courses.html?course=tally">Tally Prime</a>
-                    <a href="courses.html?course=dtp">DTP</a>
-                    <a href="courses.html?course=dte">DTE</a>
-                    <a href="courses.html?course=web">Web Development</a>
-                    <a href="courses.html?course=digital">Digital Marketing</a>
-                </div>
-            </li>
-            <li><a href="placements.html">Placements</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="admissions.html">Admissions</a></li>
-            <li><a href="contacts.html">Contact</a></li>
-          <button class="theme-toggle" aria-label="Toggle dark/light mode">
-    <i id="themeIcon" class="fas fa-moon"></i>
-</button>
-        </ul>
-    </nav>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
 
-    <!-- Main Content -->
-    <main class="container page-content">
-        <h1 style="text-align:center; margin-bottom:1rem; font-family:'Montserrat',sans-serif; font-size:2.5rem;">
-            <span style="background:linear-gradient(to right,var(--primary),var(--secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">Get in Touch</span>
-        </h1>
-        <p style="text-align:center; opacity:0.8; max-width:600px; margin:0 auto;">Have questions about courses, admissions, or anything else? Reach out to us – we're happy to help!</p>
-
-        <div class="contact-grid">
-            <!-- Left: Contact details + Map -->
-            <div class="contact-info">
-                <h2>Our Institute</h2>
-                <div class="info-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div>
-                        <strong>Address:</strong><br>
-                        123, Skillset Marg, Near Tech Park,<br>
-                        Mumbai, Maharashtra – 400001
-                    </div>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-phone-alt"></i>
-                    <div>
-                        <strong>Phone:</strong><br>
-                        <a href="tel:+919876543210">+91 98765 43210</a>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-envelope"></i>
-                    <div>
-                        <strong>Email:</strong><br>
-                        <a href="mailto:info@studentskillset.com">info@studentskillset.com</a>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <i class="fab fa-whatsapp"></i>
-                    <div>
-                        <strong>WhatsApp:</strong><br>
-                        <a href="https://wa.me/919876543210" target="_blank">Chat on WhatsApp</a>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-clock"></i>
-                    <div>
-                        <strong>Office Hours:</strong><br>
-                        Mon–Sat: 8:00 AM – 8:00 PM<br>
-                        Sunday: 10:00 AM – 2:00 PM
-                    </div>
-                </div>
-
-                <!-- Google Maps Embed (replace with your actual location) -->
-                <div class="map-container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.123456789!2d72.8777!3d19.0760!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDA0JzMzLjYiTiA3MsKwNTInMzkuNyJF!5e0!3m2!1sen!2sin!4v1620000000000"
-                        allowfullscreen="" loading="lazy"></iframe>
-                </div>
-            </div>
-
-            <!-- Right: Inquiry Form -->
-            <div class="inquiry-form">
-                <h2>Send an Inquiry</h2>
-                <form id="inquiryForm">
-                    <div class="form-group">
-                        <label for="inqName">Your Name *</label>
-                        <input type="text" id="inqName" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="inqEmail">Email Address *</label>
-                        <input type="email" id="inqEmail" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="inqPhone">Phone Number</label>
-                        <input type="tel" id="inqPhone" name="phone">
-                    </div>
-                    <div class="form-group">
-                        <label for="inqCourse">Course Interest</label>
-                        <select id="inqCourse" name="course">
-                            <option value="">-- Select --</option>
-                            <option>CCC</option><option>Tally Prime</option><option>DTP</option>
-                            <option>DTE</option><option>Web Development</option><option>Digital Marketing</option>
-                            <option>Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="inqMessage">Message *</label>
-                        <textarea id="inqMessage" name="message" rows="4" required></textarea>
-                    </div>
-                    <button type="submit" class="btn" style="width:100%;" id="inqSubmitBtn">
-                        <span id="inqSubmitText">Send Message</span>
-                        <span id="inqSubmitLoader" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Sending...</span>
-                    </button>
-                </form>
-            </div>
+  <nav id="navbar">
+    <a href="index.html" class="logo">SKILLSET</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li class="dropdown">
+        <a href="courses.html" class="dropdown-toggle">Courses</a>
+        <div class="dropdown-menu">
+          <a href="courses.html?course=ccc">CCC</a>
+          <a href="courses.html?course=tally">Tally Prime</a>
+          <a href="courses.html?course=dtp">DTP</a>
+          <a href="courses.html?course=dte">DTE</a>
+          <a href="courses.html?course=web">Web Development</a>
+          <a href="courses.html?course=digital">Digital Marketing</a>
         </div>
-    </main>
+      </li>
+      <li><a href="placements.html">Placements</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="admissions.html">Admissions</a></li>
+      <li><a href="contacts.html">Contact</a></li>
+      <li>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <i id="themeIcon" class="fas fa-moon"></i>
+        </button>
+      </li>
+      
+    </ul>
+  </nav>
 
-    <!-- WhatsApp Float -->
-    <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  <main class="container" style="padding-top:130px;">
+    <h1 class="section-title"><span>Get in Touch</span></h1>
+    <p style="text-align:center; max-width:600px; margin:0 auto 2rem; color:var(--text-dim);">
+      Have questions about courses, admissions, or anything else? Reach out to us!
+    </p>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container footer-grid">
-            <div><h4>Student Skillset</h4><p>Practical Computer Education</p></div>
-            <div><a href="index.html">Home</a> | <a href="courses.html">Courses</a> | <a href="admissions.html">Admissions</a></div>
-            <div><i class="fab fa-instagram fa-2x"></i> <i class="fab fa-facebook fa-2x"></i> <i class="fab fa-youtube fa-2x"></i></div>
+    <div class="contact-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:2rem;">
+      <div class="glass-card">
+        <h2>Our Institute</h2>
+        <div style="display:flex; align-items:center; gap:15px; margin:1.5rem 0; padding:1rem; background:var(--surface); border-radius:12px;">
+          <i class="fas fa-map-marker-alt" style="color:var(--secondary);"></i>
+          <div>
+            <strong>Address:</strong><br>
+            123, Skillset Marg, Near Tech Park, Mumbai – 400001
+          </div>
         </div>
-    </footer>
+        <div style="display:flex; align-items:center; gap:15px; margin:1.5rem 0; padding:1rem; background:var(--surface); border-radius:12px;">
+          <i class="fas fa-phone-alt" style="color:var(--secondary);"></i>
+          <div>
+            <strong>Phone:</strong><br>
+            <a href="tel:+919876543210" style="color:var(--text);">+91 98765 43210</a>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:15px; margin:1.5rem 0; padding:1rem; background:var(--surface); border-radius:12px;">
+          <i class="fas fa-envelope" style="color:var(--secondary);"></i>
+          <div>
+            <strong>Email:</strong><br>
+            <a href="mailto:info@studentskillset.com" style="color:var(--text);">info@studentskillset.com</a>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:15px; margin:1.5rem 0; padding:1rem; background:var(--surface); border-radius:12px;">
+          <i class="fab fa-whatsapp" style="color:var(--secondary);"></i>
+          <div>
+            <strong>WhatsApp:</strong><br>
+            <a href="https://wa.me/919876543210" target="_blank" style="color:var(--text);">Chat on WhatsApp</a>
+          </div>
+        </div>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.123456789!2d72.8777!3d19.0760!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDA0JzMzLjYiTiA3MsKwNTInMzkuNyJF!5e0!3m2!1sen!2sin!4v1620000000000" width="100%" height="250" style="border:0; border-radius:12px; margin-top:1rem;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
 
-    <script>
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-        });
+      <div class="glass-card">
+        <h2>Send an Inquiry</h2>
+        <form id="inquiryForm">
+          <div class="form-group">
+            <label for="inqName">Your Name *</label>
+            <input type="text" id="inqName" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="inqEmail">Email Address *</label>
+            <input type="email" id="inqEmail" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="inqPhone">Phone Number</label>
+            <input type="tel" id="inqPhone" name="phone">
+          </div>
+          <div class="form-group">
+            <label for="inqCourse">Course Interest</label>
+            <select id="inqCourse" name="course">
+              <option value="">-- Select --</option>
+              <option>CCC</option><option>Tally Prime</option><option>DTP</option>
+              <option>DTE</option><option>Web Development</option><option>Digital Marketing</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inqMessage">Message *</label>
+            <textarea id="inqMessage" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn" style="width:100%;">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </main>
 
-        // Inquiry form submission
-        document.getElementById('inquiryForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const submitText = document.getElementById('inqSubmitText');
-            const submitLoader = document.getElementById('inqSubmitLoader');
-            const submitBtn = document.getElementById('inqSubmitBtn');
+  <footer>
+    <div class="container footer-grid">
+      <div><h4>Student Skillset</h4><p>Practical Computer Education</p></div>
+      <div><a href="index.html">Home</a> | <a href="courses.html">Courses</a> | <a href="admissions.html">Admissions</a></div>
+      <div><i class="fab fa-instagram fa-2x"></i><i class="fab fa-facebook fa-2x"></i><i class="fab fa-youtube fa-2x"></i></div>
+    </div>
+  </footer>
 
-            submitText.style.display = 'none';
-            submitLoader.style.display = 'inline-block';
-            submitBtn.disabled = true;
-
-            const formData = new FormData(this);
-            const payload = Object.fromEntries(formData.entries());
-
-            try {
-                const res = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    alert('✅ Message sent successfully!');
-                    this.reset();
-                } else {
-                    alert('❌ ' + (data.error || 'Failed to send.'));
-                }
-            } catch (err) {
-                alert('❌ Network error. Is the server running?');
-            } finally {
-                submitText.style.display = 'inline-block';
-                submitLoader.style.display = 'none';
-                submitBtn.disabled = false;
-            }
-        });
-    </script>
-    <script src="js/main.js"></script>
+  <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  <script src="js/main.js"></script>
 </body>
 </html>
