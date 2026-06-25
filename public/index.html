@@ -1,228 +1,774 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Student Skillset Tech Institute | Learn. Build. Grow.</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <style>
+        /* ===== CSS VARIABLES (Dark default, Light override) ===== */
         :root {
-            --primary: #ff2d95;
-            --secondary: #00d4ff;
-            --bg: #0a0a1a;
+            --bg-body: #0a0a1a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-nav: rgba(10, 10, 26, 0.7);
+            --bg-nav-scrolled: rgba(10, 10, 26, 0.9);
+            --bg-footer: rgba(0, 0, 0, 0.3);
+            --bg-panel: rgba(5, 5, 20, 0.95);
+            --bg-dropdown: rgba(10, 10, 26, 0.9);
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-light: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --input-border: rgba(255, 255, 255, 0.1);
+            --card-hover-border: #00d4ff;
+            --btn-outline-border: rgba(255, 255, 255, 0.3);
+            --btn-outline-hover-bg: #ffffff;
+            --btn-outline-hover-text: #0a0a1a;
+            --orb-opacity: 0.15;
+            --hero-gradient: to right, #fff, #00d4ff;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* Light theme overrides */
+        [data-theme="light"] {
+            --bg-body: #f0f4ff;
+            --bg-card: rgba(0, 0, 0, 0.04);
+            --bg-nav: rgba(255, 255, 255, 0.7);
+            --bg-nav-scrolled: rgba(255, 255, 255, 0.92);
+            --bg-footer: rgba(200, 210, 230, 0.5);
+            --bg-panel: rgba(240, 244, 255, 0.97);
+            --bg-dropdown: rgba(255, 255, 255, 0.95);
+            --text-primary: #0a0a1a;
+            --text-secondary: #333355;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --border-light: rgba(0, 0, 0, 0.12);
+            --shadow-color: rgba(0, 0, 0, 0.15);
+            --input-bg: rgba(0, 0, 0, 0.04);
+            --input-border: rgba(0, 0, 0, 0.12);
+            --card-hover-border: #00b8d4;
+            --btn-outline-border: rgba(0, 0, 0, 0.25);
+            --btn-outline-hover-bg: #0a0a1a;
+            --btn-outline-hover-text: #ffffff;
+            --orb-opacity: 0.08;
+            --hero-gradient: to right, #1a1a4e, #00b8d4;
+        }
+
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--bg);
-            color: #fff;
+            background: var(--bg-body);
+            color: var(--text-primary);
             overflow-x: hidden;
             line-height: 1.6;
             position: relative;
+            transition: background 0.35s ease, color 0.3s ease;
         }
+
+        /* ===== ORBS ===== */
         .bg-orbs {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
         }
         .orb {
-            position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15;
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: var(--orb-opacity);
             animation: float 20s infinite ease-in-out;
+            transition: opacity 0.5s ease;
         }
-        .orb-1 { width: 600px; height: 600px; background: var(--primary); top: -200px; left: -100px; }
-        .orb-2 { width: 500px; height: 500px; background: var(--secondary); bottom: -200px; right: -100px; animation-delay: -7s; }
-        .orb-3 { width: 400px; height: 400px; background: #7b2ff7; top: 50%; left: 50%; animation-delay: -14s; }
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: #ff2d95;
+            top: -200px;
+            left: -100px;
+        }
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: #00d4ff;
+            bottom: -200px;
+            right: -100px;
+            animation-delay: -7s;
+        }
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: #7b2ff7;
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
         @keyframes float {
-            0%,100%{transform:translate(0,0) scale(1);}
-            25%{transform:translate(50px,-30px) scale(1.1);}
-            50%{transform:translate(-20px,40px) scale(0.9);}
-            75%{transform:translate(-40px,-20px) scale(1.05);}
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(50px, -30px) scale(1.1);
+            }
+            50% {
+                transform: translate(-20px, 40px) scale(0.9);
+            }
+            75% {
+                transform: translate(-40px, -20px) scale(1.05);
+            }
         }
-        .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== NAVBAR ===== */
         nav {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 1200px; z-index: 1000;
-            background: rgba(10,10,26,0.7); backdrop-filter: blur(20px);
-            border-radius: 60px; padding: 0.8rem 2rem;
-            display: flex; align-items: center; justify-content: space-between;
-            border: 1px solid rgba(255,255,255,0.08);
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            z-index: 1000;
+            background: var(--bg-nav);
+            backdrop-filter: blur(20px);
+            border-radius: 60px;
+            padding: 0.8rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--border-color);
+            transition: background 0.4s, box-shadow 0.4s, border-color 0.3s;
         }
-        nav.scrolled { background: rgba(10,10,26,0.9); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        nav.scrolled {
+            background: var(--bg-nav-scrolled);
+            box-shadow: 0 10px 40px var(--shadow-color);
+        }
         .logo {
-            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.6rem;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.6rem;
+            background: linear-gradient(45deg, #ff2d95, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-decoration: none;
         }
-        .nav-links { display: flex; list-style: none; gap: 1.5rem; align-items: center; }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.2rem;
+            align-items: center;
+        }
         .nav-links a {
-            color: #fff; text-decoration: none; font-weight: 500; font-size: 0.9rem;
-            position: relative; padding: 0.3rem 0;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            position: relative;
+            padding: 0.3rem 0;
+            transition: color 0.3s;
         }
         .nav-links a::after {
-            content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px;
-            background: var(--secondary); transition: width 0.3s;
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #00d4ff;
+            transition: width 0.3s;
         }
-        .nav-links a:hover { color: var(--secondary); }
-        .nav-links a:hover::after { width: 100%; }
-        .dropdown { position: relative; }
-        .dropdown-toggle::after { content: " ▾"; font-size: 0.8rem; }
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-toggle::after {
+            content: " ▾";
+            font-size: 0.8rem;
+        }
         .dropdown-menu {
-            position: absolute; top: 100%; left: 0;
-            background: rgba(10,10,26,0.9); backdrop-filter: blur(20px);
-            border-radius: 16px; padding: 0.8rem 0; min-width: 220px;
-            display: none; flex-direction: column;
-            border: 1px solid rgba(255,255,255,0.1);
-            margin-top: 10px; z-index: 1001;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--bg-dropdown);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 0.8rem 0;
+            min-width: 220px;
+            display: none;
+            flex-direction: column;
+            border: 1px solid var(--border-light);
+            margin-top: 10px;
+            z-index: 1001;
+            transition: background 0.3s;
         }
-        .dropdown:hover .dropdown-menu { display: flex; }
-        .dropdown-menu a { padding: 0.6rem 1.5rem; font-size: 0.85rem; white-space: nowrap; }
-        .dropdown-menu a:hover { background: rgba(255,255,255,0.05); }
+        .dropdown:hover .dropdown-menu {
+            display: flex;
+        }
+        .dropdown-menu a {
+            padding: 0.6rem 1.5rem;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            color: var(--text-primary);
+        }
+        .dropdown-menu a:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Buttons */
         .btn {
-            padding: 0.7rem 1.8rem; border-radius: 50px; font-weight: 600;
-            background: linear-gradient(135deg, var(--primary), #c0266b);
-            color: white; box-shadow: 0 4px 20px rgba(255,45,149,0.5);
-            border: none; cursor: pointer; transition: 0.3s; text-decoration: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ff2d95, #c0266b);
+            color: white;
+            box-shadow: 0 4px 20px rgba(255, 45, 149, 0.5);
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,45,149,0.7); }
-        .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.3); box-shadow: none; }
-        .btn-outline:hover { background: white; color: var(--bg); }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 45, 149, 0.7);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--btn-outline-border);
+            box-shadow: none;
+            color: var(--text-primary);
+        }
+        .btn-outline:hover {
+            background: var(--btn-outline-hover-bg);
+            color: var(--btn-outline-hover-text);
+            border-color: var(--btn-outline-hover-bg);
+        }
+
+        /* ===== THEME TOGGLE BUTTON ===== */
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--border-light);
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            transition: background 0.3s, border-color 0.3s, color 0.3s;
+            padding: 0;
+            flex-shrink: 0;
+        }
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #00d4ff;
+        }
+        [data-theme="light"] .theme-toggle:hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        /* ===== HAMBURGER ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            z-index: 2000;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        /* ===== HERO ===== */
         .hero {
-            min-height: 100vh; display: flex; align-items: center; justify-content: center;
-            text-align: center; position: relative; z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding-top: 80px;
         }
         .hero h1 {
-            font-size: clamp(2.8rem, 8vw, 5.5rem); font-family: 'Montserrat', sans-serif;
-            font-weight: 900; background: linear-gradient(to right, #fff, var(--secondary));
-            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+            font-size: clamp(2.8rem, 8vw, 5.5rem);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            background: linear-gradient(var(--hero-gradient));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 1.5rem;
         }
-        .typewriter { font-size: 1.3rem; opacity: 0.8; margin-bottom: 2.5rem; min-height: 30px; }
-        .section-title { text-align: center; margin: 4rem 0 2rem; font-size: 2.5rem; font-weight: 800; }
-        .section-title span { background: linear-gradient(to right, var(--primary), var(--secondary)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .typewriter {
+            font-size: 1.3rem;
+            opacity: 0.8;
+            margin-bottom: 2.5rem;
+            min-height: 30px;
+            color: var(--text-secondary);
+        }
+        .section-title {
+            text-align: center;
+            margin: 4rem 0 2rem;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .section-title span {
+            background: linear-gradient(to right, #ff2d95, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ===== CARDS ===== */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
         .card {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 28px; padding: 2rem; text-align: center; transition: 0.4s;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 2rem;
+            text-align: center;
+            transition: 0.4s;
+            color: var(--text-primary);
         }
-        .card:hover { transform: translateY(-10px); border-color: var(--secondary); }
-        .card i { font-size: 2.5rem; color: var(--secondary); margin-bottom: 1rem; }
-        .counter-section { display: flex; justify-content: center; gap: 4rem; margin: 5rem 0; text-align: center; }
-        .counter-num { font-size: 3rem; font-weight: 900; color: var(--secondary); }
-        .gallery-preview { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-        .gallery-preview img { width: 100%; border-radius: 16px; transition: 0.3s; }
-        .gallery-preview img:hover { transform: scale(1.05); }
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--card-hover-border);
+        }
+        .card i {
+            font-size: 2.5rem;
+            color: #00d4ff;
+            margin-bottom: 1rem;
+        }
+        .card h3,
+        .card h4 {
+            color: var(--text-primary);
+        }
+        .card .btn {
+            margin-top: 0.8rem;
+        }
+
+        /* ===== COUNTERS ===== */
+        .counter-section {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin: 5rem 0;
+            text-align: center;
+            color: var(--text-primary);
+        }
+        .counter-num {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #00d4ff;
+        }
+
+        /* ===== GALLERY ===== */
+        .gallery-preview {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+        .gallery-preview img {
+            width: 100%;
+            border-radius: 16px;
+            transition: 0.3s;
+        }
+        .gallery-preview img:hover {
+            transform: scale(1.05);
+        }
+
+        /* ===== FOOTER ===== */
         footer {
-            background: rgba(0,0,0,0.3); backdrop-filter: blur(15px);
-            padding: 3rem 2rem; margin-top: 5rem; border-top: 1px solid rgba(255,255,255,0.05);
+            background: var(--bg-footer);
+            backdrop-filter: blur(15px);
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+            border-top: 1px solid var(--border-color);
+            transition: background 0.3s;
         }
+        footer a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        footer a:hover {
+            color: #00d4ff;
+        }
+        footer .fa-2x {
+            margin: 0 6px;
+            color: var(--text-primary);
+            transition: color 0.3s;
+        }
+        footer .fa-2x:hover {
+            color: #00d4ff;
+        }
+
+        /* ===== WHATSAPP FLOAT ===== */
         .whatsapp-float {
-            position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white;
-            width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; box-shadow: 0 10px 30px rgba(37,211,102,0.5); z-index: 999;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: white;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.5);
+            z-index: 999;
             animation: pulse 2s infinite;
+            text-decoration: none;
         }
         @keyframes pulse {
-            0%{box-shadow:0 0 0 0 rgba(37,211,102,0.7);}
-            70%{box-shadow:0 0 0 25px rgba(37,211,102,0);}
-            100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 25px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
         }
 
-        /* ---------- ADMISSION PANEL (same working form) ---------- */
+        /* ===== ADMISSION PANEL ===== */
         .admission-panel {
-            position: fixed; top: 0; right: 0; width: 100%; max-width: 550px; height: 100vh;
-            background: rgba(5,5,20,0.95); backdrop-filter: blur(30px); z-index: 3000;
-            transform: translateX(100%); transition: transform 0.5s; padding: 2.5rem;
-            overflow-y: auto; border-left: 1px solid rgba(255,255,255,0.1);
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 550px;
+            height: 100vh;
+            background: var(--bg-panel);
+            backdrop-filter: blur(30px);
+            z-index: 3000;
+            transform: translateX(100%);
+            transition: transform 0.5s, background 0.3s;
+            padding: 2.5rem;
+            overflow-y: auto;
+            border-left: 1px solid var(--border-light);
+            color: var(--text-primary);
         }
-        .admission-panel.open { transform: translateX(0); }
-        .panel-close { position: absolute; top: 20px; right: 20px; font-size: 2rem; cursor: pointer; }
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group label { display: block; margin-bottom: 0.3rem; color: var(--secondary); }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 14px; background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
-            color: white; font-family: inherit; font-size: 1rem;
+        .admission-panel.open {
+            transform: translateX(0);
+        }
+        .panel-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #00d4ff;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: background 0.3s, border-color 0.3s, color 0.3s;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
         }
         .file-upload-box {
-            background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2);
-            border-radius: 12px; padding: 1rem; text-align: center;
-            margin-bottom: 0.8rem; cursor: pointer; position: relative;
+            background: var(--bg-card);
+            border: 1px dashed var(--border-light);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s, border-color 0.3s;
         }
-        .file-upload-box i { display: block; font-size: 1.5rem; color: var(--secondary); }
-        .file-upload-box span { display: block; margin-top: 0.3rem; }
-        .file-upload-box input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2999; display: none; }
-        .overlay.show { display: block; }
-        .hidden { display: none; }
+        .file-upload-box i {
+            display: block;
+            font-size: 1.5rem;
+            color: #00d4ff;
+        }
+        .file-upload-box span {
+            display: block;
+            margin-top: 0.3rem;
+            color: var(--text-secondary);
+        }
+        .file-upload-box input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2999;
+            display: none;
+        }
+        .overlay.show {
+            display: block;
+        }
+        .hidden {
+            display: none !important;
+        }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .gallery-preview { grid-template-columns: repeat(2, 1fr); }
-            .counter-section { gap: 2rem; }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: var(--bg-nav-scrolled);
+                backdrop-filter: blur(30px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                transform: translateX(-100%);
+                transition: transform 0.4s ease-in-out;
+                z-index: 1500;
+                padding: 2rem;
+            }
+            .nav-links.active {
+                transform: translateX(0);
+            }
+            .nav-links a {
+                font-size: 1.2rem;
+            }
+            .hamburger {
+                display: flex;
+                position: relative;
+                z-index: 2000;
+            }
+            .dropdown-menu {
+                position: static;
+                background: transparent;
+                border: none;
+                padding: 0.5rem 0;
+                backdrop-filter: none;
+            }
+            .dropdown-menu a {
+                padding: 0.4rem 1rem;
+                color: var(--text-primary);
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .counter-section {
+                gap: 2rem;
+                flex-wrap: wrap;
+            }
+            .gallery-preview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .admission-panel {
+                max-width: 100%;
+            }
+            nav {
+                padding: 0.6rem 1.2rem;
+                top: 12px;
+                border-radius: 40px;
+            }
+            .theme-toggle {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .gallery-preview {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- ===== ORBS ===== -->
     <div class="bg-orbs">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
     </div>
 
-    <!-- Navbar -->
+    <!-- ===== NAVBAR ===== -->
     <nav id="navbar">
         <a href="index.html" class="logo">SKILLSET</a>
-        <ul class="nav-links">
+
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li class="dropdown">
                 <a href="courses.html" class="dropdown-toggle">Courses</a>
                 <div class="dropdown-menu">
+                    <a href="courses.html?course=web">Web Development</a>
+                    <a href="courses.html?course=digital">Digital Marketing</a>
                     <a href="courses.html?course=ccc">CCC</a>
                     <a href="courses.html?course=tally">Tally Prime</a>
                     <a href="courses.html?course=dtp">DTP</a>
                     <a href="courses.html?course=dte">DTE</a>
-                    <a href="courses.html?course=web">Web Development</a>
-                    <a href="courses.html?course=digital">Digital Marketing</a>
                 </div>
             </li>
             <li><a href="placements.html">Placements</a></li>
             <li><a href="gallery.html">Gallery</a></li>
             <li><a href="#" id="admissionsLink">Admissions</a></li>
-            <li><a href="contact.html">Contact</a></li>
-              <li><a href="sign in.html">Sign In</a></li>
-            
-           
+            <li><a href="contacts.html">Contact</a></li>
+            <li><a href="sign in.html">Sign In</a></li>
+            <li>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+                    <i id="themeIcon" class="fas fa-moon"></i>
+                </button>
+            </li>
         </ul>
     </nav>
 
-    <!-- Overlay & Admission Panel -->
+    <!-- ===== OVERLAY & ADMISSION PANEL ===== -->
     <div class="overlay" id="overlay"></div>
     <div class="admission-panel" id="admissionPanel">
         <span class="panel-close" id="closePanel">&times;</span>
         <h2>Admission Application</h2>
         <form id="admissionForm" action="/api/admissions" method="POST" enctype="multipart/form-data">
-            <div class="form-group"><label for="fullName">Full Name</label><input type="text" id="fullName" name="fullName" required></div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                <div class="form-group"><label for="mobile">Mobile</label><input type="tel" id="mobile" name="mobile" required></div>
-                <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" required></div>
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" required />
             </div>
-            <div class="form-group"><label for="qualification">Qualification</label><select id="qualification" name="qualification"><option>10th</option><option>12th</option><option>Graduate</option></select></div>
-            <div class="form-group"><label for="course">Course</label><select id="course" name="course" required><option value="">-- Choose --</option><option>CCC</option><option>Tally Prime</option><option>DTP</option><option>DTE</option><option>Web Development</option><option>Digital Marketing</option></select></div>
-            <div class="form-group"><label for="address">Address</label><textarea id="address" name="address" rows="2"></textarea></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <div class="form-group">
+                    <label for="mobile">Mobile</label>
+                    <input type="tel" id="mobile" name="mobile" required />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="qualification">Qualification</label>
+                <select id="qualification" name="qualification">
+                    <option>10th</option>
+                    <option>12th</option>
+                    <option>Graduate</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="course">Course</label>
+                <select id="course" name="course" required>
+                    <option value="">-- Choose --</option>
+                    <option>CCC</option>
+                    <option>Tally Prime</option>
+                    <option>DTP</option>
+                    <option>DTE</option>
+                    <option>Web Development</option>
+                    <option>Digital Marketing</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <textarea id="address" name="address" rows="2"></textarea>
+            </div>
 
             <!-- Photo -->
-            <div class="form-group"><label>Upload Photo</label>
-                <div class="file-upload-box"><i class="fas fa-camera"></i><span id="photoLabel">Click to add photo</span><input type="file" id="photoFile" name="photo" accept="image/*" required></div>
-                <img id="photoPreview" style="width:100px; height:100px; object-fit:cover; border-radius:10px; display:none; margin-top:10px;" alt="Preview">
+            <div class="form-group">
+                <label>Upload Photo</label>
+                <div class="file-upload-box">
+                    <i class="fas fa-camera"></i>
+                    <span id="photoLabel">Click to add photo</span>
+                    <input type="file" id="photoFile" name="photo" accept="image/*" required />
+                </div>
+                <img id="photoPreview" style="width:100px; height:100px; object-fit:cover; border-radius:10px; display:none; margin-top:10px;" alt="Preview" />
             </div>
+
             <!-- Aadhaar -->
-            <div class="form-group"><label>Aadhaar Card</label>
-                <div class="file-upload-box"><i class="fas fa-id-card"></i><span id="aadhaarLabel">Upload Aadhaar</span><input type="file" id="aadhaarFile" name="aadhaar" accept="image/*,application/pdf" required></div>
+            <div class="form-group">
+                <label>Aadhaar Card</label>
+                <div class="file-upload-box">
+                    <i class="fas fa-id-card"></i>
+                    <span id="aadhaarLabel">Upload Aadhaar</span>
+                    <input type="file" id="aadhaarFile" name="aadhaar" accept="image/*,application/pdf" required />
+                </div>
             </div>
+
             <!-- Marksheet -->
-            <div class="form-group"><label>Marksheet</label>
-                <div class="file-upload-box"><i class="fas fa-file-alt"></i><span id="marksheetLabel">Upload Marksheet</span><input type="file" id="marksheetFile" name="marksheet" accept="image/*,application/pdf" required></div>
+            <div class="form-group">
+                <label>Marksheet</label>
+                <div class="file-upload-box">
+                    <i class="fas fa-file-alt"></i>
+                    <span id="marksheetLabel">Upload Marksheet</span>
+                    <input type="file" id="marksheetFile" name="marksheet" accept="image/*,application/pdf" required />
+                </div>
             </div>
 
             <button type="submit" class="btn" style="width:100%;" id="submitBtn">
@@ -232,11 +778,14 @@
         </form>
     </div>
 
-    <!-- Main Content -->
+    <!-- ===== MAIN CONTENT ===== -->
     <main style="position:relative; z-index:1;">
+
+        <!-- HERO -->
         <section class="hero">
             <div>
-                <h1>Student Skillset<br>Computer Academy</h1>
+                <h1>Student Skillset<br />Tech Institite
+</h1>
                 <div class="typewriter" id="typewriter"></div>
                 <div style="display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap;">
                     <a href="courses.html" class="btn">Explore Courses</a>
@@ -245,18 +794,20 @@
             </div>
         </section>
 
+        <!-- FEATURED COURSES -->
         <section class="container">
             <h2 class="section-title"><span>Featured Courses</span></h2>
             <div class="card-grid">
+                <div class="card"><i class="fas fa-code"></i><h3>Web Development</h3><a href="courses.html?course=web" class="btn">Details</a></div>
+                <div class="card"><i class="fas fa-chart-line"></i><h3>Digital Marketing</h3><a href="courses.html?course=digital" class="btn">Details</a></div>
                 <div class="card"><i class="fas fa-laptop-code"></i><h3>CCC</h3><a href="courses.html?course=ccc" class="btn">Details</a></div>
                 <div class="card"><i class="fas fa-calculator"></i><h3>Tally Prime</h3><a href="courses.html?course=tally" class="btn">Details</a></div>
                 <div class="card"><i class="fas fa-paint-brush"></i><h3>DTP</h3><a href="courses.html?course=dtp" class="btn">Details</a></div>
                 <div class="card"><i class="fas fa-keyboard"></i><h3>DTE</h3><a href="courses.html?course=dte" class="btn">Details</a></div>
-                <div class="card"><i class="fas fa-code"></i><h3>Web Development</h3><a href="courses.html?course=web" class="btn">Details</a></div>
-                <div class="card"><i class="fas fa-chart-line"></i><h3>Digital Marketing</h3><a href="courses.html?course=digital" class="btn">Details</a></div>
             </div>
         </section>
 
+        <!-- WHY CHOOSE US -->
         <section class="container">
             <h2 class="section-title"><span>Why Choose Us</span></h2>
             <div class="card-grid">
@@ -269,157 +820,282 @@
             </div>
         </section>
 
+        <!-- COUNTERS -->
         <div class="container counter-section">
-            <div><span class="counter-num" data-target="1200">0</span>+<br>Students Trained</div>
-            <div><span class="counter-num" data-target="800">0</span>+<br>Certificates Issued</div>
-            <div><span class="counter-num" data-target="350">0</span>+<br>Projects Completed</div>
+            <div><span class="counter-num" data-target="1200">0</span>+<br />Students Trained</div>
+            <div><span class="counter-num" data-target="800">0</span>+<br />Certificates Issued</div>
+            <div><span class="counter-num" data-target="350">0</span>+<br />Projects Completed</div>
         </div>
 
-        <section class="container">
-            <h2 class="section-title"><span>Gallery</span></h2>
-            <div class="gallery-preview">
-                <img src="room.jpeg">
-            </div>
-            <div style="text-align:center; margin-top:2rem;"><a href="gallery.html" class="btn">View Full Gallery</a></div>
-        </section>
-
-        
     </main>
 
+    <!-- ===== FOOTER ===== -->
     <footer>
         <div class="container" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:2rem;">
-            <div><h4>Student Skillset</h4><p>Practical Computer Education</p></div>
-            <div><a href="index.html" style="color:white;">Home</a> | <a href="courses.html" style="color:white;">Courses</a> | <a href="admissions.html" style="color:white;">Admissions</a></div>
-            <div><i class="fab fa-instagram fa-2x"></i> <i class="fab fa-facebook fa-2x"></i> <i class="fab fa-youtube fa-2x"></i></div>
+            <div>
+                <h4>Student Skillset</h4>
+                <p style="color:var(--text-secondary);">Practical Computer Education</p>
+            </div>
+            <div>
+                <a href="index.html">Home</a> |
+                <a href="courses.html">Courses</a> |
+                <a href="admissions.html">Admissions</a>
+            </div>
+            <div>
+                <i class="fab fa-instagram fa-2x"></i>
+                <i class="fab fa-facebook fa-2x"></i>
+                <i class="fab fa-youtube fa-2x"></i>
+            </div>
         </div>
     </footer>
 
-    <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <!-- ===== WHATSAPP FLOAT ===== -->
+    <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
-    <!-- JavaScript (same logic as the working admissions.html) -->
+    <!-- ============================================================ -->
+    <!-- ===== JAVASCRIPT ===== -->
+    <!-- ============================================================ -->
     <script>
-        // Navbar scroll
-        window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50));
+        document.addEventListener('DOMContentLoaded', function() {
 
-        // Typewriter
-        const words = ["Learn. Build. Grow.", "Practical Computer Education", "Career Success Starts Here"];
-        let wordIndex = 0, charIndex = 0, isDeleting = false;
-        const typewriterEl = document.getElementById('typewriter');
-        function type() {
-            const current = words[wordIndex];
-            typewriterEl.textContent = isDeleting ? current.substring(0, charIndex - 1) : current.substring(0, charIndex + 1);
-            charIndex += isDeleting ? -1 : 1;
-            if (!isDeleting && charIndex === current.length) setTimeout(() => isDeleting = true, 1500);
-            else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; }
-            setTimeout(type, isDeleting ? 50 : 100);
-        }
-        type();
+            // ========== 1. THEME TOGGLE (Dark / Light) ==========
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
 
-        // Counter animation
-        const counters = document.querySelectorAll('.counter-num');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const counter = entry.target;
-                    const target = +counter.dataset.target;
-                    let count = 0;
-                    const update = () => {
-                        count += target / 100;
-                        if (count < target) { counter.innerText = Math.ceil(count); requestAnimationFrame(update); }
-                        else counter.innerText = target;
-                    };
-                    update();
-                    observer.unobserve(counter);
+            function setTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                // Update icon
+                if (themeIcon) {
+                    themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+                }
+            }
+
+            function getStoredTheme() {
+                return localStorage.getItem('theme') || 'dark';
+            }
+
+            // Apply stored theme on load
+            const initialTheme = getStoredTheme();
+            setTheme(initialTheme);
+
+            // Toggle on click
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const current = document.documentElement.getAttribute('data-theme');
+                    const next = current === 'dark' ? 'light' : 'dark';
+                    setTheme(next);
+                });
+            }
+
+            // ========== 2. NAVBAR SCROLL ==========
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                if (navbar) {
+                    navbar.classList.toggle('scrolled', window.scrollY > 50);
                 }
             });
-        }, { threshold: 0.5 });
-        counters.forEach(c => observer.observe(c));
 
-        // ---------- ADMISSION PANEL LOGIC ----------
-        const panel = document.getElementById('admissionPanel');
-        const overlay = document.getElementById('overlay');
-        const closePanel = document.getElementById('closePanel');
-        const openTriggers = document.querySelectorAll('#admissionsLink, #applyNowBtn, .open-admission');
+            // ========== 3. HAMBURGER MENU ==========
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
 
-        function openPanel(e) {
-            e.preventDefault();
-            panel.classList.add('open');
-            overlay.classList.add('show');
-        }
-        function closePanelFn() {
-            panel.classList.remove('open');
-            overlay.classList.remove('show');
-        }
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    navLinks.classList.toggle('active');
+                });
 
-        openTriggers.forEach(el => el.addEventListener('click', openPanel));
-        closePanel.addEventListener('click', closePanelFn);
-        overlay.addEventListener('click', closePanelFn);
+                // Close menu on link click
+                navLinks.querySelectorAll('a').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        navLinks.classList.remove('active');
+                    });
+                });
+            }
 
-        // ---------- FILE HANDLING (same as working admissions.html) ----------
-        function setupFileInput(fileId, labelId, isPhoto = false) {
-            const input = document.getElementById(fileId);
-            const label = document.getElementById(labelId);
-            input.addEventListener('change', function() {
-                if (this.files.length > 0) {
-                    label.textContent = this.files[0].name;
-                    if (isPhoto) {
-                        const reader = new FileReader();
-                        reader.onload = e => {
+            // ========== 4. ADMISSION PANEL ==========
+            const panel = document.getElementById('admissionPanel');
+            const overlay = document.getElementById('overlay');
+            const closePanelBtn = document.getElementById('closePanel');
+            const openTriggers = document.querySelectorAll('#admissionsLink, .open-admission');
+
+            function openPanel(e) {
+                if (e) e.preventDefault();
+                if (panel) panel.classList.add('open');
+                if (overlay) overlay.classList.add('show');
+            }
+
+            function closePanelFn() {
+                if (panel) panel.classList.remove('open');
+                if (overlay) overlay.classList.remove('show');
+            }
+
+            openTriggers.forEach(function(el) {
+                el.addEventListener('click', openPanel);
+            });
+
+            if (closePanelBtn) closePanelBtn.addEventListener('click', closePanelFn);
+            if (overlay) overlay.addEventListener('click', closePanelFn);
+
+            // ========== 5. FILE INPUT HELPERS ==========
+            function setupFileInput(fileId, labelId, isPhoto) {
+                const input = document.getElementById(fileId);
+                const label = document.getElementById(labelId);
+                if (!input || !label) return;
+
+                input.addEventListener('change', function() {
+                    if (this.files && this.files.length > 0) {
+                        label.textContent = this.files[0].name;
+
+                        if (isPhoto) {
                             const preview = document.getElementById('photoPreview');
-                            preview.src = e.target.result;
-                            preview.style.display = 'block';
+                            if (preview) {
+                                const reader = new FileReader();
+                                reader.onload = function(e) {
+                                    preview.src = e.target.result;
+                                    preview.style.display = 'block';
+                                };
+                                reader.readAsDataURL(this.files[0]);
+                            }
+                        }
+                    } else {
+                        const defaultLabels = {
+                            photoFile: 'Click to add photo',
+                            aadhaarFile: 'Upload Aadhaar',
+                            marksheetFile: 'Upload Marksheet'
                         };
-                        reader.readAsDataURL(this.files[0]);
+                        label.textContent = defaultLabels[fileId] || 'Upload file';
+                        if (isPhoto) {
+                            const preview = document.getElementById('photoPreview');
+                            if (preview) preview.style.display = 'none';
+                        }
                     }
-                } else {
-                    label.textContent = isPhoto ? 'Click to add photo' : (fileId === 'aadhaarFile' ? 'Upload Aadhaar' : 'Upload Marksheet');
-                    if (isPhoto) document.getElementById('photoPreview').style.display = 'none';
-                }
-            });
-            input.addEventListener('click', function() { this.value = ''; });
-        }
-        setupFileInput('photoFile', 'photoLabel', true);
-        setupFileInput('aadhaarFile', 'aadhaarLabel');
-        setupFileInput('marksheetFile', 'marksheetLabel');
+                });
 
-        // ---------- FORM SUBMISSION (exact same logic as the one that worked) ----------
-        document.getElementById('admissionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const photo = document.getElementById('photoFile').files[0];
-            const aadhaar = document.getElementById('aadhaarFile').files[0];
-            const marksheet = document.getElementById('marksheetFile').files[0];
-            if (!photo || !aadhaar || !marksheet) {
-                alert('Please upload all three documents.');
-                return;
+                // Reset on click so user can re-select the same file
+                input.addEventListener('click', function() {
+                    this.value = '';
+                });
             }
-            const submitText = document.getElementById('submitText');
-            const submitLoader = document.getElementById('submitLoader');
-            const submitBtn = document.getElementById('submitBtn');
-            submitText.classList.add('hidden');
-            submitLoader.classList.remove('hidden');
-            submitBtn.disabled = true;
 
-            try {
-                const res = await fetch('/api/admissions', { method: 'POST', body: new FormData(this) });
-                const data = await res.json();
-                if (res.ok) {
-                    alert('✅ ' + data.message);
-                    this.reset();
-                    document.getElementById('photoLabel').textContent = 'Click to add photo';
-                    document.getElementById('aadhaarLabel').textContent = 'Upload Aadhaar';
-                    document.getElementById('marksheetLabel').textContent = 'Upload Marksheet';
-                    document.getElementById('photoPreview').style.display = 'none';
-                } else {
-                    alert('❌ ' + (data.error || 'Submission failed'));
-                }
-            } catch (err) {
-                alert('❌ Network error. Is the server running?');
-            } finally {
-                submitText.classList.remove('hidden');
-                submitLoader.classList.remove('hidden');
-                submitBtn.disabled = false;
+            setupFileInput('photoFile', 'photoLabel', true);
+            setupFileInput('aadhaarFile', 'aadhaarLabel', false);
+            setupFileInput('marksheetFile', 'marksheetLabel', false);
+
+            // ========== 6. COUNTER ANIMATION ==========
+            const counters = document.querySelectorAll('.counter-num');
+            if (counters.length > 0) {
+                const counterObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            const counter = entry.target;
+                            const target = parseInt(counter.dataset.target, 10);
+                            let count = 0;
+                            const step = Math.max(1, Math.floor(target / 100));
+                            const interval = setInterval(function() {
+                                count += step;
+                                if (count >= target) {
+                                    counter.innerText = target;
+                                    clearInterval(interval);
+                                } else {
+                                    counter.innerText = count;
+                                }
+                            }, 16);
+                            counterObserver.unobserve(counter);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                counters.forEach(function(c) {
+                    counterObserver.observe(c);
+                });
             }
-        });
+
+            // ========== 7. TYPEWRITER ==========
+            const typewriterEl = document.getElementById('typewriter');
+            if (typewriterEl) {
+                const words = ['Learn. Build. Grow.', 'Practical Computer Education', 'Career Success Starts Here'];
+                let wordIndex = 0,
+                    charIndex = 0,
+                    isDeleting = false;
+
+                function type() {
+                    const current = words[wordIndex];
+                    if (isDeleting) {
+                        typewriterEl.textContent = current.substring(0, charIndex - 1);
+                        charIndex--;
+                    } else {
+                        typewriterEl.textContent = current.substring(0, charIndex + 1);
+                        charIndex++;
+                    }
+
+                    if (!isDeleting && charIndex === current.length) {
+                        setTimeout(function() { isDeleting = true; }, 1500);
+                    } else if (isDeleting && charIndex === 0) {
+                        isDeleting = false;
+                        wordIndex = (wordIndex + 1) % words.length;
+                    }
+                    setTimeout(type, isDeleting ? 50 : 100);
+                }
+                type();
+            }
+
+            // ========== 8. FORM SUBMISSION ==========
+            const form = document.getElementById('admissionForm');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+
+                    const photo = document.getElementById('photoFile').files[0];
+                    const aadhaar = document.getElementById('aadhaarFile').files[0];
+                    const marksheet = document.getElementById('marksheetFile').files[0];
+
+                    if (!photo || !aadhaar || !marksheet) {
+                        alert('Please upload all three documents (Photo, Aadhaar, Marksheet).');
+                        return;
+                    }
+
+                    const submitText = document.getElementById('submitText');
+                    const submitLoader = document.getElementById('submitLoader');
+                    const submitBtn = document.getElementById('submitBtn');
+
+                    submitText.classList.add('hidden');
+                    submitLoader.classList.remove('hidden');
+                    submitBtn.disabled = true;
+
+                    try {
+                        const formData = new FormData(form);
+                        const res = await fetch('/api/admissions', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const data = await res.json();
+                        if (res.ok) {
+                            alert('✅ ' + (data.message || 'Application submitted!'));
+                            form.reset();
+                            document.getElementById('photoLabel').textContent = 'Click to add photo';
+                            document.getElementById('aadhaarLabel').textContent = 'Upload Aadhaar';
+                            document.getElementById('marksheetLabel').textContent = 'Upload Marksheet';
+                            document.getElementById('photoPreview').style.display = 'none';
+                        } else {
+                            alert('❌ ' + (data.error || 'Submission failed.'));
+                        }
+                    } catch (err) {
+                        alert('❌ Network error. Please check your connection.');
+                    } finally {
+                        submitText.classList.remove('hidden');
+                        submitLoader.classList.add('hidden');
+                        submitBtn.disabled = false;
+                    }
+                });
+            }
+
+        }); // end DOMContentLoaded
     </script>
+
 </body>
 </html>
