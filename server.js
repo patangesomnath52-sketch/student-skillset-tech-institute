@@ -30,7 +30,15 @@ app.use('/uploads', express.static(uploadDir));
 // Note: Ensure your './routes/admissions' file uses multer as shown previously
 const admissionsRouter = require('./routes/admissions');
 app.use('/api/admissions', admissionsRouter);
+const admissionsRouter = require('./routes/admissions');
+const coursesRouter = require('./routes/courses');
+const galleryRouter = require('./routes/gallery');
+const contactRouter = require('./routes/contact');
 
+app.use('/api/admissions', admissionsRouter);
+app.use('/api/courses', coursesRouter);
+app.use('/api/gallery', galleryRouter);
+app.use('/api/contact', contactRouter);
 // Database Connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/skillset')
   .then(() => console.log('✅ MongoDB connected'))

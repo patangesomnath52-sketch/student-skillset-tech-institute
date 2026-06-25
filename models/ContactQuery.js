@@ -1,12 +1,10 @@
-const mongoose = require('mongoose');
-
+﻿const mongoose = require('mongoose');
 const contactQuerySchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
+  name: String,
+  email: String,
   phone: String,
   course: String,
-  message: { type: String, required: true },
+  message: String,
   createdAt: { type: Date, default: Date.now }
 });
-
 module.exports = mongoose.model('ContactQuery', contactQuerySchema);
