@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admissions – Student Skillset</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root { --primary:#6c5ce7; --secondary:#00cec9; }
+    body { font-family:'Poppins',sans-serif; background:linear-gradient(135deg,#0c0c1d,#1a1a3e); color:#fff; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; }
+    .container { background:rgba(255,255,255,0.08); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.2); border-radius:20px; padding:2rem; max-width:550px; width:90%; }
+    h1 { text-align:center; }
+    label { display:block; margin:1rem 0 .3rem; color:var(--secondary); }
+    input,select,textarea { width:100%; padding:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:12px; color:white; }
+    .file-upload-box { background:rgba(255,255,255,0.05); border:1px dashed rgba(255,255,255,0.3); border-radius:12px; padding:1rem; text-align:center; cursor:pointer; margin-bottom:0.8rem; position:relative; }
+    .file-upload-box i { display:block; font-size:1.5rem; color:var(--secondary); }
+    .file-upload-box span { display:block; margin-top:0.5rem; }
+    .file-upload-box input[type="file"] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+    button { background:linear-gradient(45deg,var(--primary),#a29bfe); border:none; padding:14px; width:100%; border-radius:50px; color:white; font-weight:bold; margin-top:1.5rem; cursor:pointer; }
+    button:disabled { opacity:0.6; }
+    #photoPreview { display:none; width:100px; height:100px; object-fit:cover; border-radius:10px; margin-top:10px; }
+    .hidden { display:none; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Admission Application</h1>
+  <form id="admissionForm" action="/api/admissions" method="POST" enctype="multipart/form-data">
+    <label for="fullName">Full Name</label>
+    <input type="text" id="fullName" name="fullName" required>
+
+    <label for="mobile">Mobile</label>
+    <input type="tel" id="mobile" name="mobile" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="qualification">Qualification</label>
+    <select id="qualification" name="qualification"><option>10th</option><option>12th</option><option>Graduate</option></select>
+
+    <label for="course">Course</label>
+    <select id="course" name="course" required><option value="">-- Choose --</option><option>CCC</option><option>Tally Prime</option><option>DTP</option><option>DTE</option><option>Web Development</option><option>Digital Marketing</option></select>
+
+    <label for="address">Address</label>
+    <textarea id="address" name="address" rows="2"></textarea>
+
+    <label>Upload Photo</label>
+    <div class="file-upload-box"><i class="fas fa-camera"></i><span id="photoLabel">Click to add photo</span><input type="file" id="photoFile" name="photo" accept="image/*" required></div>
+    <img id="photoPreview" alt="Preview">
+
+    <label>Aadhaar Card</label>
+    <div class="file-upload-box"><i class="fas fa-id-card"></i><span id="aadhaarLabel">Upload Aadhaar</span><input type="file" id="aadhaarFile" name="aadhaar" accept="image/*,application/pdf" required></div>
+
+    <label>Marksheet</label>
+    <div class="file-upload-box"><i class="fas fa-file-alt"></i><span id="marksheetLabel">Upload Marksheet</span><input type="file" id="marksheetFile" name="marksheet" accept="image/*,application/pdf" required></div>
+
+    <button type="submit" id="submitBtn"><span id="submitText">Submit Application</span><span id="submitLoader" class="hidden"> Sending...</span></button>
+  </form>
+</div>
+<script>
+// File selection feedback
+function setupFileInput(fileId, labelId, isPhoto = false) {
+  const input = document.getElementById(fileId);
+  const label = document.getElementById(labelId);
+  input.addEventListener('change', function() {
+    if (this.files.length > 0) {
+      label.textContent = this.files[0].name;
+      if (isPhoto) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const preview = document.getElementById('photoPreview');
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(this.files[0]);
+      }
+    } else {
+      label.textContent = isPhoto ? 'Click to add photo' : (fileId === 'aadhaarFile' ? 'Upload Aadhaar' : 'Upload Marksheet');
+      if (isPhoto) document.getElementById('photoPreview').style.display = 'none';
+    }
+  });
+  // Allow re-selecting same file
+  input.addEventListener('click', function() { this.value = ''; });
+}
+setupFileInput('photoFile', 'photoLabel', true);
+setupFileInput('aadhaarFile', 'aadhaarLabel');
+setupFileInput('marksheetFile', 'marksheetLabel');
+
+// Form submission
+document.getElementById('admissionForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const photo = document.getElementById('photoFile').files[0];
+  const aadhaar = document.getElementById('aadhaarFile').files[0];
+  const marksheet = document.getElementById('marksheetFile').files[0];
+  if (!photo || !aadhaar || !marksheet) {
+    alert('Please upload all three documents.');
+    return;
+  }
+  const submitText = document.getElementById('submitText');
+  const submitLoader = document.getElementById('submitLoader');
+  const submitBtn = document.getElementById('submitBtn');
+  submitText.classList.add('hidden');
+  submitLoader.classList.remove('hidden');
+  submitBtn.disabled = true;
+
+  try {
+    const res = await fetch('/api/admissions', { method: 'POST', body: new FormData(this) });
+    const data = await res.json();
+    if (res.ok) {
+      alert('✅ ' + data.message);
+      this.reset();
+      document.getElementById('photoLabel').textContent = 'Click to add photo';
+      document.getElementById('aadhaarLabel').textContent = 'Upload Aadhaar';
+      document.getElementById('marksheetLabel').textContent = 'Upload Marksheet';
+      document.getElementById('photoPreview').style.display = 'none';
+    } else {
+      alert('❌ ' + (data.error || 'Submission failed'));
+    }
+  } catch (err) {
+    alert('❌ Network error. Is the server running?');
+  } finally {
+    submitText.classList.remove('hidden');
+    submitLoader.classList.add('hidden');
+    submitBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

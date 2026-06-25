@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel – Student Skillset</title>
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #0a0a1a; color: white; padding: 2rem; }
+    .login-container, .dashboard { max-width: 1000px; margin: 0 auto; }
+    input, select, button { padding: 0.6rem; margin: 0.3rem; border-radius: 8px; border: none; }
+    table { width: 100%; border-collapse: collapse; background: rgba(255,255,255,0.05); margin-top: 1rem; }
+    th, td { padding: 0.7rem; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: left; }
+    button { background: #6c5ce7; color: white; cursor: pointer; }
+    button:hover { opacity: 0.8; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div id="loginScreen">
+    <h1>Admin Login</h1>
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
+<title>Admin Dashboard</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; background: #f4f4f9; }
+    table { width: 100%; border-collapse: collapse; background: white; }
+    th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+  </style>
+</head>
+<body>
+  <h1>Student Applications</h1>
+  <table id="appTable">
+    <thead>
+      <tr><th>Name</th><th>Email</th><th>Course</th><th>Files</th></tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <div id="dashboard" class="hidden">
+    <h1>Admission Applications</h1>
+    <div>
+      <input type="text" id="search" placeholder="Search by name/mobile/email" oninput="loadAdmissions()">
+      <select id="statusFilter" onchange="loadAdmissions()">
+        <option value="">All Status</option>
+        <option value="pending">Pending</option>
+        <option value="reviewed">Reviewed</option>
+        <option value="approved">Approved</option>
+      </select>
+    </div>
+    <table id="admissionsTable">
+      <thead>
+        <tr>
+          <th>Name</th><th>Mobile</th><th>Course</th><th>Status</th><th>Submitted</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const API = '/api/admissions';
+    let token = sessionStorage.getItem('adminToken');
+
+    function login() {
+      const password = document.getElementById('password').value;
+      // Simple password check (in production, use a proper auth route)
+      if (password === 'skillset2024') {
+        token = btoa(password);
+        sessionStorage.setItem('adminToken', token);
+        showDashboard();
+      } else {
+        alert('Wrong password');
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+      loadAdmissions();
+    }
+
+    if (token) showDashboard();
+
+  async function loadApplications() {
+      const res = await fetch('/api/admissions'); // Ensure this GET route exists
+      const data = await res.json();
+      const body = document.getElementById('tableBody');
+      data.forEach(app => {
+        body.innerHTML += `<tr>
+          <td>${app.fullName}</td>
+          <td>${app.email}</td>
+          <td>${app.course}</td>
+          <td><a href="/uploads/${app.photo}" target="_blank">View File</a></td>
+        </tr>`;
+      });
+    }
+    loadApplications();
+
+    function renderTable(admissions) {
+      const tbody = document.querySelector('#admissionsTable tbody');
+      tbody.innerHTML = '';
+      admissions.forEach(adm => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${adm.fullName}</td>
+          <td>${adm.mobile}</td>
+          <td>${adm.course}</td>
+          <td>
+            <select onchange="updateStatus('${adm._id}', this.value)">
+              <option value="pending" ${adm.status==='pending'?'selected':''}>Pending</option>
+              <option value="reviewed" ${adm.status==='reviewed'?'selected':''}>Reviewed</option>
+              <option value="approved" ${adm.status==='approved'?'selected':''}>Approved</option>
+            </select>
+          </td>
+          <td>${new Date(adm.submittedAt).toLocaleDateString()}</td>
+          <td>
+            <button onclick="viewDocs('${adm._id}')">Docs</button>
+            <button onclick="deleteAdm('${adm._id}')">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function updateStatus(id, status) {
+      await fetch(`${API}/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+    }
+
+    async function deleteAdm(id) {
+      if (confirm('Delete this application?')) {
+        await fetch(`${API}/${id}`, { method: 'DELETE' });
+        loadAdmissions();
+      }
+    }
+
+    function viewDocs(id) {
+      // Fetch specific admission and open files
+      fetch(`${API}?search=${id}`).then(r=>r.json()).then(data=>{
+        if(data.length>0){
+          const adm = data[0];
+          let html = `<h3>Documents for ${adm.fullName}</h3>`;
+          if(adm.photo) html += `<a href="/${adm.photo}" target="_blank">Photo</a><br>`;
+          if(adm.aadhaar) html += `<a href="/${adm.aadhaar}" target="_blank">Aadhaar</a><br>`;
+          if(adm.marksheet) html += `<a href="/${adm.marksheet}" target="_blank">Marksheet</a><br>`;
+          const win = window.open('', '_blank');
+          win.document.write(html);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

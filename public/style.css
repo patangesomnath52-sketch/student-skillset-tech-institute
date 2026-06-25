@@ -1,0 +1,117 @@
+:root {
+    --primary-color: #0f172a;
+    --accent-color: #3b82f6;
+    --text-color: #334155;
+    --white: #ffffff;
+}
+
+body { font-family: 'Segoe UI', sans-serif; color: var(--text-color); margin: 0; }
+
+.navbar { 
+    display: flex; justify-content: space-between; padding: 1rem 5%; 
+    background: var(--white); box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.hero { 
+    text-align: center; padding: 5rem 10%; background: #f1f5f9; 
+}
+
+.btn-primary { 
+    background: var(--accent-color); color: var(--white); 
+    padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none; 
+}
+.admission-section { max-width: 600px; margin: 2rem auto; padding: 2rem; background: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+.form-group input, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; }
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    background: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #1e293b;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover { color: #3b82f6; }
+
+.btn-primary {
+    background: #3b82f6;
+    color: white !important;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    transition: transform 0.2s, background 0.3s;
+}
+
+.btn-primary:hover { background: #2563eb; transform: translateY(-2px); }
+.hero {
+    padding: 8rem 5%;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: #475569;
+    margin-bottom: 2.5rem;
+}
+/* Premium Glassmorphism */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 3rem;
+    border-radius: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Typography upgrade */
+h1 {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    line-height: 1.1;
+    color: #0f172a;
+}
+
+h1 span {
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Button style */
+.btn-main {
+    background: #0f172a;
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-main:hover {
+    transform: scale(1.05);
+    background: #1e293b;
+}

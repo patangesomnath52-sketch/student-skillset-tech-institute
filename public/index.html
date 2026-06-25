@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Student Skillset Tech Institute | Learn. Build. Grow.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff2d95;
+            --secondary: #00d4ff;
+            --bg: #0a0a1a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+        }
+        .bg-orbs {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15;
+            animation: float 20s infinite ease-in-out;
+        }
+        .orb-1 { width: 600px; height: 600px; background: var(--primary); top: -200px; left: -100px; }
+        .orb-2 { width: 500px; height: 500px; background: var(--secondary); bottom: -200px; right: -100px; animation-delay: -7s; }
+        .orb-3 { width: 400px; height: 400px; background: #7b2ff7; top: 50%; left: 50%; animation-delay: -14s; }
+        @keyframes float {
+            0%,100%{transform:translate(0,0) scale(1);}
+            25%{transform:translate(50px,-30px) scale(1.1);}
+            50%{transform:translate(-20px,40px) scale(0.9);}
+            75%{transform:translate(-40px,-20px) scale(1.05);}
+        }
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+        nav {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 1200px; z-index: 1000;
+            background: rgba(10,10,26,0.7); backdrop-filter: blur(20px);
+            border-radius: 60px; padding: 0.8rem 2rem;
+            display: flex; align-items: center; justify-content: space-between;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        nav.scrolled { background: rgba(10,10,26,0.9); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .logo {
+            font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.6rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-links { display: flex; list-style: none; gap: 1.5rem; align-items: center; }
+        .nav-links a {
+            color: #fff; text-decoration: none; font-weight: 500; font-size: 0.9rem;
+            position: relative; padding: 0.3rem 0;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px;
+            background: var(--secondary); transition: width 0.3s;
+        }
+        .nav-links a:hover { color: var(--secondary); }
+        .nav-links a:hover::after { width: 100%; }
+        .dropdown { position: relative; }
+        .dropdown-toggle::after { content: " ▾"; font-size: 0.8rem; }
+        .dropdown-menu {
+            position: absolute; top: 100%; left: 0;
+            background: rgba(10,10,26,0.9); backdrop-filter: blur(20px);
+            border-radius: 16px; padding: 0.8rem 0; min-width: 220px;
+            display: none; flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-top: 10px; z-index: 1001;
+        }
+        .dropdown:hover .dropdown-menu { display: flex; }
+        .dropdown-menu a { padding: 0.6rem 1.5rem; font-size: 0.85rem; white-space: nowrap; }
+        .dropdown-menu a:hover { background: rgba(255,255,255,0.05); }
+        .btn {
+            padding: 0.7rem 1.8rem; border-radius: 50px; font-weight: 600;
+            background: linear-gradient(135deg, var(--primary), #c0266b);
+            color: white; box-shadow: 0 4px 20px rgba(255,45,149,0.5);
+            border: none; cursor: pointer; transition: 0.3s; text-decoration: none;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,45,149,0.7); }
+        .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.3); box-shadow: none; }
+        .btn-outline:hover { background: white; color: var(--bg); }
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; position: relative; z-index: 1;
+        }
+        .hero h1 {
+            font-size: clamp(2.8rem, 8vw, 5.5rem); font-family: 'Montserrat', sans-serif;
+            font-weight: 900; background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+        }
+        .typewriter { font-size: 1.3rem; opacity: 0.8; margin-bottom: 2.5rem; min-height: 30px; }
+        .section-title { text-align: center; margin: 4rem 0 2rem; font-size: 2.5rem; font-weight: 800; }
+        .section-title span { background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 28px; padding: 2rem; text-align: center; transition: 0.4s;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--secondary); }
+        .card i { font-size: 2.5rem; color: var(--secondary); margin-bottom: 1rem; }
+        .counter-section { display: flex; justify-content: center; gap: 4rem; margin: 5rem 0; text-align: center; }
+        .counter-num { font-size: 3rem; font-weight: 900; color: var(--secondary); }
+        .gallery-preview { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+        .gallery-preview img { width: 100%; border-radius: 16px; transition: 0.3s; }
+        .gallery-preview img:hover { transform: scale(1.05); }
+        footer {
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(15px);
+            padding: 3rem 2rem; margin-top: 5rem; border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .whatsapp-float {
+            position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white;
+            width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; box-shadow: 0 10px 30px rgba(37,211,102,0.5); z-index: 999;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%{box-shadow:0 0 0 0 rgba(37,211,102,0.7);}
+            70%{box-shadow:0 0 0 25px rgba(37,211,102,0);}
+            100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
+        }
+
+        /* ---------- ADMISSION PANEL (same working form) ---------- */
+        .admission-panel {
+            position: fixed; top: 0; right: 0; width: 100%; max-width: 550px; height: 100vh;
+            background: rgba(5,5,20,0.95); backdrop-filter: blur(30px); z-index: 3000;
+            transform: translateX(100%); transition: transform 0.5s; padding: 2.5rem;
+            overflow-y: auto; border-left: 1px solid rgba(255,255,255,0.1);
+        }
+        .admission-panel.open { transform: translateX(0); }
+        .panel-close { position: absolute; top: 20px; right: 20px; font-size: 2rem; cursor: pointer; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 0.3rem; color: var(--secondary); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 14px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            color: white; font-family: inherit; font-size: 1rem;
+        }
+        .file-upload-box {
+            background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 12px; padding: 1rem; text-align: center;
+            margin-bottom: 0.8rem; cursor: pointer; position: relative;
+        }
+        .file-upload-box i { display: block; font-size: 1.5rem; color: var(--secondary); }
+        .file-upload-box span { display: block; margin-top: 0.3rem; }
+        .file-upload-box input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2999; display: none; }
+        .overlay.show { display: block; }
+        .hidden { display: none; }
+
+        @media (max-width: 768px) {
+            .gallery-preview { grid-template-columns: repeat(2, 1fr); }
+            .counter-section { gap: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar">
+        <a href="index.html" class="logo">SKILLSET</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li class="dropdown">
+                <a href="courses.html" class="dropdown-toggle">Courses</a>
+                <div class="dropdown-menu">
+                    <a href="courses.html?course=ccc">CCC</a>
+                    <a href="courses.html?course=tally">Tally Prime</a>
+                    <a href="courses.html?course=dtp">DTP</a>
+                    <a href="courses.html?course=dte">DTE</a>
+                    <a href="courses.html?course=web">Web Development</a>
+                    <a href="courses.html?course=digital">Digital Marketing</a>
+                </div>
+            </li>
+            <li><a href="placements.html">Placements</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="#" id="admissionsLink">Admissions</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="#" id="studentLoginBtn" class="btn btn-outline" style="padding:0.4rem 1.2rem;">Student Login</a></li>
+            <li><a href="#" id="applyNowBtn" class="btn">Apply Now</a></li>
+        </ul>
+    </nav>
+
+    <!-- Overlay & Admission Panel -->
+    <div class="overlay" id="overlay"></div>
+    <div class="admission-panel" id="admissionPanel">
+        <span class="panel-close" id="closePanel">&times;</span>
+        <h2>Admission Application</h2>
+        <form id="admissionForm" action="/api/admissions" method="POST" enctype="multipart/form-data">
+            <div class="form-group"><label for="fullName">Full Name</label><input type="text" id="fullName" name="fullName" required></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                <div class="form-group"><label for="mobile">Mobile</label><input type="tel" id="mobile" name="mobile" required></div>
+                <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" required></div>
+            </div>
+            <div class="form-group"><label for="qualification">Qualification</label><select id="qualification" name="qualification"><option>10th</option><option>12th</option><option>Graduate</option></select></div>
+            <div class="form-group"><label for="course">Course</label><select id="course" name="course" required><option value="">-- Choose --</option><option>CCC</option><option>Tally Prime</option><option>DTP</option><option>DTE</option><option>Web Development</option><option>Digital Marketing</option></select></div>
+            <div class="form-group"><label for="address">Address</label><textarea id="address" name="address" rows="2"></textarea></div>
+
+            <!-- Photo -->
+            <div class="form-group"><label>Upload Photo</label>
+                <div class="file-upload-box"><i class="fas fa-camera"></i><span id="photoLabel">Click to add photo</span><input type="file" id="photoFile" name="photo" accept="image/*" required></div>
+                <img id="photoPreview" style="width:100px; height:100px; object-fit:cover; border-radius:10px; display:none; margin-top:10px;" alt="Preview">
+            </div>
+            <!-- Aadhaar -->
+            <div class="form-group"><label>Aadhaar Card</label>
+                <div class="file-upload-box"><i class="fas fa-id-card"></i><span id="aadhaarLabel">Upload Aadhaar</span><input type="file" id="aadhaarFile" name="aadhaar" accept="image/*,application/pdf" required></div>
+            </div>
+            <!-- Marksheet -->
+            <div class="form-group"><label>Marksheet</label>
+                <div class="file-upload-box"><i class="fas fa-file-alt"></i><span id="marksheetLabel">Upload Marksheet</span><input type="file" id="marksheetFile" name="marksheet" accept="image/*,application/pdf" required></div>
+            </div>
+
+            <button type="submit" class="btn" style="width:100%;" id="submitBtn">
+                <span id="submitText">Submit Application</span>
+                <span id="submitLoader" class="hidden"> Sending...</span>
+            </button>
+        </form>
+    </div>
+
+    <!-- Main Content -->
+    <main style="position:relative; z-index:1;">
+        <section class="hero">
+            <div>
+                <h1>Student Skillset<br>Computer Academy</h1>
+                <div class="typewriter" id="typewriter"></div>
+                <div style="display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap;">
+                    <a href="courses.html" class="btn">Explore Courses</a>
+                    <a href="#" class="btn btn-outline open-admission">Apply Now</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <h2 class="section-title"><span>Featured Courses</span></h2>
+            <div class="card-grid">
+                <div class="card"><i class="fas fa-laptop-code"></i><h3>CCC</h3><a href="courses.html?course=ccc" class="btn">Details</a></div>
+                <div class="card"><i class="fas fa-calculator"></i><h3>Tally Prime</h3><a href="courses.html?course=tally" class="btn">Details</a></div>
+                <div class="card"><i class="fas fa-paint-brush"></i><h3>DTP</h3><a href="courses.html?course=dtp" class="btn">Details</a></div>
+                <div class="card"><i class="fas fa-keyboard"></i><h3>DTE</h3><a href="courses.html?course=dte" class="btn">Details</a></div>
+                <div class="card"><i class="fas fa-code"></i><h3>Web Development</h3><a href="courses.html?course=web" class="btn">Details</a></div>
+                <div class="card"><i class="fas fa-chart-line"></i><h3>Digital Marketing</h3><a href="courses.html?course=digital" class="btn">Details</a></div>
+            </div>
+        </section>
+
+        <section class="container">
+            <h2 class="section-title"><span>Why Choose Us</span></h2>
+            <div class="card-grid">
+                <div class="card"><i class="fas fa-chalkboard-teacher"></i><h4>Expert Trainers</h4></div>
+                <div class="card"><i class="fas fa-flask"></i><h4>Practical Labs</h4></div>
+                <div class="card"><i class="fas fa-project-diagram"></i><h4>Live Projects</h4></div>
+                <div class="card"><i class="fas fa-certificate"></i><h4>Certification</h4></div>
+                <div class="card"><i class="fas fa-compass"></i><h4>Career Guidance</h4></div>
+                <div class="card"><i class="fas fa-rupee-sign"></i><h4>Affordable Fees</h4></div>
+            </div>
+        </section>
+
+        <div class="container counter-section">
+            <div><span class="counter-num" data-target="1200">0</span>+<br>Students Trained</div>
+            <div><span class="counter-num" data-target="800">0</span>+<br>Certificates Issued</div>
+            <div><span class="counter-num" data-target="350">0</span>+<br>Projects Completed</div>
+        </div>
+
+        <section class="container">
+            <h2 class="section-title"><span>Gallery</span></h2>
+            <div class="gallery-preview">
+                <img src="https://picsum.photos/400/300?random=1"><img src="https://picsum.photos/400/300?random=2">
+                <img src="https://picsum.photos/400/300?random=3"><img src="https://picsum.photos/400/300?random=4">
+            </div>
+            <div style="text-align:center; margin-top:2rem;"><a href="gallery.html" class="btn">View Full Gallery</a></div>
+        </section>
+
+        <div class="container" style="text-align:center; margin-top:5rem;">
+            <h2>Start Your Career Today</h2>
+            <a href="#" class="btn open-admission">Apply Now</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:2rem;">
+            <div><h4>Student Skillset</h4><p>Practical Computer Education</p></div>
+            <div><a href="index.html" style="color:white;">Home</a> | <a href="courses.html" style="color:white;">Courses</a> | <a href="admissions.html" style="color:white;">Admissions</a></div>
+            <div><i class="fab fa-instagram fa-2x"></i> <i class="fab fa-facebook fa-2x"></i> <i class="fab fa-youtube fa-2x"></i></div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+    <!-- JavaScript (same logic as the working admissions.html) -->
+    <script>
+        // Navbar scroll
+        window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50));
+
+        // Typewriter
+        const words = ["Learn. Build. Grow.", "Practical Computer Education", "Career Success Starts Here"];
+        let wordIndex = 0, charIndex = 0, isDeleting = false;
+        const typewriterEl = document.getElementById('typewriter');
+        function type() {
+            const current = words[wordIndex];
+            typewriterEl.textContent = isDeleting ? current.substring(0, charIndex - 1) : current.substring(0, charIndex + 1);
+            charIndex += isDeleting ? -1 : 1;
+            if (!isDeleting && charIndex === current.length) setTimeout(() => isDeleting = true, 1500);
+            else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; }
+            setTimeout(type, isDeleting ? 50 : 100);
+        }
+        type();
+
+        // Counter animation
+        const counters = document.querySelectorAll('.counter-num');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = +counter.dataset.target;
+                    let count = 0;
+                    const update = () => {
+                        count += target / 100;
+                        if (count < target) { counter.innerText = Math.ceil(count); requestAnimationFrame(update); }
+                        else counter.innerText = target;
+                    };
+                    update();
+                    observer.unobserve(counter);
+                }
+            });
+        }, { threshold: 0.5 });
+        counters.forEach(c => observer.observe(c));
+
+        // ---------- ADMISSION PANEL LOGIC ----------
+        const panel = document.getElementById('admissionPanel');
+        const overlay = document.getElementById('overlay');
+        const closePanel = document.getElementById('closePanel');
+        const openTriggers = document.querySelectorAll('#admissionsLink, #applyNowBtn, .open-admission');
+
+        function openPanel(e) {
+            e.preventDefault();
+            panel.classList.add('open');
+            overlay.classList.add('show');
+        }
+        function closePanelFn() {
+            panel.classList.remove('open');
+            overlay.classList.remove('show');
+        }
+
+        openTriggers.forEach(el => el.addEventListener('click', openPanel));
+        closePanel.addEventListener('click', closePanelFn);
+        overlay.addEventListener('click', closePanelFn);
+
+        // ---------- FILE HANDLING (same as working admissions.html) ----------
+        function setupFileInput(fileId, labelId, isPhoto = false) {
+            const input = document.getElementById(fileId);
+            const label = document.getElementById(labelId);
+            input.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    label.textContent = this.files[0].name;
+                    if (isPhoto) {
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                            const preview = document.getElementById('photoPreview');
+                            preview.src = e.target.result;
+                            preview.style.display = 'block';
+                        };
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                } else {
+                    label.textContent = isPhoto ? 'Click to add photo' : (fileId === 'aadhaarFile' ? 'Upload Aadhaar' : 'Upload Marksheet');
+                    if (isPhoto) document.getElementById('photoPreview').style.display = 'none';
+                }
+            });
+            input.addEventListener('click', function() { this.value = ''; });
+        }
+        setupFileInput('photoFile', 'photoLabel', true);
+        setupFileInput('aadhaarFile', 'aadhaarLabel');
+        setupFileInput('marksheetFile', 'marksheetLabel');
+
+        // ---------- FORM SUBMISSION (exact same logic as the one that worked) ----------
+        document.getElementById('admissionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const photo = document.getElementById('photoFile').files[0];
+            const aadhaar = document.getElementById('aadhaarFile').files[0];
+            const marksheet = document.getElementById('marksheetFile').files[0];
+            if (!photo || !aadhaar || !marksheet) {
+                alert('Please upload all three documents.');
+                return;
+            }
+            const submitText = document.getElementById('submitText');
+            const submitLoader = document.getElementById('submitLoader');
+            const submitBtn = document.getElementById('submitBtn');
+            submitText.classList.add('hidden');
+            submitLoader.classList.remove('hidden');
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/admissions', { method: 'POST', body: new FormData(this) });
+                const data = await res.json();
+                if (res.ok) {
+                    alert('✅ ' + data.message);
+                    this.reset();
+                    document.getElementById('photoLabel').textContent = 'Click to add photo';
+                    document.getElementById('aadhaarLabel').textContent = 'Upload Aadhaar';
+                    document.getElementById('marksheetLabel').textContent = 'Upload Marksheet';
+                    document.getElementById('photoPreview').style.display = 'none';
+                } else {
+                    alert('❌ ' + (data.error || 'Submission failed'));
+                }
+            } catch (err) {
+                alert('❌ Network error. Is the server running?');
+            } finally {
+                submitText.classList.remove('hidden');
+                submitLoader.classList.remove('hidden');
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
