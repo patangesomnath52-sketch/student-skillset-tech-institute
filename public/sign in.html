@@ -43,28 +43,35 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // Email/Password Logic
-    document.getElementById('signInBtn').addEventListener('click', async () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        // Admin vs Student routing
-        window.location.href = email === "admin@skillset.com" ? '/admin.html' : '/dashboard.html';
-      } catch (err) {
-        document.getElementById('errorMsg').textContent = "Invalid credentials";
-      }
-    });
+   // Email/Password Logic
+document.getElementById('signInBtn').addEventListener('click', async () => {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    
+    // REDIRECT LOGIC
+    if (email === "admin@skillset.com") {
+      window.location.href = '/admin.html';
+    } else {
+      // Redirecting to index.html as requested
+      window.location.href = '/index.html'; 
+    }
+  } catch (err) {
+    document.getElementById('errorMsg').textContent = "Invalid credentials";
+  }
+});
 
-    // Google Logic
-    document.getElementById('googleBtn').addEventListener('click', async () => {
-      try {
-        await signInWithPopup(auth, provider);
-        window.location.href = '/dashboard.html';
-      } catch (err) {
-        document.getElementById('errorMsg').textContent = "Google Sign-In failed.";
-      }
-    });
+// Google Logic
+document.getElementById('googleBtn').addEventListener('click', async () => {
+  try {
+    await signInWithPopup(auth, provider);
+    // Redirecting to index.html as requested
+    window.location.href = '/index.html';
+  } catch (err) {
+    document.getElementById('errorMsg').textContent = "Google Sign-In failed.";
+  }
+});
   </script>
 </body>
 </html>
