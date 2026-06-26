@@ -64,6 +64,7 @@
     <a href="index.html" class="logo">SKILLSET</a>
     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     <ul class="nav-links" id="navLinks">
+      <a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a>
       <li><a href="index.html">Site Home</a></li>
       <li><a href="admin.html" class="btn-outline" style="padding:0.4rem 1.2rem;">Admin</a></li>
     </ul>
@@ -94,57 +95,42 @@
 
       <main class="main-content">
         <!-- Overview -->
-        <section id="overview" class="section active">
-          <h2>Dashboard Overview</h2>
-          <div class="card-grid">
-            <div class="card stat-card"><i class="fas fa-user-graduate fa-2x" style="color:var(--secondary);"></i><h2 id="totalStudents">0</h2><p>Students</p></div>
-            <div class="card stat-card"><i class="fas fa-book-open fa-2x" style="color:var(--secondary);"></i><h2 id="totalCourses">0</h2><p>Courses</p></div>
-            <div class="card stat-card"><i class="fas fa-images fa-2x" style="color:var(--secondary);"></i><h2 id="totalImages">0</h2><p>Gallery</p></div>
-          </div>
-        </section>
+<!-- Settings -->
+<section id="settings" class="section">
+  <h2>Site Settings</h2>
+  <div class="card" style="margin-top:1rem;">
+    <form id="settingsForm">
+      <h3 style="color:var(--secondary); margin-bottom:1rem;">Homepage Hero</h3>
+      <div class="form-group"><label>Hero Title</label><input type="text" id="heroTitle"></div>
+      <div class="form-group"><label>Hero Subtitle</label><input type="text" id="heroSubtitle"></div>
+      <div class="form-group"><label>Hero Description</label><input type="text" id="heroDescription"></div>
 
-        <!-- Admissions -->
-        <section id="admissions" class="section">
-          <h2>Manage Admissions</h2>
-          <div class="card" style="margin-top:1rem;">
-            <div style="display:flex; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
-              <input type="text" id="admSearch" placeholder="Search name/mobile/email" oninput="loadAdmissions()" style="flex:1;">
-              <select id="admStatus" onchange="loadAdmissions()">
-                <option value="">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="reviewed">Reviewed</option>
-                <option value="approved">Approved</option>
-              </select>
-            </div>
-            <div style="overflow-x:auto;">
-              <table id="admTable">
-                <thead><tr><th>Name</th><th>Mobile</th><th>Course</th><th>Status</th><th>Docs</th><th>Actions</th></tr></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+      <h3 style="color:var(--secondary); margin:1.5rem 0 1rem;">Stats / Counters</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
+        <div class="form-group"><label>Students Trained</label><input type="number" id="studentsTrained"></div>
+        <div class="form-group"><label>Certificates Issued</label><input type="number" id="certificatesIssued"></div>
+        <div class="form-group"><label>Projects Completed</label><input type="number" id="projectsCompleted"></div>
+      </div>
 
-        <!-- Courses -->
-        <section id="courses" class="section">
-          <h2>Manage Courses</h2>
-          <button class="btn" onclick="openCourseModal()">+ Add New Course</button>
-          <div class="card" style="margin-top:1rem;">
-            <table id="courseTable">
-              <thead><tr><th>Title</th><th>Duration</th><th>Actions</th></tr></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </section>
+      <h3 style="color:var(--secondary); margin:1.5rem 0 1rem;">About Page</h3>
+      <div class="form-group"><label>Vision</label><textarea id="vision" rows="2"></textarea></div>
+      <div class="form-group"><label>Mission</label><textarea id="mission" rows="2"></textarea></div>
+      <div class="form-group"><label>Facilities</label><textarea id="facilities" rows="2"></textarea></div>
 
-        <!-- Gallery -->
-        <section id="gallery" class="section">
-          <h2>Gallery Management</h2>
-          <button class="btn" onclick="openGalleryModal()">+ Upload Image</button>
-          <div class="card" style="margin-top:1rem;">
-            <div id="galleryGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1rem;"></div>
-          </div>
-        </section>
+      <h3 style="color:var(--secondary); margin:1.5rem 0 1rem;">Contact Info</h3>
+      <div class="form-group"><label>Address</label><textarea id="address" rows="2"></textarea></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="form-group"><label>Phone</label><input type="text" id="phone"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="email"></div>
+      </div>
+      <div class="form-group"><label>WhatsApp Number (with country code)</label><input type="text" id="whatsapp"></div>
+      <div class="form-group"><label>Office Hours</label><input type="text" id="officeHours"></div>
+      <div class="form-group"><label>Google Maps Embed URL</label><textarea id="googleMapsEmbed" rows="2"></textarea></div>
+
+      <button type="submit" class="btn" style="width:100%; margin-top:1rem;">Save Settings</button>
+    </form>
+  </div>
+</section>
       </main>
     </div>
   </div>
@@ -409,6 +395,67 @@
         loadOverview();
       }
     }
+    // ---------- SETTINGS ----------
+async function loadSettings() {
+  try {
+    const res = await fetch('/api/settings');
+    const data = await res.json();
+    document.getElementById('heroTitle').value = data.heroTitle || '';
+    document.getElementById('heroSubtitle').value = data.heroSubtitle || '';
+    document.getElementById('heroDescription').value = data.heroDescription || '';
+    document.getElementById('studentsTrained').value = data.studentsTrained || 0;
+    document.getElementById('certificatesIssued').value = data.certificatesIssued || 0;
+    document.getElementById('projectsCompleted').value = data.projectsCompleted || 0;
+    document.getElementById('vision').value = data.vision || '';
+    document.getElementById('mission').value = data.mission || '';
+    document.getElementById('facilities').value = data.facilities || '';
+    document.getElementById('address').value = data.address || '';
+    document.getElementById('phone').value = data.phone || '';
+    document.getElementById('email').value = data.email || '';
+    document.getElementById('whatsapp').value = data.whatsapp || '';
+    document.getElementById('officeHours').value = data.officeHours || '';
+    document.getElementById('googleMapsEmbed').value = data.googleMapsEmbed || '';
+  } catch (err) {
+    console.error('Error loading settings:', err);
+  }
+}
+
+document.getElementById('settingsForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const data = {
+    heroTitle: document.getElementById('heroTitle').value,
+    heroSubtitle: document.getElementById('heroSubtitle').value,
+    heroDescription: document.getElementById('heroDescription').value,
+    studentsTrained: parseInt(document.getElementById('studentsTrained').value),
+    certificatesIssued: parseInt(document.getElementById('certificatesIssued').value),
+    projectsCompleted: parseInt(document.getElementById('projectsCompleted').value),
+    vision: document.getElementById('vision').value,
+    mission: document.getElementById('mission').value,
+    facilities: document.getElementById('facilities').value,
+    address: document.getElementById('address').value,
+    phone: document.getElementById('phone').value,
+    email: document.getElementById('email').value,
+    whatsapp: document.getElementById('whatsapp').value,
+    officeHours: document.getElementById('officeHours').value,
+    googleMapsEmbed: document.getElementById('googleMapsEmbed').value,
+  };
+
+  try {
+    const res = await fetch('/api/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (res.ok) {
+      alert('✅ Settings saved successfully!');
+    } else {
+      alert('❌ Failed to save settings.');
+    }
+  } catch (err) {
+    alert('❌ Network error.');
+  }
+});
+if (this.dataset.section === 'settings') loadSettings();
   </script>
 </body>
 </html>
