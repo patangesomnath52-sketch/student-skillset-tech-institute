@@ -1,24 +1,16 @@
 ﻿const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const path = require('path');
 const GalleryImage = require('../models/GalleryImage');
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
 });
-
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'gallery',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-  },
-});
-
 const upload = multer({ storage });
 
 router.get('/', async (req, res) => {
@@ -36,13 +28,12 @@ router.post('/', upload.single('image'), async (req, res) => {
       return res.status(400).json({ error: 'No image file uploaded' });
     }
     const img = new GalleryImage({
-      url: req.file.path,
+      url: '/uploads/' + req.file.filename,
       category: req.body.category || 'General',
     });
     await img.save();
     res.status(201).json(img);
   } catch (err) {
-    console.error('Gallery upload error:', err);
     res.status(500).json({ error: err.message });
   }
 });
