@@ -13,8 +13,12 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: { folder: 'gallery', allowed_formats: ['jpg', 'jpeg', 'png', 'webp'] },
+  params: {
+    folder: 'gallery',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+  },
 });
+
 const upload = multer({ storage });
 
 router.get('/', async (req, res) => {
@@ -28,6 +32,9 @@ router.get('/', async (req, res) => {
 
 router.post('/', upload.single('image'), async (req, res) => {
   try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No image file uploaded' });
+    }
     const img = new GalleryImage({
       url: req.file.path,
       category: req.body.category || 'General',
@@ -35,6 +42,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     await img.save();
     res.status(201).json(img);
   } catch (err) {
+    console.error('Gallery upload error:', err);
     res.status(500).json({ error: err.message });
   }
 });
