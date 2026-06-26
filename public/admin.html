@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Admin-specific styles that respect the theme */
     .admin-layout { display: flex; min-height: 100vh; padding-top: 100px; }
     .sidebar {
       width: 260px; background: var(--surface); border-right: 1px solid var(--border);
@@ -31,14 +30,7 @@
     table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
     th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); color: var(--text); }
     th { color: var(--secondary); }
-    select { padding: 6px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); }
-    .badge {
-      padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;
-      display: inline-block;
-    }
-    .badge-pending { background: #ffc107; color: #000; }
-    .badge-reviewed { background: #17a2b8; color: #fff; }
-    .badge-approved { background: #28a745; color: #fff; }
+    select, input { padding: 6px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); }
     .modal {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
@@ -56,15 +48,12 @@
       .admin-layout { flex-direction: column; }
     }
   </style>
-  <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 <body>
-  <!-- Navbar -->
   <nav id="navbar">
     <a href="index.html" class="logo">SKILLSET</a>
     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     <ul class="nav-links" id="navLinks">
-      <a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a>
       <li><a href="index.html">Site Home</a></li>
       <li><a href="admin.html" class="btn-outline" style="padding:0.4rem 1.2rem;">Admin</a></li>
     </ul>
@@ -82,55 +71,106 @@
     </div>
   </div>
 
-  <!-- Admin Dashboard (hidden until login) -->
+  <!-- Dashboard -->
   <div id="dashboard" style="display:none;">
     <div class="admin-layout">
-      <aside class="sidebar">
+      <aside class="sidebar" id="sidebar">
         <a href="#" class="active" data-section="overview"><i class="fas fa-tachometer-alt"></i> Overview</a>
         <a href="#" data-section="admissions"><i class="fas fa-users"></i> Admissions</a>
         <a href="#" data-section="courses"><i class="fas fa-book"></i> Courses</a>
         <a href="#" data-section="gallery"><i class="fas fa-images"></i> Gallery</a>
+        <a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a>
         <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
       </aside>
 
       <main class="main-content">
         <!-- Overview -->
-<!-- Settings -->
-<section id="settings" class="section">
-  <h2>Site Settings</h2>
-  <div class="card" style="margin-top:1rem;">
-    <form id="settingsForm">
-      <h3 style="color:var(--secondary); margin-bottom:1rem;">Homepage Hero</h3>
-      <div class="form-group"><label>Hero Title</label><input type="text" id="heroTitle"></div>
-      <div class="form-group"><label>Hero Subtitle</label><input type="text" id="heroSubtitle"></div>
-      <div class="form-group"><label>Hero Description</label><input type="text" id="heroDescription"></div>
+        <section id="overview" class="section active">
+          <h2>Dashboard Overview</h2>
+          <div class="card-grid">
+            <div class="card stat-card"><i class="fas fa-user-graduate fa-2x" style="color:var(--secondary);"></i><h2 id="totalStudents">0</h2><p>Students</p></div>
+            <div class="card stat-card"><i class="fas fa-book-open fa-2x" style="color:var(--secondary);"></i><h2 id="totalCourses">0</h2><p>Courses</p></div>
+            <div class="card stat-card"><i class="fas fa-images fa-2x" style="color:var(--secondary);"></i><h2 id="totalImages">0</h2><p>Gallery</p></div>
+          </div>
+        </section>
 
-      <h3 style="color:var(--secondary); margin:1.5rem 0 1rem;">Stats / Counters</h3>
-      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
-        <div class="form-group"><label>Students Trained</label><input type="number" id="studentsTrained"></div>
-        <div class="form-group"><label>Certificates Issued</label><input type="number" id="certificatesIssued"></div>
-        <div class="form-group"><label>Projects Completed</label><input type="number" id="projectsCompleted"></div>
-      </div>
+        <!-- Admissions -->
+        <section id="admissions" class="section">
+          <h2>Manage Admissions</h2>
+          <div class="card" style="margin-top:1rem;">
+            <div style="display:flex; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
+              <input type="text" id="admSearch" placeholder="Search name/mobile/email" oninput="loadAdmissions()" style="flex:1;">
+              <select id="admStatus" onchange="loadAdmissions()">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="reviewed">Reviewed</option>
+                <option value="approved">Approved</option>
+              </select>
+            </div>
+            <div style="overflow-x:auto;">
+              <table id="admTable">
+                <thead><tr><th>Name</th><th>Mobile</th><th>Course</th><th>Status</th><th>Docs</th><th>Actions</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
 
-      <h3 style="color:var(--secondary); margin:1.5rem 0 1rem;">About Page</h3>
-      <div class="form-group"><label>Vision</label><textarea id="vision" rows="2"></textarea></div>
-      <div class="form-group"><label>Mission</label><textarea id="mission" rows="2"></textarea></div>
-      <div class="form-group"><label>Facilities</label><textarea id="facilities" rows="2"></textarea></div>
+        <!-- Courses -->
+        <section id="courses" class="section">
+          <h2>Manage Courses</h2>
+          <button class="btn" onclick="openCourseModal()">+ Add New Course</button>
+          <div class="card" style="margin-top:1rem;">
+            <table id="courseTable">
+              <thead><tr><th>Title</th><th>Duration</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
 
-      <h3 style="color:var(--secondary); margin:1.5rem 0 1rem;">Contact Info</h3>
-      <div class="form-group"><label>Address</label><textarea id="address" rows="2"></textarea></div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-        <div class="form-group"><label>Phone</label><input type="text" id="phone"></div>
-        <div class="form-group"><label>Email</label><input type="email" id="email"></div>
-      </div>
-      <div class="form-group"><label>WhatsApp Number (with country code)</label><input type="text" id="whatsapp"></div>
-      <div class="form-group"><label>Office Hours</label><input type="text" id="officeHours"></div>
-      <div class="form-group"><label>Google Maps Embed URL</label><textarea id="googleMapsEmbed" rows="2"></textarea></div>
+        <!-- Gallery -->
+        <section id="gallery" class="section">
+          <h2>Gallery Management</h2>
+          <button class="btn" onclick="openGalleryModal()">+ Upload Image</button>
+          <div class="card" style="margin-top:1rem;">
+            <div id="galleryGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1rem;"></div>
+          </div>
+        </section>
 
-      <button type="submit" class="btn" style="width:100%; margin-top:1rem;">Save Settings</button>
-    </form>
-  </div>
-</section>
+        <!-- Settings -->
+        <section id="settings" class="section">
+          <h2>Site Settings</h2>
+          <form id="settingsForm" class="card" style="margin-top:1rem;">
+            <h3 style="color:var(--secondary);">Homepage Hero</h3>
+            <div class="form-group"><label>Hero Title</label><input type="text" id="heroTitle"></div>
+            <div class="form-group"><label>Hero Subtitle</label><input type="text" id="heroSubtitle"></div>
+            <div class="form-group"><label>Hero Description</label><input type="text" id="heroDescription"></div>
+
+            <h3 style="color:var(--secondary); margin-top:1.5rem;">Stats</h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
+              <div class="form-group"><label>Students Trained</label><input type="number" id="studentsTrained"></div>
+              <div class="form-group"><label>Certificates Issued</label><input type="number" id="certificatesIssued"></div>
+              <div class="form-group"><label>Projects Completed</label><input type="number" id="projectsCompleted"></div>
+            </div>
+
+            <h3 style="color:var(--secondary); margin-top:1.5rem;">About Page</h3>
+            <div class="form-group"><label>Vision</label><textarea id="vision" rows="2"></textarea></div>
+            <div class="form-group"><label>Mission</label><textarea id="mission" rows="2"></textarea></div>
+            <div class="form-group"><label>Facilities</label><textarea id="facilities" rows="2"></textarea></div>
+
+            <h3 style="color:var(--secondary); margin-top:1.5rem;">Contact Info</h3>
+            <div class="form-group"><label>Address</label><textarea id="address" rows="2"></textarea></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+              <div class="form-group"><label>Phone</label><input type="text" id="phone"></div>
+              <div class="form-group"><label>Email</label><input type="email" id="email"></div>
+            </div>
+            <div class="form-group"><label>WhatsApp Number</label><input type="text" id="whatsapp"></div>
+            <div class="form-group"><label>Office Hours</label><input type="text" id="officeHours"></div>
+            <div class="form-group"><label>Google Maps Embed URL</label><textarea id="googleMapsEmbed" rows="2"></textarea></div>
+
+            <button type="submit" class="btn" style="width:100%; margin-top:1rem;">Save Settings</button>
+          </form>
+        </section>
       </main>
     </div>
   </div>
@@ -158,8 +198,7 @@
       <span class="close" onclick="closeGalleryModal()">&times;</span>
       <h3>Upload Image</h3>
       <form id="galleryForm">
-        <div class="form-group">
-          <label>Category</label>
+        <div class="form-group"><label>Category</label>
           <select id="galleryCategory">
             <option>Classroom</option><option>Lab</option><option>Students</option>
             <option>Workshops</option><option>Certificates</option><option>Events</option>
@@ -173,12 +212,10 @@
 
   <script src="js/main.js"></script>
   <script>
-    // ---------- AUTH ----------
     const ADMIN_PASSWORD = 'skillset2024';
 
     function login() {
-      const password = document.getElementById('adminPassword').value;
-      if (password === ADMIN_PASSWORD) {
+      if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         sessionStorage.setItem('adminLoggedIn', 'true');
@@ -194,48 +231,50 @@
       document.getElementById('dashboard').style.display = 'none';
     }
 
-    // Auto-login if already logged in
     if (sessionStorage.getItem('adminLoggedIn') === 'true') {
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
       loadOverview();
     }
 
-    // ---------- NAVIGATION ----------
+    // Navigation
     document.querySelectorAll('.sidebar a[data-section]').forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(this.dataset.section).classList.add('active');
+        const section = document.getElementById(this.dataset.section);
+        if (section) section.classList.add('active');
         document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
         this.classList.add('active');
         if (this.dataset.section === 'overview') loadOverview();
         if (this.dataset.section === 'admissions') loadAdmissions();
         if (this.dataset.section === 'courses') loadCourses();
         if (this.dataset.section === 'gallery') loadGallery();
+        if (this.dataset.section === 'settings') loadSettings();
       });
     });
 
-    // ---------- OVERVIEW ----------
+    // Overview
     async function loadOverview() {
       try {
         const [admRes, courseRes, galleryRes] = await Promise.all([
-          fetch('/api/admissions'),
-          fetch('/api/courses'),
-          fetch('/api/gallery')
+          fetch('/api/admissions'), fetch('/api/courses'), fetch('/api/gallery')
         ]);
         const admissions = await admRes.json();
         const courses = await courseRes.json();
         const images = await galleryRes.json();
-        document.getElementById('totalStudents').textContent = admissions.length || 0;
-        document.getElementById('totalCourses').textContent = courses.length || 0;
-        document.getElementById('totalImages').textContent = images.length || 0;
+        const el1 = document.getElementById('totalStudents');
+        const el2 = document.getElementById('totalCourses');
+        const el3 = document.getElementById('totalImages');
+        if (el1) el1.textContent = (admissions && admissions.length) || 0;
+        if (el2) el2.textContent = (courses && courses.length) || 0;
+        if (el3) el3.textContent = (images && images.length) || 0;
       } catch (err) {
         console.error('Error loading overview:', err);
       }
     }
 
-    // ---------- ADMISSIONS ----------
+    // Admissions
     async function loadAdmissions() {
       try {
         const search = document.getElementById('admSearch').value;
@@ -243,18 +282,15 @@
         const res = await fetch(`/api/admissions?search=${encodeURIComponent(search)}&status=${status}`);
         const data = await res.json();
         const tbody = document.querySelector('#admTable tbody');
-        tbody.innerHTML = data.map(adm => `
+        if (!tbody) return;
+        tbody.innerHTML = (data || []).map(adm => `
           <tr>
-            <td>${adm.fullName || ''}</td>
-            <td>${adm.mobile || ''}</td>
-            <td>${adm.course || ''}</td>
-            <td>
-              <select onchange="updateAdmissionStatus('${adm._id}', this.value)">
-                <option value="pending" ${adm.status==='pending'?'selected':''}>Pending</option>
-                <option value="reviewed" ${adm.status==='reviewed'?'selected':''}>Reviewed</option>
-                <option value="approved" ${adm.status==='approved'?'selected':''}>Approved</option>
-              </select>
-            </td>
+            <td>${adm.fullName || ''}</td><td>${adm.mobile || ''}</td><td>${adm.course || ''}</td>
+            <td><select onchange="updateAdmissionStatus('${adm._id}', this.value)">
+              <option value="pending" ${adm.status==='pending'?'selected':''}>Pending</option>
+              <option value="reviewed" ${adm.status==='reviewed'?'selected':''}>Reviewed</option>
+              <option value="approved" ${adm.status==='approved'?'selected':''}>Approved</option>
+            </select></td>
             <td>
               ${adm.photo ? `<a href="${adm.photo}" target="_blank">Photo</a> ` : ''}
               ${adm.aadhaar ? `<a href="${adm.aadhaar}" target="_blank">Aadhaar</a> ` : ''}
@@ -263,199 +299,154 @@
             <td><button class="btn" onclick="deleteAdmission('${adm._id}')" style="background:red;">Delete</button></td>
           </tr>
         `).join('');
-      } catch (err) {
-        console.error('Error loading admissions:', err);
-      }
+      } catch (err) { console.error('Error loading admissions:', err); }
     }
 
     async function updateAdmissionStatus(id, status) {
-      await fetch(`/api/admissions/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status })
-      });
+      await fetch(`/api/admissions/${id}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify({status}) });
     }
 
     async function deleteAdmission(id) {
-      if (confirm('Delete this application?')) {
-        await fetch(`/api/admissions/${id}`, { method: 'DELETE' });
-        loadAdmissions();
-        loadOverview();
-      }
+      if (confirm('Delete?')) { await fetch(`/api/admissions/${id}`, { method:'DELETE' }); loadAdmissions(); loadOverview(); }
     }
 
-    // ---------- COURSES ----------
+    // Courses
     async function loadCourses() {
       try {
         const res = await fetch('/api/courses');
         const courses = await res.json();
         const tbody = document.querySelector('#courseTable tbody');
-        tbody.innerHTML = courses.map(c => `
+        if (!tbody) return;
+        tbody.innerHTML = (courses || []).map(c => `
           <tr>
-            <td>${c.title || ''}</td>
-            <td>${c.duration || ''}</td>
+            <td>${c.title || ''}</td><td>${c.duration || ''}</td>
             <td>
               <button class="btn" onclick="editCourse('${c._id}')">Edit</button>
               <button class="btn" onclick="deleteCourse('${c._id}')" style="background:red;">Delete</button>
             </td>
           </tr>
         `).join('');
-      } catch (err) {
-        console.error('Error loading courses:', err);
-      }
+      } catch (err) { console.error('Error loading courses:', err); }
     }
 
-    function openCourseModal(course = null) {
-      document.getElementById('courseModal').style.display = 'flex';
+    function openCourseModal(course=null) {
+      document.getElementById('courseModal').style.display='flex';
       if (course) {
-        document.getElementById('courseModalTitle').textContent = 'Edit Course';
-        document.getElementById('courseId').value = course._id;
-        document.getElementById('courseTitle').value = course.title;
-        document.getElementById('courseSlug').value = course.slug;
-        document.getElementById('courseDuration').value = course.duration;
-        document.getElementById('courseDesc').value = course.description;
+        document.getElementById('courseModalTitle').textContent='Edit Course';
+        document.getElementById('courseId').value=course._id;
+        document.getElementById('courseTitle').value=course.title;
+        document.getElementById('courseSlug').value=course.slug;
+        document.getElementById('courseDuration').value=course.duration;
+        document.getElementById('courseDesc').value=course.description;
       } else {
-        document.getElementById('courseModalTitle').textContent = 'Add Course';
+        document.getElementById('courseModalTitle').textContent='Add Course';
         document.getElementById('courseForm').reset();
-        document.getElementById('courseId').value = '';
+        document.getElementById('courseId').value='';
       }
     }
+    function closeCourseModal(){ document.getElementById('courseModal').style.display='none'; }
 
-    function closeCourseModal() { document.getElementById('courseModal').style.display = 'none'; }
-
-    document.getElementById('courseForm').addEventListener('submit', async function(e) {
+    document.getElementById('courseForm').addEventListener('submit', async function(e){
       e.preventDefault();
-      const id = document.getElementById('courseId').value;
-      const formData = new FormData();
-      formData.append('title', document.getElementById('courseTitle').value);
-      formData.append('slug', document.getElementById('courseSlug').value);
-      formData.append('duration', document.getElementById('courseDuration').value);
-      formData.append('description', document.getElementById('courseDesc').value);
-      const imageFile = document.getElementById('courseImage').files[0];
-      if (imageFile) formData.append('image', imageFile);
-
-      const url = id ? `/api/courses/${id}` : '/api/courses';
-      const method = id ? 'PUT' : 'POST';
-      await fetch(url, { method, body: formData });
-      closeCourseModal();
-      loadCourses();
-      loadOverview();
+      const id=document.getElementById('courseId').value;
+      const fd=new FormData();
+      fd.append('title',document.getElementById('courseTitle').value);
+      fd.append('slug',document.getElementById('courseSlug').value);
+      fd.append('duration',document.getElementById('courseDuration').value);
+      fd.append('description',document.getElementById('courseDesc').value);
+      const img=document.getElementById('courseImage').files[0];
+      if(img) fd.append('image',img);
+      await fetch(id?`/api/courses/${id}`:'/api/courses', {method:id?'PUT':'POST', body:fd});
+      closeCourseModal(); loadCourses(); loadOverview();
     });
 
-    async function editCourse(id) {
-      const res = await fetch('/api/courses');
-      const courses = await res.json();
-      const course = courses.find(c => c._id === id);
-      if (course) openCourseModal(course);
+    async function editCourse(id){
+      const res=await fetch('/api/courses'); const courses=await res.json();
+      const c=courses.find(x=>x._id===id); if(c) openCourseModal(c);
     }
 
-    async function deleteCourse(id) {
-      if (confirm('Delete this course?')) {
-        await fetch(`/api/courses/${id}`, { method: 'DELETE' });
-        loadCourses();
-        loadOverview();
-      }
+    async function deleteCourse(id){
+      if(confirm('Delete?')){ await fetch(`/api/courses/${id}`,{method:'DELETE'}); loadCourses(); loadOverview(); }
     }
 
-    // ---------- GALLERY ----------
-    async function loadGallery() {
+    // Gallery
+    async function loadGallery(){
       try {
-        const res = await fetch('/api/gallery');
-        const images = await res.json();
-        const grid = document.getElementById('galleryGrid');
-        grid.innerHTML = images.map(img => `
-          <div style="position:relative; border-radius:12px; overflow:hidden;">
+        const res=await fetch('/api/gallery'); const images=await res.json();
+        const grid=document.getElementById('galleryGrid');
+        if(!grid) return;
+        grid.innerHTML=(images||[]).map(img=>`
+          <div style="position:relative;border-radius:12px;overflow:hidden;">
             <img src="${img.url}" width="100%" height="120" style="object-fit:cover;">
-            <button class="btn" onclick="deleteImage('${img._id}')" style="position:absolute; top:5px; right:5px; background:red; padding:4px 8px; font-size:0.8rem;">X</button>
+            <button class="btn" onclick="deleteImage('${img._id}')" style="position:absolute;top:5px;right:5px;background:red;padding:4px 8px;font-size:.8rem;">X</button>
           </div>
         `).join('');
-      } catch (err) {
-        console.error('Error loading gallery:', err);
-      }
+      } catch(err){ console.error('Error loading gallery:',err); }
     }
 
-    function openGalleryModal() { document.getElementById('galleryModal').style.display = 'flex'; }
-    function closeGalleryModal() { document.getElementById('galleryModal').style.display = 'none'; }
+    function openGalleryModal(){ document.getElementById('galleryModal').style.display='flex'; }
+    function closeGalleryModal(){ document.getElementById('galleryModal').style.display='none'; }
 
-    document.getElementById('galleryForm').addEventListener('submit', async function(e) {
+    document.getElementById('galleryForm').addEventListener('submit', async function(e){
       e.preventDefault();
-      const formData = new FormData();
-      formData.append('image', document.getElementById('galleryImageFile').files[0]);
-      formData.append('category', document.getElementById('galleryCategory').value);
-      await fetch('/api/gallery', { method: 'POST', body: formData });
-      closeGalleryModal();
-      loadGallery();
-      loadOverview();
+      const fd=new FormData();
+      fd.append('image',document.getElementById('galleryImageFile').files[0]);
+      fd.append('category',document.getElementById('galleryCategory').value);
+      await fetch('/api/gallery',{method:'POST',body:fd});
+      closeGalleryModal(); loadGallery(); loadOverview();
     });
 
-    async function deleteImage(id) {
-      if (confirm('Delete this image?')) {
-        await fetch(`/api/gallery/${id}`, { method: 'DELETE' });
-        loadGallery();
-        loadOverview();
-      }
+    async function deleteImage(id){
+      if(confirm('Delete?')){ await fetch(`/api/gallery/${id}`,{method:'DELETE'}); loadGallery(); loadOverview(); }
     }
-    // ---------- SETTINGS ----------
-async function loadSettings() {
-  try {
-    const res = await fetch('/api/settings');
-    const data = await res.json();
-    document.getElementById('heroTitle').value = data.heroTitle || '';
-    document.getElementById('heroSubtitle').value = data.heroSubtitle || '';
-    document.getElementById('heroDescription').value = data.heroDescription || '';
-    document.getElementById('studentsTrained').value = data.studentsTrained || 0;
-    document.getElementById('certificatesIssued').value = data.certificatesIssued || 0;
-    document.getElementById('projectsCompleted').value = data.projectsCompleted || 0;
-    document.getElementById('vision').value = data.vision || '';
-    document.getElementById('mission').value = data.mission || '';
-    document.getElementById('facilities').value = data.facilities || '';
-    document.getElementById('address').value = data.address || '';
-    document.getElementById('phone').value = data.phone || '';
-    document.getElementById('email').value = data.email || '';
-    document.getElementById('whatsapp').value = data.whatsapp || '';
-    document.getElementById('officeHours').value = data.officeHours || '';
-    document.getElementById('googleMapsEmbed').value = data.googleMapsEmbed || '';
-  } catch (err) {
-    console.error('Error loading settings:', err);
-  }
-}
 
-document.getElementById('settingsForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const data = {
-    heroTitle: document.getElementById('heroTitle').value,
-    heroSubtitle: document.getElementById('heroSubtitle').value,
-    heroDescription: document.getElementById('heroDescription').value,
-    studentsTrained: parseInt(document.getElementById('studentsTrained').value),
-    certificatesIssued: parseInt(document.getElementById('certificatesIssued').value),
-    projectsCompleted: parseInt(document.getElementById('projectsCompleted').value),
-    vision: document.getElementById('vision').value,
-    mission: document.getElementById('mission').value,
-    facilities: document.getElementById('facilities').value,
-    address: document.getElementById('address').value,
-    phone: document.getElementById('phone').value,
-    email: document.getElementById('email').value,
-    whatsapp: document.getElementById('whatsapp').value,
-    officeHours: document.getElementById('officeHours').value,
-    googleMapsEmbed: document.getElementById('googleMapsEmbed').value,
-  };
+    // Settings
+    async function loadSettings(){
+      try {
+        const res=await fetch('/api/settings'); const data=await res.json();
+        document.getElementById('heroTitle').value=data.heroTitle||'';
+        document.getElementById('heroSubtitle').value=data.heroSubtitle||'';
+        document.getElementById('heroDescription').value=data.heroDescription||'';
+        document.getElementById('studentsTrained').value=data.studentsTrained||0;
+        document.getElementById('certificatesIssued').value=data.certificatesIssued||0;
+        document.getElementById('projectsCompleted').value=data.projectsCompleted||0;
+        document.getElementById('vision').value=data.vision||'';
+        document.getElementById('mission').value=data.mission||'';
+        document.getElementById('facilities').value=data.facilities||'';
+        document.getElementById('address').value=data.address||'';
+        document.getElementById('phone').value=data.phone||'';
+        document.getElementById('email').value=data.email||'';
+        document.getElementById('whatsapp').value=data.whatsapp||'';
+        document.getElementById('officeHours').value=data.officeHours||'';
+        document.getElementById('googleMapsEmbed').value=data.googleMapsEmbed||'';
+      } catch(err){ console.error('Error loading settings:',err); }
+    }
 
-  try {
-    const res = await fetch('/api/settings', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+    document.getElementById('settingsForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const data={
+        heroTitle:document.getElementById('heroTitle').value,
+        heroSubtitle:document.getElementById('heroSubtitle').value,
+        heroDescription:document.getElementById('heroDescription').value,
+        studentsTrained:parseInt(document.getElementById('studentsTrained').value)||0,
+        certificatesIssued:parseInt(document.getElementById('certificatesIssued').value)||0,
+        projectsCompleted:parseInt(document.getElementById('projectsCompleted').value)||0,
+        vision:document.getElementById('vision').value,
+        mission:document.getElementById('mission').value,
+        facilities:document.getElementById('facilities').value,
+        address:document.getElementById('address').value,
+        phone:document.getElementById('phone').value,
+        email:document.getElementById('email').value,
+        whatsapp:document.getElementById('whatsapp').value,
+        officeHours:document.getElementById('officeHours').value,
+        googleMapsEmbed:document.getElementById('googleMapsEmbed').value,
+      };
+      try {
+        const res=await fetch('/api/settings',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+        if(res.ok) alert('✅ Settings saved!');
+        else alert('❌ Failed to save.');
+      } catch(err){ alert('❌ Network error.'); }
     });
-    if (res.ok) {
-      alert('✅ Settings saved successfully!');
-    } else {
-      alert('❌ Failed to save settings.');
-    }
-  } catch (err) {
-    alert('❌ Network error.');
-  }
-});
-if (this.dataset.section === 'settings') loadSettings();
   </script>
 </body>
 </html>
