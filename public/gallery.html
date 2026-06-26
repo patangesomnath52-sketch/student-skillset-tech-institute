@@ -2,13 +2,73 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery – Student Skillset</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .gallery-item {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: 0.3s;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .gallery-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px var(--shadow-color);
+      border-color: var(--secondary);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-item .category-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--primary);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .filter-bar {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+    .filter-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.6rem 1.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+  </style>
 </head>
 <body>
   <div class="bg-orbs">
@@ -43,15 +103,28 @@
           <i id="themeIcon" class="fas fa-moon"></i>
         </button>
       </li>
-  
+      
     </ul>
   </nav>
 
   <main class="container" style="padding-top:130px;">
-    <h1 class="section-title"><span>Gallery</span></h1>
-    <div class="gallery-preview">
+    <h1 class="section-title"><span>Our Gallery</span></h1>
+    <p style="text-align:center; color:var(--text-dim); max-width:600px; margin:0 auto;">
+      Explore our classrooms, labs, workshops, events, and student achievements.
+    </p>
 
-      
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="Classroom">Classroom</button>
+      <button class="filter-btn" data-filter="Lab">Lab</button>
+      <button class="filter-btn" data-filter="Students">Students</button>
+      <button class="filter-btn" data-filter="Workshops">Workshops</button>
+      <button class="filter-btn" data-filter="Certificates">Certificates</button>
+      <button class="filter-btn" data-filter="Events">Events</button>
+    </div>
+
+    <div class="gallery-grid" id="galleryGrid">
+      <p style="text-align:center; color:var(--text-dim);">Loading gallery...</p>
     </div>
   </main>
 
@@ -65,5 +138,48 @@
 
   <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
   <script src="js/main.js"></script>
+  <script>
+    let allImages = [];
+
+    // Load images from API
+    async function loadGallery() {
+      try {
+        const res = await fetch('/api/gallery');
+        allImages = await res.json();
+        displayImages('all');
+      } catch (err) {
+        document.getElementById('galleryGrid').innerHTML = '<p style="text-align:center; color:var(--text-dim);">Failed to load gallery.</p>';
+      }
+    }
+
+    function displayImages(filter) {
+      const grid = document.getElementById('galleryGrid');
+      const filtered = filter === 'all' ? allImages : allImages.filter(img => img.category === filter);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<p style="text-align:center; color:var(--text-dim);">No images found.</p>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(img => `
+        <div class="gallery-item">
+          <span class="category-badge">${img.category || 'General'}</span>
+          <img src="${img.url}" alt="${img.category}" loading="lazy">
+        </div>
+      `).join('');
+    }
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        displayImages(this.dataset.filter);
+      });
+    });
+
+    // Load on page ready
+    loadGallery();
+  </script>
 </body>
 </html>
