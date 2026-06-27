@@ -5,15 +5,12 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const GalleryImage = require('../models/GalleryImage');
 
-// Cloudinary config
+// Configure Cloudinary
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'skillsetcloud',
+  api_key: process.env.CLOUDINARY_API_KEY || '415767268281125',
+  api_secret: process.env.CLOUDINARY_API_SECRET || 'c9mPe0A8xTHCPQdQlpvK_DZgclw',
 });
-
-// Log Cloudinary config status (for debugging)
-console.log('Cloudinary configured:', !!process.env.CLOUDINARY_CLOUD_NAME);
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
@@ -23,18 +20,15 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
-});
+const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
-// GET all images
+// GET all gallery images
 router.get('/', async (req, res) => {
   try {
     const images = await GalleryImage.find().sort({ uploadedAt: -1 });
     res.json(images);
   } catch (err) {
-    console.error('GET /api/gallery error:', err);
+    console.error('Gallery GET error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
@@ -46,13 +40,13 @@ router.post('/', upload.single('image'), async (req, res) => {
       return res.status(400).json({ error: 'No image file provided' });
     }
     const img = new GalleryImage({
-      url: req.file.path, // Cloudinary URL
+      url: req.file.path,
       category: req.body.category || 'General',
     });
     await img.save();
     res.status(201).json(img);
   } catch (err) {
-    console.error('POST /api/gallery error:', err);
+    console.error('Gallery POST error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
@@ -63,7 +57,7 @@ router.delete('/:id', async (req, res) => {
     await GalleryImage.findByIdAndDelete(req.params.id);
     res.json({ message: 'Deleted' });
   } catch (err) {
-    console.error('DELETE /api/gallery error:', err);
+    console.error('Gallery DELETE error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
