@@ -1,34 +1,33 @@
 ﻿const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const Admission = require('../models/Admission');
 
-// Cloudinary config (values come from environment variables)
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+// Use memory storage - no disk writing needed
+const storage = multer.memoryStorage();
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'student-skillset',          // Cloudinary folder name
-    allowed_formats: ['jpg', 'jpeg', 'png', 'pdf'],
-  },
-});
-
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
-
-// POST – submit admission
+// POST - Handle file uploads
 router.post('/', upload.fields([
   { name: 'photo', maxCount: 1 },
   { name: 'aadhaar', maxCount: 1 },
   { name: 'marksheet', maxCount: 1 }
 ]), async (req, res) => {
   try {
+    // Convert uploaded files to base64 strings
+    const photo = req.files['photo']?.[0] 
+      ? `data:${req.files['photo'][0].mimetype};base64,${req.files['photo'][0].buffer.toString('base64')}` 
+      : '';
+    const aadhaar = req.files['aadhaar']?.[0] 
+      ? `data:${req.files['aadhaar'][0].mimetype};base64,${req.files['aadhaar'][0].buffer.toString('base64')}` 
+      : '';
+    const marksheet = req.files['marksheet']?.[0] 
+      ? `data:${req.files['marksheet'][0].mimetype};base64,${req.files['marksheet'][0].buffer.toString('base64')}` 
+      : '';
+    
     const admission = new Admission({
       fullName: req.body.fullName,
       mobile: req.body.mobile,
@@ -36,19 +35,22 @@ router.post('/', upload.fields([
       qualification: req.body.qualification,
       course: req.body.course,
       address: req.body.address,
-      message: req.body.message,
-      photo: req.files['photo']?.[0]?.path,        // Cloudinary URL
-      aadhaar: req.files['aadhaar']?.[0]?.path,
-      marksheet: req.files['marksheet']?.[0]?.path,
+      photo,
+      aadhaar,
+      marksheet,
+      status: 'pending',
+      submittedAt: new Date()
     });
+    
     await admission.save();
     res.status(201).json({ message: 'Application submitted successfully!' });
   } catch (err) {
+    console.error('Admission POST error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
 
-// GET – all admissions (with search & status filter)
+// GET all admissions
 router.get('/', async (req, res) => {
   try {
     const { search, status } = req.query;
@@ -68,7 +70,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// PATCH – update status
+// PATCH - Update status
 router.patch('/:id', async (req, res) => {
   try {
     const admission = await Admission.findByIdAndUpdate(
@@ -82,7 +84,7 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
-// DELETE – remove admission
+// DELETE
 router.delete('/:id', async (req, res) => {
   try {
     await Admission.findByIdAndDelete(req.params.id);
@@ -91,13 +93,5 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-// Add this to routes/admissions.js
-router.get('/student', async (req, res) => {
-  try {
-    const student = await Admission.findOne({ email: req.query.email });
-    res.json(student);
-  } catch (err) {
-    res.status(500).json({ error: "Could not fetch student data" });
-  }
-});
+
 module.exports = router;
