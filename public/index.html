@@ -485,7 +485,39 @@
         document.querySelectorAll('.theme-toggle').forEach(btn => {
             btn.addEventListener('click', toggleTheme);
         });
+// ===== LOAD SETTINGS FROM API =====
+async function loadSiteSettings() {
+  try {
+    const res = await fetch('/api/settings');
+    const data = await res.json();
+    
+    // Update hero text
+    if (data.heroTitle) {
+      document.querySelector('.hero h1').innerHTML = data.heroTitle.replace('\n', '<br>');
+    }
+    if (data.heroSubtitle) {
+      document.getElementById('typewriter').textContent = data.heroSubtitle;
+    }
+    
+    // Update counters
+    if (data.studentsTrained) {
+      document.querySelector('[data-target="1200"]').setAttribute('data-target', data.studentsTrained);
+    }
+    if (data.certificatesIssued) {
+      document.querySelector('[data-target="800"]').setAttribute('data-target', data.certificatesIssued);
+    }
+    if (data.projectsCompleted) {
+      document.querySelector('[data-target="350"]').setAttribute('data-target', data.projectsCompleted);
+    }
+    
+    console.log('Site settings loaded');
+  } catch (err) {
+    console.log('Settings not loaded, using defaults');
+  }
+}
 
+// Call on page load
+loadSiteSettings();
         // ===== HAMBURGER MENU =====
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
