@@ -1,15 +1,17 @@
-﻿const admin = require('firebase-admin');
-
-// Initialize Firebase Admin
-if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-  admin.initializeApp({
-    credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT))
-  });
-} else {
-  // For local development, use a service account file
-  admin.initializeApp({
-    credential: admin.credential.cert(require('./serviceAccountKey.json'))
-  });
+﻿// Initialize Firebase Admin (only if credentials exist)
+let admin;
+try {
+  admin = require('firebase-admin');
+  if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+    admin.initializeApp({
+      credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT))
+    });
+    console.log('Firebase Admin initialized');
+  } else {
+    console.log('FIREBASE_SERVICE_ACCOUNT not set - skipping Firebase initialization');
+  }
+} catch(e) {
+  console.log('Firebase Admin not available:', e.message);
 }
 require('dotenv').config();
 const express = require('express');
