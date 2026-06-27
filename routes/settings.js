@@ -2,7 +2,7 @@
 const router = express.Router();
 const SiteSettings = require('../models/SiteSettings');
 
-// GET settings (auto-creates default if none exist)
+// GET settings (creates default if none exist)
 router.get('/', async (req, res) => {
   try {
     let settings = await SiteSettings.findOne();
