@@ -245,7 +245,7 @@
           <i id="themeIcon" class="fas fa-moon"></i>
         </button>
       </li>
-      <li><a href="admissions.html" class="btn">Apply Now</a></li>
+      
     </ul>
   </nav>
 
@@ -417,6 +417,53 @@
 
   <script src="js/main.js"></script>
   <script>
+      // ===== THEME TOGGLE =====
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeIcon');
+            if (icon) {
+                icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+            }
+        }
+
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+        // ===== HAMBURGER MENU =====
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Close menu when tapping a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('open');
+            });
+        });
+
+        // Close menu when tapping outside
+        document.addEventListener('click', function(e) {
+            if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('open');
+            }
+        });
     // ===== FETCH GITHUB PROFILE DATA =====
     async function loadGitHubProfile() {
       const username = 'patangesomnath52-sketch';
@@ -454,36 +501,6 @@
     
     // Load on page ready
     loadGitHubProfile();
-
-    // ===== THEME TOGGLE =====
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
-
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-      updateThemeIcon(next);
-    }
-
-    function updateThemeIcon(theme) {
-      const icon = document.getElementById('themeIcon');
-      if (icon) icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-    }
-
-    document.querySelectorAll('.theme-toggle').forEach(btn => {
-      btn.addEventListener('click', toggleTheme);
-    });
-
-    // ===== HAMBURGER =====
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
-    hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => navLinks.classList.remove('active'));
-    });
   </script>
 </body>
 </html>

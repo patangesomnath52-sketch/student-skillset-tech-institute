@@ -183,7 +183,7 @@
     submitBtn.disabled = true;
     
     try {
-      const res = await fetch('/api/admissions', {
+      const res = await fetch('/api/admissions/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
