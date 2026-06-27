@@ -6,66 +6,53 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ============================================================
-    // 1. THEME TOGGLE (Dark / Light)
-    // ============================================================
-    const themeToggle = document.querySelector('.theme-toggle');
-    const themeIcon = document.querySelector('#themeIcon');
+      // ===== THEME TOGGLE =====
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
 
-    function setTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        if (themeIcon) {
-            themeIcon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-        }
-    }
-
-    function getStoredTheme() {
-        return localStorage.getItem('theme') || 'dark';
-    }
-
-    // Apply stored theme on load
-    const initialTheme = getStoredTheme();
-    setTheme(initialTheme);
-
-    // Toggle on click
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function (e) {
-            e.stopPropagation();
+        function toggleTheme() {
             const current = document.documentElement.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
-            setTheme(next);
-        });
-    }
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        }
 
-    // ============================================================
-    // 2. NAVBAR SCROLL EFFECT
-    // ============================================================
-    const navbar = document.querySelector('nav');
-    if (navbar) {
-        window.addEventListener('scroll', function () {
-            navbar.classList.toggle('scrolled', window.scrollY > 50);
-        });
-    }
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeIcon');
+            if (icon) {
+                icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+            }
+        }
 
-    // ============================================================
-    // 3. HAMBURGER MENU TOGGLE
-    // ============================================================
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('navLinks');
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
-    if (hamburger && navLinks) {
-        hamburger.addEventListener('click', function (e) {
+        // ===== HAMBURGER MENU =====
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', function(e) {
             e.stopPropagation();
-            navLinks.classList.toggle('active');
+            this.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
         });
 
-        navLinks.querySelectorAll('a').forEach(function (link) {
-            link.addEventListener('click', function () {
-                navLinks.classList.remove('active');
+        // Close menu when tapping a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('open');
             });
         });
-    }
+
+        // Close menu when tapping outside
+        document.addEventListener('click', function(e) {
+            if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('open');
+            }
+        });
 
     // ============================================================
     // 4. ADMISSION PANEL

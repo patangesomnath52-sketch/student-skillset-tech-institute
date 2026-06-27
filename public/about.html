@@ -306,42 +306,7 @@
 
     
 
-    <div class="section-title">
-      <h2><span>👨‍💻 Meet Our  Founder</span></h2>
-    </div>
-
-    <div class="founder-card">
-      <img id="githubAvatar" src="https://avatars.githubusercontent.com/u/0?v=4" alt="Founder" onerror="this.src='https://ui-avatars.com/api/?name=PS&background=ff2d95&color=fff&size=200'">
-      <h3 id="githubName">Loading...</h3>
-      <p class="role">Founder </p>
-      <p class="bio" id="githubBio">🎓 Building the next generation of developers | Full Stack Trainer | CCC, Tally, DTP, Web Dev & Digital Marketing | Learning by doing</p>
-      
-      
-      <div class="github-stats">
-        <div class="github-stat">
-          <i class="fas fa-code-branch"></i>
-          <span id="githubRepos">0</span>
-          <small>Repositories</small>
-        </div>
-        <div class="github-stat">
-          <i class="fas fa-users"></i>
-          <span id="githubFollowers">0</span>
-          <small>Followers</small>
-        </div>
-        <div class="github-stat">
-          <i class="fas fa-user-plus"></i>
-          <span id="githubFollowing">0</span>
-          <small>Following</small>
-        </div>
-      </div>
-
-      <div class="social-links">
-        <a href="https://github.com/" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
     
-       
-        <a href="mailto:@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
-      </div>
-    </div>
 
     <!-- Faculty Team -->
     <div class="section-title">
@@ -350,7 +315,7 @@
 
     <!-- <div class="team-grid">
       <div class="team-card">
-        <img src="https://ui-avatars.com/api/?name=Somnath+Patange&background=6c5ce7&color=fff&size=160" alt="Faculty">
+        <img src="" alt="Faculty">
         <h4>Somnath Patange</h4>
         <p>Web Development & MERN Stack</p>
       </div> -->
@@ -415,92 +380,68 @@
 
   <a href="https://wa.me/+919604995068" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
-  <script src="js/main.js"></script>
-  <script>
-      // ===== THEME TOGGLE =====
+ <script src="js/main.js"></script>
+<script>
+    // ===== THEME TOGGLE (using class, no ID needed) =====
+    (function() {
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
-        updateThemeIcon(savedTheme);
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    })();
 
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        }
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.className = next === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    }
 
-        function updateThemeIcon(theme) {
-            const icon = document.getElementById('themeIcon');
-            if (icon) {
-                icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-            }
-        }
+    // Attach to the existing theme button
+    document.querySelector('.theme-toggle').addEventListener('click', toggleTheme);
 
-        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-
-        // ===== HAMBURGER MENU =====
-        const hamburger = document.getElementById('hamburger');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        hamburger.addEventListener('click', function(e) {
-            e.stopPropagation();
-            this.classList.toggle('active');
-            mobileMenu.classList.toggle('open');
+    // ===== HAMBURGER MENU (simplified, no mobile menu div needed) =====
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
         });
-
-        // Close menu when tapping a link
-        mobileMenu.querySelectorAll('a').forEach(link => {
+        // Close menu on link click
+        navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                mobileMenu.classList.remove('open');
+                navLinks.classList.remove('active');
             });
         });
-
-        // Close menu when tapping outside
-        document.addEventListener('click', function(e) {
-            if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
-                hamburger.classList.remove('active');
-                mobileMenu.classList.remove('open');
-            }
-        });
-    // ===== FETCH GITHUB PROFILE DATA =====
-    async function loadGitHubProfile() {
-      const username = 'patangesomnath52-sketch';
-      
-      try {
-        const res = await fetch(`https://api.github.com/users/${username}`);
-        const data = await res.json();
-        
-        // Update avatar
-        document.getElementById('githubAvatar').src = data.avatar_url;
-        
-        // Update name
-        document.getElementById('githubName').textContent = data.name || data.login;
-        
-        // Update bio
-        if (data.bio) {
-          document.getElementById('githubBio').textContent = data.bio;
-        }
-        
-        // Update stats
-        document.getElementById('githubRepos').textContent = data.public_repos || 0;
-        document.getElementById('githubFollowers').textContent = data.followers || 0;
-        document.getElementById('githubFollowing').textContent = data.following || 0;
-        
-        console.log('GitHub profile loaded:', data.login);
-      } catch (err) {
-        console.log('GitHub API limit reached or error, using defaults');
-        // Keep default values if API fails
-        document.getElementById('githubName').textContent = 'Somnath Patange';
-        document.getElementById('githubRepos').textContent = '25+';
-        document.getElementById('githubFollowers').textContent = '50+';
-        document.getElementById('githubFollowing').textContent = '30+';
-      }
     }
-    
-    // Load on page ready
+
+    // ===== FETCH GITHUB PROFILE =====
+    async function loadGitHubProfile() {
+        const username = 'patangesomnath52-sketch';
+        try {
+            const res = await fetch(`https://api.github.com/users/${username}`);
+            if (!res.ok) throw new Error('GitHub API limit');
+            const data = await res.json();
+            
+            document.getElementById('githubAvatar').src = data.avatar_url;
+            document.getElementById('githubName').textContent = data.name || data.login;
+            if (data.bio) document.getElementById('githubBio').textContent = data.bio;
+            document.getElementById('githubRepos').textContent = data.public_repos || 0;
+            document.getElementById('githubFollowers').textContent = data.followers || 0;
+            document.getElementById('githubFollowing').textContent = data.following || 0;
+        } catch (err) {
+            // Keep defaults (they're already in the HTML)
+            document.getElementById('githubName').textContent = 'Somnath Patange';
+            document.getElementById('githubRepos').textContent = '25+';
+            document.getElementById('githubFollowers').textContent = '50+';
+            document.getElementById('githubFollowing').textContent = '30+';
+        }
+    }
+
+    // Run after page loads
     loadGitHubProfile();
-  </script>
+</script>
 </body>
 </html>
