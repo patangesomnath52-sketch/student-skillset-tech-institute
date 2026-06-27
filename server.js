@@ -18,7 +18,8 @@ const admissionsRouter = require('./routes/admissions');
 const coursesRouter = require('./routes/courses');
 const galleryRouter = require('./routes/gallery');
 const contactRouter = require('./routes/contact');
-
+const settingsRouter = require('./routes/settings');
+app.use('/api/settings', settingsRouter);
 app.use('/api/admissions', admissionsRouter);
 app.use('/api/courses', coursesRouter);
 app.use('/api/gallery', galleryRouter);
