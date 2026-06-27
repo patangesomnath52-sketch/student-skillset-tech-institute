@@ -1,4 +1,17 @@
-﻿require('dotenv').config();
+﻿const admin = require('firebase-admin');
+
+// Initialize Firebase Admin
+if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+  admin.initializeApp({
+    credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT))
+  });
+} else {
+  // For local development, use a service account file
+  admin.initializeApp({
+    credential: admin.credential.cert(require('./serviceAccountKey.json'))
+  });
+}
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -6,7 +19,8 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+const studentRouter = require('./routes/student');
+app.use('/api/student', studentRouter);
 // Middleware
 app.use(cors());
 app.use(express.json());
