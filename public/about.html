@@ -2,21 +2,223 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About – Student Skillset</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <title>About Us – Student Skillset</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    .page-content { padding-top: 100px; padding-bottom: 3rem; }
+    
+    /* Hero Banner */
+    .about-hero {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+      position: relative;
+    }
+    .about-hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .about-hero p {
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 1rem auto;
+      font-size: 1rem;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    .stats-bar .stat h3 {
+      font-size: 2rem;
+      color: var(--secondary);
+      font-family: 'Montserrat', sans-serif;
+    }
+    .stats-bar .stat p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    /* Section Title */
+    .section-title {
+      text-align: center;
+      margin: 3rem 0 1.5rem;
+    }
+    .section-title h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+    .section-title h2 span {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Founder Card - GitHub Style */
+    .founder-card {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+    .founder-card img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid var(--secondary);
+      object-fit: cover;
+      margin-bottom: 1rem;
+    }
+    .founder-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.4rem;
+    }
+    .founder-card .role {
+      color: var(--secondary);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    .founder-card .bio {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .founder-card .github-stats {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    .founder-card .github-stat {
+      text-align: center;
+    }
+    .founder-card .github-stat i {
+      color: var(--secondary);
+      font-size: 1.2rem;
+    }
+    .founder-card .github-stat span {
+      display: block;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .founder-card .github-stat small {
+      color: var(--text-dim);
+      font-size: 0.8rem;
+    }
+    .founder-card .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .founder-card .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.3s;
+      font-size: 1.1rem;
+    }
+    .founder-card .social-links a:hover {
+      background: var(--secondary);
+      color: #000;
+      border-color: var(--secondary);
+    }
+
+    /* Team Grid */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .team-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .team-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--secondary);
+    }
+    .team-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.8rem;
+    }
+    .team-card h4 {
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+    .team-card p {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    /* Why Us */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .why-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+    }
+    .why-card i {
+      font-size: 2rem;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+    }
+    .why-card h4 {
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem;
+    }
+    .why-card p {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 480px) {
+      .founder-card .github-stats { gap: 1rem; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <div class="bg-orbs">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-  </div>
 
+  <!-- Navbar -->
   <nav id="navbar">
     <a href="index.html" class="logo">SKILLSET</a>
     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
@@ -43,104 +245,245 @@
           <i id="themeIcon" class="fas fa-moon"></i>
         </button>
       </li>
-      
+      <li><a href="admissions.html" class="btn">Apply Now</a></li>
     </ul>
   </nav>
 
-  <main class="container" style="padding-top:130px;">
-    <h1 class="section-title"><span>About Us</span></h1>
-    <p style="max-width:700px; margin:0 auto 2rem; text-align:center; color:var(--text-dim);">
-      Student Skillset is a leading institution providing practical computer education to empower students with industry-relevant skills.
-    </p>
-    <div class="card-grid">
-      <div class="card">
-        <i class="fas fa-laptop-code"></i>
-        <h3>CCC</h3>
-        <p>Computer Concepts</p>
-        <p style="color:var(--text-dim);">3 months | Certificate: Yes</p>
-        <a href="courses.html?course=ccc" class="btn">Learn More</a>
+  <!-- Main Content -->
+  <main class="container page-content">
+    
+    <!-- Hero -->
+    <div class="about-hero">
+      <h1>About Student Skillset</h1>
+      <p>We are a premier computer training institute dedicated to empowering students with practical, career-focused digital skills.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat"><h3>5+</h3><p>Years Experience</p></div>
+      <div class="stat"><h3>1200+</h3><p>Students Trained</p></div>
+      <div class="stat"><h3>6</h3><p>Career Courses</p></div>
+      <div class="stat"><h3>100%</h3><p>Placement Support</p></div>
+    </div>
+
+    <!-- Founder - GitHub Profile -->
+    <div class="section-title">
+      <h2><span>👨‍💻 Meet Our  Lead Trainer</span></h2>
+    </div>
+
+    <div class="founder-card">
+      <img id="githubAvatar" src="https://avatars.githubusercontent.com/u/0?v=4" alt="Founder" onerror="this.src='https://ui-avatars.com/api/?name=PS&background=ff2d95&color=fff&size=200'">
+      <h3 id="githubName">Loading...</h3>
+      <p class="role"> Lead Technical Trainer</p>
+      <p class="bio" id="githubBio">Passionate about teaching and technology.Lead Trainer at Student Skillset Tech Institute | MERN Stack Developer | Passionate about teaching coding & computer skills | Building the next generation of tech talent 🚀 .</p>
+      
+      
+      <div class="github-stats">
+        <div class="github-stat">
+          <i class="fas fa-code-branch"></i>
+          <span id="githubRepos">0</span>
+          <small>Repositories</small>
+        </div>
+        <div class="github-stat">
+          <i class="fas fa-users"></i>
+          <span id="githubFollowers">0</span>
+          <small>Followers</small>
+        </div>
+        <div class="github-stat">
+          <i class="fas fa-user-plus"></i>
+          <span id="githubFollowing">0</span>
+          <small>Following</small>
+        </div>
       </div>
-      <div class="card">
-        <i class="fas fa-calculator"></i>
-        <h3>Tally Prime</h3>
-        <p>GST, Accounting</p>
-        <p style="color:var(--text-dim);">6 months | Certificate: Yes</p>
-        <a href="courses.html?course=tally" class="btn">Learn More</a>
-      </div>
-      <div class="card">
-        <i class="fas fa-paint-brush"></i>
-        <h3>DTP</h3>
-        <p>Photoshop, CorelDraw</p>
-        <p style="color:var(--text-dim);">4 months | Certificate: Yes</p>
-        <a href="courses.html?course=dtp" class="btn">Learn More</a>
-      </div>
-      <div class="card">
-        <i class="fas fa-keyboard"></i>
-        <h3>DTE</h3>
-        <p>Data Entry & Typing</p>
-        <p style="color:var(--text-dim);">3 months | Certificate: Yes</p>
-        <a href="courses.html?course=dte" class="btn">Learn More</a>
-      </div>
-      <div class="card">
-        <i class="fas fa-code"></i>
-        <h3>Web Development</h3>
-        <p>MERN Stack</p>
-        <p style="color:var(--text-dim);">6 months | Certificate: Yes</p>
-        <a href="courses.html?course=web" class="btn">Learn More</a>
-      </div>
-      <div class="card">
-        <i class="fas fa-chart-line"></i>
-        <h3>Digital Marketing</h3>
-        <p>SEO, Ads, Social</p>
-        <p style="color:var(--text-dim);">4 months | Certificate: Yes</p>
-        <a href="courses.html?course=digital" class="btn">Learn More</a>
+
+      <div class="social-links">
+        <a href="https://github.com/patangesomnath52-sketch" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+    
+       
+        <a href="mailto:patangesomnath52@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
       </div>
     </div>
+
+    
+
+    <div class="section-title">
+      <h2><span>👨‍💻 Meet Our  Founder</span></h2>
+    </div>
+
+    <div class="founder-card">
+      <img id="githubAvatar" src="https://avatars.githubusercontent.com/u/0?v=4" alt="Founder" onerror="this.src='https://ui-avatars.com/api/?name=PS&background=ff2d95&color=fff&size=200'">
+      <h3 id="githubName">Loading...</h3>
+      <p class="role">Founder </p>
+      <p class="bio" id="githubBio">🎓 Building the next generation of developers | Full Stack Trainer | CCC, Tally, DTP, Web Dev & Digital Marketing | Learning by doing</p>
+      
+      
+      <div class="github-stats">
+        <div class="github-stat">
+          <i class="fas fa-code-branch"></i>
+          <span id="githubRepos">0</span>
+          <small>Repositories</small>
+        </div>
+        <div class="github-stat">
+          <i class="fas fa-users"></i>
+          <span id="githubFollowers">0</span>
+          <small>Followers</small>
+        </div>
+        <div class="github-stat">
+          <i class="fas fa-user-plus"></i>
+          <span id="githubFollowing">0</span>
+          <small>Following</small>
+        </div>
+      </div>
+
+      <div class="social-links">
+        <a href="https://github.com/" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+    
+       
+        <a href="mailto:@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+
+    <!-- Faculty Team -->
+    <div class="section-title">
+      <h2><span>👥 Our Faculty Team</span></h2>
+    </div>
+
+    <!-- <div class="team-grid">
+      <div class="team-card">
+        <img src="https://ui-avatars.com/api/?name=Somnath+Patange&background=6c5ce7&color=fff&size=160" alt="Faculty">
+        <h4>Somnath Patange</h4>
+        <p>Web Development & MERN Stack</p>
+      </div> -->
+      
+      <!-- <div class="team-card">
+  <img src="https://ui-avatars.com/api/?name=Rajesh+Kumar&background=00cec9&color=fff&size=160" alt="Rajesh Kumar">
+  <h4>Rajesh Kumar</h4>
+  <p style="color:var(--secondary); font-weight:500; font-size:0.8rem;">Senior Faculty – Tally & Accounting</p>
+  <p style="color:var(--text-dim); font-size:0.8rem; margin-top:0.5rem;">
+    12+ years experience | 500+ students trained | Certified Tally Trainer
+  </p>
+</div> -->
+
+    <!-- Why Choose Us -->
+    <div class="section-title">
+      <h2><span>⭐ Why Choose Student Skillset?</span></h2>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <i class="fas fa-laptop-code"></i>
+        <h4>Practical Learning</h4>
+        <p>Hands-on projects, not just theory</p>
+      </div>
+      <div class="why-card">
+        <i class="fas fa-chalkboard-teacher"></i>
+        <h4>Expert Faculty</h4>
+        <p>Industry-experienced trainers</p>
+      </div>
+      <div class="why-card">
+        <i class="fas fa-certificate"></i>
+        <h4>Certification</h4>
+        <p>Government-recognized certificates</p>
+      </div>
+      <div class="why-card">
+        <i class="fas fa-briefcase"></i>
+        <h4>Placement Support</h4>
+        <p>Resume building & interview prep</p>
+      </div>
+      <div class="why-card">
+        <i class="fas fa-clock"></i>
+        <h4>Flexible Batches</h4>
+        <p>Morning & evening options</p>
+      </div>
+      <div class="why-card">
+        <i class="fas fa-rupee-sign"></i>
+        <h4>Affordable Fees</h4>
+        <p>Quality education at low cost</p>
+      </div>
+    </div>
+
   </main>
 
+  <!-- Footer -->
   <footer>
-    <div class="container footer-grid">
+    <div class="container" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:2rem; padding:2rem 0;">
       <div><h4>Student Skillset</h4><p>Practical Computer Education</p></div>
       <div><a href="index.html">Home</a> | <a href="courses.html">Courses</a> | <a href="admissions.html">Admissions</a></div>
       <div><i class="fab fa-instagram fa-2x"></i><i class="fab fa-facebook fa-2x"></i><i class="fab fa-youtube fa-2x"></i></div>
     </div>
   </footer>
 
-  <a href="https://wa.me/+91 96049 95068" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-  <script src="js/main.js">
-    // ===== LOAD SETTINGS FROM API =====
-async function loadSiteSettings() {
-  try {
-    const res = await fetch('/api/settings');
-    const data = await res.json();
-    
-    // Update hero text
-    if (data.heroTitle) {
-      document.querySelector('.hero h1').innerHTML = data.heroTitle.replace('\n', '<br>');
-    }
-    if (data.heroSubtitle) {
-      document.getElementById('typewriter').textContent = data.heroSubtitle;
-    }
-    
-    // Update counters
-    if (data.studentsTrained) {
-      document.querySelector('[data-target="1200"]').setAttribute('data-target', data.studentsTrained);
-    }
-    if (data.certificatesIssued) {
-      document.querySelector('[data-target="800"]').setAttribute('data-target', data.certificatesIssued);
-    }
-    if (data.projectsCompleted) {
-      document.querySelector('[data-target="350"]').setAttribute('data-target', data.projectsCompleted);
-    }
-    
-    console.log('Site settings loaded');
-  } catch (err) {
-    console.log('Settings not loaded, using defaults');
-  }
-}
+  <a href="https://wa.me/+919604995068" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
-// Call on page load
-loadSiteSettings();
+  <script src="js/main.js"></script>
+  <script>
+    // ===== FETCH GITHUB PROFILE DATA =====
+    async function loadGitHubProfile() {
+      const username = 'patangesomnath52-sketch';
+      
+      try {
+        const res = await fetch(`https://api.github.com/users/${username}`);
+        const data = await res.json();
+        
+        // Update avatar
+        document.getElementById('githubAvatar').src = data.avatar_url;
+        
+        // Update name
+        document.getElementById('githubName').textContent = data.name || data.login;
+        
+        // Update bio
+        if (data.bio) {
+          document.getElementById('githubBio').textContent = data.bio;
+        }
+        
+        // Update stats
+        document.getElementById('githubRepos').textContent = data.public_repos || 0;
+        document.getElementById('githubFollowers').textContent = data.followers || 0;
+        document.getElementById('githubFollowing').textContent = data.following || 0;
+        
+        console.log('GitHub profile loaded:', data.login);
+      } catch (err) {
+        console.log('GitHub API limit reached or error, using defaults');
+        // Keep default values if API fails
+        document.getElementById('githubName').textContent = 'Somnath Patange';
+        document.getElementById('githubRepos').textContent = '25+';
+        document.getElementById('githubFollowers').textContent = '50+';
+        document.getElementById('githubFollowing').textContent = '30+';
+      }
+    }
+    
+    // Load on page ready
+    loadGitHubProfile();
+
+    // ===== THEME TOGGLE =====
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcon(next);
+    }
+
+    function updateThemeIcon(theme) {
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+
+    document.querySelectorAll('.theme-toggle').forEach(btn => {
+      btn.addEventListener('click', toggleTheme);
+    });
+
+    // ===== HAMBURGER =====
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('active'));
+    });
   </script>
 </body>
 </html>
