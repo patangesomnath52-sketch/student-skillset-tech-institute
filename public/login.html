@@ -3,85 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
   <title>Student Login – Skillset</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    .auth-container {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+    .auth-container { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+    .auth-card { background:rgba(255,255,255,0.08); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.2); border-radius:24px; padding:2.5rem 2rem; max-width:420px; width:100%; text-align:center; }
+    .auth-card .logo-icon { font-size:3rem; margin-bottom:0.5rem; }
+    .auth-card h2 { font-family:'Montserrat',sans-serif; font-size:1.6rem; margin-bottom:0.3rem; color:#fff; }
+    .auth-card p { color:rgba(255,255,255,0.6); margin-bottom:1.5rem; font-size:0.9rem; }
+    
+    .form-group { margin-bottom:1rem; text-align:left; }
+    .form-group label { display:flex; align-items:center; gap:6px; margin-bottom:4px; color:var(--secondary, #00cec9); font-weight:500; font-size:0.9rem; }
+    .form-group input { width:100%; padding:14px; background:rgba(255,255,255,0.05); border:2px solid rgba(255,255,255,0.15); border-radius:14px; color:#fff; font-family:inherit; font-size:1rem; }
+    .form-group input:focus { border-color:#00cec9; outline:none; }
+    
+    .auth-btn { width:100%; padding:14px; border-radius:50px; background:linear-gradient(135deg,#6c5ce7,#a29bfe); color:white; font-weight:600; font-size:1rem; border:none; cursor:pointer; margin-top:0.5rem; }
+    .auth-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(108,92,231,0.4); }
+    .auth-btn:disabled { opacity:0.6; }
+    
+    .divider { display:flex; align-items:center; gap:1rem; margin:1.5rem 0; color:rgba(255,255,255,0.5); font-size:0.85rem; }
+    .divider::before, .divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.2); }
+    
+    .google-btn {
+      width:100%; padding:14px; border-radius:50px;
+      border:2px solid rgba(255,255,255,0.2); background:transparent;
+      color:#fff; cursor:pointer; font-size:1rem; font-weight:500;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      transition:all 0.3s;
     }
-    .auth-card {
-      background: var(--surface);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 2.5rem 2rem;
-      max-width: 420px;
-      width: 100%;
-      text-align: center;
-    }
-    .auth-card h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-    }
-    .auth-card p { color: var(--text-dim); margin-bottom: 1.5rem; font-size: 0.9rem; }
-    .form-group { margin-bottom: 1rem; text-align: left; }
-    .form-group label { display: block; margin-bottom: 4px; color: var(--secondary); font-weight: 500; font-size: 0.9rem; }
-    .form-group input {
-      width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border);
-      border-radius: 12px; color: var(--text); font-family: inherit; font-size: 1rem;
-    }
-    .auth-btn {
-      width: 100%; padding: 14px; border-radius: 50px;
-      background: linear-gradient(135deg, var(--primary), #c0266b);
-      color: white; font-weight: 600; font-size: 1.05rem;
-      border: none; cursor: pointer; margin-top: 0.5rem;
-    }
-    .auth-link { margin-top: 1.2rem; color: var(--text-dim); font-size: 0.9rem; }
-    .auth-link a { color: var(--secondary); text-decoration: none; font-weight: 600; }
-    .divider { display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0; color: var(--text-dim); font-size: 0.85rem; }
-    .divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--border); }
-    .social-btn {
-      width: 100%; padding: 12px; border-radius: 50px;
-      border: 1px solid var(--border); background: var(--bg);
-      color: var(--text); cursor: pointer; font-size: 0.95rem;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      margin-bottom: 0.8rem; transition: 0.2s;
-    }
-    .social-btn:hover { border-color: var(--secondary); }
+    .google-btn:hover { background:rgba(255,255,255,0.1); border-color:#fff; }
+    .google-btn img { width:20px; height:20px; }
+    
+    .auth-link { margin-top:1.2rem; color:rgba(255,255,255,0.6); font-size:0.9rem; }
+    .auth-link a { color:#00cec9; text-decoration:none; font-weight:600; }
+    .hidden { display:none !important; }
+    .error-msg { color:#ff4444; font-size:0.85rem; margin-top:0.5rem; display:none; }
   </style>
 </head>
 <body>
   <div class="auth-container">
     <div class="auth-card">
-      <h2>Welcome Back 👋</h2>
+      <div class="logo-icon">🎓</div>
+      <h2>Welcome Back!</h2>
       <p>Sign in to your student account</p>
       
+      <!-- Google Sign-In Button -->
+      <button class="google-btn" onclick="signInWithGoogle()">
+        <img src="https://www.google.com/favicon.ico" alt="G" style="width:20px;height:20px;border-radius:50%;">
+        Continue with Google
+      </button>
+      
+      <div class="divider">or sign in with email</div>
+      
+      <!-- Email Login Form -->
       <form id="loginForm">
         <div class="form-group">
-          <label>Email</label>
+          <label><i class="fas fa-envelope"></i> Email</label>
           <input type="email" id="email" placeholder="you@example.com" required>
         </div>
         <div class="form-group">
-          <label>Password</label>
+          <label><i class="fas fa-lock"></i> Password</label>
           <input type="password" id="password" placeholder="••••••••" required>
         </div>
-        <p style="text-align:right; margin-bottom:0.5rem;">
-          <a href="#" id="forgotPassword" style="color:var(--secondary); font-size:0.85rem; text-decoration:none;">Forgot password?</a>
-        </p>
+        <p class="error-msg" id="loginError">Invalid email or password</p>
         <button type="submit" class="auth-btn" id="loginBtn">
           <span id="loginText">Sign In</span>
-          <span id="loginLoader" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Please wait...</span>
+          <span id="loginLoader" class="hidden"><i class="fas fa-spinner fa-spin"></i> Signing in...</span>
         </button>
       </form>
-
-      <p class="auth-link">Don't have an account? <a href="signup.html">Create one</a></p>
+      
+      <p style="text-align:right; margin:0.5rem 0;">
+        <a href="#" id="forgotPassword" style="color:#00cec9; font-size:0.85rem; text-decoration:none;">Forgot password?</a>
+      </p>
+      
+      <p class="auth-link">Don't have an account? <a href="registrations.html">Create one</a></p>
     </div>
   </div>
 
@@ -90,7 +88,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script>
     // 🔥 REPLACE WITH YOUR FIREBASE CONFIG
-   const firebaseConfig = {
+      const firebaseConfig = {
   apiKey: "AIzaSyAsKJHRE1kzAdlVBXhRxcZF3yXAbdHRCrc",
   authDomain: "wallpaperfeed-577a7.firebaseapp.com",
   databaseURL: "https://wallpaperfeed-577a7-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -102,41 +100,56 @@
 };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    
+    // Google Sign-In
+    function signInWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          window.location.href = 'student-dashboard.html';
+        })
+        .catch((error) => {
+          alert('Google Sign-In failed: ' + error.message);
+        });
+    }
 
     // Check if already logged in
     auth.onAuthStateChanged(user => {
       if (user) window.location.href = 'student-dashboard.html';
     });
 
-    // Login
+    // Email Login
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       
-      document.getElementById('loginText').style.display = 'none';
-      document.getElementById('loginLoader').style.display = 'inline';
+      document.getElementById('loginText').classList.add('hidden');
+      document.getElementById('loginLoader').classList.remove('hidden');
+      document.getElementById('loginError').style.display = 'none';
       
       try {
         await auth.signInWithEmailAndPassword(email, password);
         window.location.href = 'student-dashboard.html';
       } catch (err) {
-        alert(err.message);
-        document.getElementById('loginText').style.display = 'inline';
-        document.getElementById('loginLoader').style.display = 'none';
+        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('loginError').textContent = err.message;
+      } finally {
+        document.getElementById('loginText').classList.remove('hidden');
+        document.getElementById('loginLoader').classList.add('hidden');
       }
     });
 
-    // Forgot password
+    // Forgot Password
     document.getElementById('forgotPassword').addEventListener('click', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value || prompt('Enter your email:');
       if (email) {
         try {
           await auth.sendPasswordResetEmail(email);
-          alert('✅ Password reset email sent!');
+          alert('✅ Password reset email sent! Check your inbox.');
         } catch (err) {
-          alert(err.message);
+          alert('Error: ' + err.message);
         }
       }
     });
