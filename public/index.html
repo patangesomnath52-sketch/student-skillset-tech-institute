@@ -294,32 +294,7 @@
            <a href="login.html">🔐 Student Login</a>
     </div>
 
-    <!-- ===== ADMISSION PANEL ===== -->
-    <div class="overlay" id="overlay"></div>
-    <div class="admission-panel" id="admissionPanel">
-        <span class="panel-close" id="closePanel">✕</span>
-        <h2 style="font-size:1.5rem; margin-bottom:1rem;">Apply Now</h2>
-        <form id="admissionForm" action="/api/admissions" method="POST" enctype="multipart/form-data">
-            <div class="form-group"><label>Full Name</label><input type="text" name="fullName" required></div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-                <div class="form-group"><label>Mobile</label><input type="tel" name="mobile" required></div>
-                <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
-            </div>
-            <div class="form-group"><label>Qualification</label><select name="qualification"><option>10th</option><option>12th</option><option>Graduate</option></select></div>
-            <div class="form-group"><label>Course</label><select name="course" required><option value="">-- Choose --</option><option>CCC</option><option>Tally Prime</option><option>DTP</option><option>DTE</option><option>Web Development</option><option>Digital Marketing</option></select></div>
-            <div class="form-group"><label>Upload Photo</label>
-                <div class="file-upload-box" onclick="document.getElementById('photoFile').click()">📷 Tap to add photo<input type="file" id="photoFile" name="photo" accept="image/*" required></div>
-                <img id="photoPreview" style="width:80px;height:80px;object-fit:cover;border-radius:10px;display:none;" alt="">
-            </div>
-            <div class="form-group"><label>Aadhaar Card</label>
-                <div class="file-upload-box" onclick="document.getElementById('aadhaarFile').click()">🪪 Tap to upload Aadhaar<input type="file" id="aadhaarFile" name="aadhaar" accept="image/*,application/pdf" required></div>
-            </div>
-            <div class="form-group"><label>Marksheet</label>
-                <div class="file-upload-box" onclick="document.getElementById('marksheetFile').click()">📄 Tap to upload Marksheet<input type="file" id="marksheetFile" name="marksheet" accept="image/*,application/pdf" required></div>
-            </div>
-            <button type="submit" class="btn" style="width:100%;">Submit Application</button>
-        </form>
-    </div>
+    
 
     <!-- ===== MAIN CONTENT ===== -->
     <main>
