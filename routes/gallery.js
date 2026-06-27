@@ -1,33 +1,16 @@
 ﻿const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const GalleryImage = require('../models/GalleryImage');
 
-// Hardcode Cloudinary config as fallback if env vars missing
-const cloudName = process.env.CLOUDINARY_CLOUD_NAME || 'skillsetcloud';
-const apiKey = process.env.CLOUDINARY_API_KEY || '415767268281125';
-const apiSecret = process.env.CLOUDINARY_API_SECRET || 'c9mPe0A8xTHCPQdQlpvK_DZgclw';
-
-console.log('Gallery route - Cloudinary cloud_name:', cloudName ? 'SET' : 'MISSING');
-
-cloudinary.config({
-  cloud_name: cloudName,
-  api_key: apiKey,
-  api_secret: apiSecret,
+// Use memory storage - no disk, no Cloudinary
+const storage = multer.memoryStorage();
+const upload = multer({ 
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB max
 });
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'skillset-gallery',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
-  },
-});
-
-const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
-
+// GET all images
 router.get('/', async (req, res) => {
   try {
     const images = await GalleryImage.find().sort({ uploadedAt: -1 });
@@ -37,16 +20,25 @@ router.get('/', async (req, res) => {
   }
 });
 
+// POST upload image
 router.post('/', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: 'No image file uploaded' });
+      return res.status(400).json({ error: 'No image uploaded' });
     }
+
+    // Convert image to base64 data URL
+    const base64 = req.file.buffer.toString('base64');
+    const mimeType = req.file.mimetype;
+    const dataUrl = `data:${mimeType};base64,${base64}`;
+
+    // Save to database
     const img = new GalleryImage({
-      url: req.file.path,
+      url: dataUrl,
       category: req.body.category || 'General',
     });
     await img.save();
+    
     res.status(201).json(img);
   } catch (err) {
     console.error('Upload error:', err.message);
@@ -54,6 +46,7 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
+// DELETE image
 router.delete('/:id', async (req, res) => {
   try {
     await GalleryImage.findByIdAndDelete(req.params.id);
