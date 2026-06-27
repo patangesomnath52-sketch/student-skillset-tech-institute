@@ -2,14 +2,15 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
   <title>Register – Student Skillset</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
     :root { --primary:#6c5ce7; --secondary:#00cec9; }
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family:'Poppins',sans-serif;
       background:linear-gradient(135deg,#0c0c1d,#1a1a3e);
@@ -19,187 +20,157 @@
       justify-content:center;
       min-height:100vh;
       margin:0;
-      padding: 20px;
+      padding:16px;
     }
     .container {
-      background:rgba(255,255,255,0.08);
+      background:rgba(255,255,255,0.06);
       backdrop-filter:blur(20px);
-      border:1px solid rgba(255,255,255,0.2);
+      border:1px solid rgba(255,255,255,0.15);
       border-radius:24px;
-      padding:2.5rem 2rem;
-      max-width:480px;
+      padding:2rem 1.5rem;
+      max-width:440px;
       width:100%;
     }
-    .logo-icon { text-align:center; font-size:3rem; margin-bottom:0.5rem; }
-    h1 { text-align:center; font-family:'Montserrat',sans-serif; font-size:1.8rem; margin-bottom:0.3rem; }
-    .subtitle { text-align:center; color:rgba(255,255,255,0.6); font-size:0.9rem; margin-bottom:1.5rem; }
+    .logo-icon { text-align:center; font-size:2.8rem; margin-bottom:0.3rem; }
+    h1 { text-align:center; font-family:'Montserrat',sans-serif; font-size:1.5rem; margin-bottom:0.2rem; }
+    .subtitle { text-align:center; color:rgba(255,255,255,0.55); font-size:0.85rem; margin-bottom:1.5rem; }
     
     label {
       display:flex;
       align-items:center;
-      gap:8px;
-      margin:1rem 0 0.3rem;
+      gap:6px;
+      margin:0.9rem 0 0.3rem;
       color:var(--secondary);
       font-weight:500;
-      font-size:0.9rem;
+      font-size:0.85rem;
     }
-    label i { width:16px; font-size:0.85rem; }
+    label i { width:14px; font-size:0.8rem; }
     
-    input, select, textarea {
+    input, select {
       width:100%;
-      padding:14px 16px;
-      background:rgba(255,255,255,0.05);
-      border:2px solid rgba(255,255,255,0.15);
-      border-radius:14px;
+      padding:13px 14px;
+      background:rgba(255,255,255,0.04);
+      border:2px solid rgba(255,255,255,0.12);
+      border-radius:12px;
       color:#fff;
       font-family:inherit;
-      font-size:1rem;
+      font-size:0.95rem;
       transition:all 0.3s;
       outline:none;
+      -webkit-appearance:none;
+      appearance:none;
     }
-    input:focus, select:focus, textarea:focus {
+    select {
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;
+      background-position:right 14px center;
+      padding-right:36px;
+    }
+    input:focus, select:focus {
       border-color:var(--secondary);
-      box-shadow:0 0 0 3px rgba(0,206,201,0.1);
+      box-shadow:0 0 0 3px rgba(0,206,201,0.08);
     }
-    input::placeholder { color:rgba(255,255,255,0.4); }
-    
+    input::placeholder { color:rgba(255,255,255,0.3); font-size:0.9rem; }
     select option { background:#1a1a3e; color:#fff; }
     
     button {
       background:linear-gradient(45deg,var(--primary),#a29bfe);
       border:none;
-      padding:16px;
+      padding:15px;
       width:100%;
       border-radius:50px;
       color:white;
       font-weight:700;
-      font-size:1.1rem;
+      font-size:1.05rem;
       margin-top:1.5rem;
       cursor:pointer;
       transition:all 0.3s;
+      letter-spacing:0.3px;
     }
     button:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(108,92,231,0.4); }
     button:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
     
     .hidden { display:none !important; }
     
-    .bottom-link {
+    .success-box {
+      display:none;
       text-align:center;
-      margin-top:1.2rem;
-      font-size:0.9rem;
-      color:rgba(255,255,255,0.6);
+      padding:2rem 1rem;
     }
-    .bottom-link a {
-      color:var(--secondary);
-      text-decoration:none;
-      font-weight:600;
-    }
-    .bottom-link a:hover { text-decoration:underline; }
-    
-    /* Success animation */
-    @keyframes successPop {
-      0%{transform:scale(1)}
-      50%{transform:scale(1.03)}
-      100%{transform:scale(1)}
-    }
-    .success-anim { animation:successPop 0.5s ease; }
+    .success-box .check { font-size:3.5rem; margin-bottom:1rem; }
+    .success-box h2 { font-family:'Montserrat',sans-serif; font-size:1.4rem; margin-bottom:0.5rem; }
+    .success-box p { color:rgba(255,255,255,0.6); font-size:0.9rem; }
   </style>
 </head>
 <body>
+
 <div class="container">
-  <div class="logo-icon">🎓</div>
-  <h1>Student Registration</h1>
-  <p class="subtitle">Create your account and enroll in a course</p>
-  
-  <form id="registrationForm">
-    <!-- Full Name -->
-    <label for="fullName"><i class="fas fa-user"></i> Full Name</label>
-    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+  <!-- Registration Form -->
+  <div id="formSection">
+    <div class="logo-icon">📝</div>
+    <h1>Course Registration</h1>
+    <p class="subtitle">Fill in your details to enroll</p>
+    
+    <form id="registrationForm">
+      <label for="fullName"><i class="fas fa-user"></i> Full Name</label>
+      <input type="text" id="fullName" placeholder="Enter your full name" required>
 
-    <!-- Email -->
-    <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
-    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      <label for="mobile"><i class="fas fa-phone"></i> Mobile Number</label>
+      <input type="tel" id="mobile" placeholder="+91 98765 43210" required>
 
-    <!-- Mobile -->
-    <label for="mobile"><i class="fas fa-phone"></i> Mobile Number</label>
-    <input type="tel" id="mobile" name="mobile" placeholder="+91 98765 43210" required>
+      <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+      <input type="email" id="email" placeholder="you@example.com" required>
 
-    <!-- Course -->
-    <label for="course"><i class="fas fa-book"></i> Select Course</label>
-    <select id="course" name="course" required>
-      <option value="">-- Choose Your Course --</option>
-      <option>CCC - Computer Concepts</option>
-      <option>Tally Prime with GST</option>
-      <option>DTP - Desktop Publishing</option>
-      <option>DTE - Data Entry & Typing</option>
-      <option>Web Development (MERN)</option>
-      <option>Digital Marketing</option>
-    </select>
+      <label for="course"><i class="fas fa-book"></i> Select Course</label>
+      <select id="course" required>
+        <option value="">-- Choose Your Course --</option>
+        <option>CCC - Computer Concepts</option>
+        <option>Tally Prime with GST</option>
+        <option>DTP - Desktop Publishing</option>
+        <option>DTE - Data Entry & Typing</option>
+        <option>Web Development (MERN Stack)</option>
+        <option>Digital Marketing</option>
+      </select>
 
-    <!-- Qualification -->
-    <label for="qualification"><i class="fas fa-graduation-cap"></i> Qualification</label>
-    <select id="qualification" name="qualification">
-      <option>10th Pass</option>
-      <option>12th Pass</option>
-      <option>Graduate</option>
-      <option>Post Graduate</option>
-      <option>Other</option>
-    </select>
+      <label for="qualification"><i class="fas fa-graduation-cap"></i> Qualification</label>
+      <select id="qualification">
+        <option>10th Pass</option>
+        <option>12th Pass</option>
+        <option>Graduate</option>
+        <option>Post Graduate</option>
+        <option>Other</option>
+      </select>
 
-    <!-- Password -->
-    <label for="password"><i class="fas fa-lock"></i> Create Password</label>
-    <input type="password" id="password" name="password" placeholder="Min 6 characters" required minlength="6">
+      <button type="submit" id="submitBtn">
+        <span id="submitText">🚀 Register Now</span>
+        <span id="submitLoader" class="hidden"><i class="fas fa-spinner fa-spin"></i> Submitting...</span>
+      </button>
+    </form>
+  </div>
 
-    <button type="submit" id="submitBtn">
-      <span id="submitText">🚀 Create Account & Enroll</span>
-      <span id="submitLoader" class="hidden"><i class="fas fa-spinner fa-spin"></i> Creating account...</span>
-    </button>
-  </form>
-
-  <p class="bottom-link">
-    Already registered? <a href="login.html">Sign in here</a>
-  </p>
+  <!-- Success Message -->
+  <div class="success-box" id="successBox">
+    <div class="check">✅</div>
+    <h2>Registration Successful!</h2>
+    <p>We'll contact you shortly with course details.</p>
+    <button onclick="resetForm()" style="margin-top:1.5rem;">Register Another</button>
+  </div>
 </div>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-
 <script>
-  // ===== FIREBASE CONFIG =====
-  // 🔥 REPLACE THIS WITH YOUR ACTUAL FIREBASE CONFIG
-   const firebaseConfig = {
-  apiKey: "AIzaSyAsKJHRE1kzAdlVBXhRxcZF3yXAbdHRCrc",
-  authDomain: "wallpaperfeed-577a7.firebaseapp.com",
-  databaseURL: "https://wallpaperfeed-577a7-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "wallpaperfeed-577a7",
-  storageBucket: "wallpaperfeed-577a7.firebasestorage.app",
-  messagingSenderId: "560156190506",
-  appId: "1:560156190506:web:cbc8482e912b05805ee053",
-  measurementId: "G-H8K993NRGN"
-};
-  
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-
   // ===== FORM SUBMISSION =====
   document.getElementById('registrationForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const fullName = document.getElementById('fullName').value.trim();
-    const email = document.getElementById('email').value.trim();
     const mobile = document.getElementById('mobile').value.trim();
+    const email = document.getElementById('email').value.trim();
     const course = document.getElementById('course').value;
     const qualification = document.getElementById('qualification').value;
-    const password = document.getElementById('password').value;
     
     // Validation
-    if (!fullName || !email || !mobile || !course) {
+    if (!fullName || !mobile || !email || !course) {
       alert('⚠️ Please fill all required fields');
-      return;
-    }
-    if (password.length < 6) {
-      alert('⚠️ Password must be at least 6 characters');
       return;
     }
     
@@ -212,27 +183,15 @@
     submitBtn.disabled = true;
     
     try {
-      // 1. Create Firebase account
-      const userCred = await auth.createUserWithEmailAndPassword(email, password);
-      await userCred.user.updateProfile({ displayName: fullName });
-      
-      // 2. Get Firebase token
-      const token = await userCred.user.getIdToken();
-      
-      // 3. Save registration to your backend
       const res = await fetch('/api/admissions', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           fullName,
-          email,
           mobile,
+          email,
           course,
           qualification,
-          uid: userCred.user.uid,
           status: 'pending'
         })
       });
@@ -240,32 +199,29 @@
       const data = await res.json();
       
       if (res.ok) {
-        // Success!
-        this.classList.add('success-anim');
-        alert('✅ Registration successful! Welcome to Student Skillset!');
-        this.reset();
-        
-        // Redirect to dashboard
-        setTimeout(() => {
-          window.location.href = 'student-dashboard.html';
-        }, 800);
+        // Show success
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('successBox').style.display = 'block';
       } else {
-        alert('❌ ' + (data.error || 'Registration failed'));
+        alert('❌ ' + (data.error || 'Registration failed. Please try again.'));
       }
     } catch (err) {
-      if (err.code === 'auth/email-already-in-use') {
-        alert('⚠️ This email is already registered. Please login instead.');
-      } else if (err.code === 'auth/weak-password') {
-        alert('⚠️ Password is too weak. Use at least 6 characters.');
-      } else {
-        alert('❌ ' + err.message);
-      }
+      alert('❌ Network error. Please check your connection and try again.');
     } finally {
       submitText.classList.remove('hidden');
       submitLoader.classList.add('hidden');
       submitBtn.disabled = false;
     }
   });
+
+  // ===== RESET FORM =====
+  function resetForm() {
+    document.getElementById('registrationForm').reset();
+    document.getElementById('formSection').style.display = 'block';
+    document.getElementById('successBox').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 </script>
+
 </body>
 </html>
