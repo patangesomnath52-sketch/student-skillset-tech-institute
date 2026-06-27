@@ -5,16 +5,27 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const GalleryImage = require('../models/GalleryImage');
 
+// Hardcode Cloudinary config as fallback if env vars missing
+const cloudName = process.env.CLOUDINARY_CLOUD_NAME || 'skillsetcloud';
+const apiKey = process.env.CLOUDINARY_API_KEY || '415767268281125';
+const apiSecret = process.env.CLOUDINARY_API_SECRET || 'c9mPe0A8xTHCPQdQlpvK_DZgclw';
+
+console.log('Gallery route - Cloudinary cloud_name:', cloudName ? 'SET' : 'MISSING');
+
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: cloudName,
+  api_key: apiKey,
+  api_secret: apiSecret,
 });
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: { folder: 'skillset-gallery', allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'] },
+  params: {
+    folder: 'skillset-gallery',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
+  },
 });
+
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
 router.get('/', async (req, res) => {
@@ -28,11 +39,17 @@ router.get('/', async (req, res) => {
 
 router.post('/', upload.single('image'), async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
-    const img = new GalleryImage({ url: req.file.path, category: req.body.category || 'General' });
+    if (!req.file) {
+      return res.status(400).json({ error: 'No image file uploaded' });
+    }
+    const img = new GalleryImage({
+      url: req.file.path,
+      category: req.body.category || 'General',
+    });
     await img.save();
     res.status(201).json(img);
   } catch (err) {
+    console.error('Upload error:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
