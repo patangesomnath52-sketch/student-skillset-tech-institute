@@ -1,4 +1,4 @@
-require('dotenv').config();
+﻿require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -13,22 +13,31 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes
-const admissionsRouter = require('./routes/admissions');
-const coursesRouter = require('./routes/courses');
-const galleryRouter = require('./routes/gallery');
-const contactRouter = require('./routes/contact');
-const settingsRouter = require('./routes/settings');
-app.use('/api/settings', settingsRouter);
-app.use('/api/admissions', admissionsRouter);
-app.use('/api/courses', coursesRouter);
-app.use('/api/gallery', galleryRouter);
-app.use('/api/contact', contactRouter);
+// Routes - load each one carefully
+try {
+  app.use('/api/admissions', require('./routes/admissions'));
+  console.log('Admissions route loaded');
+} catch(e) { console.error('Admissions route error:', e.message); }
 
-// Serve admin page
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-});
+try {
+  app.use('/api/courses', require('./routes/courses'));
+  console.log('Courses route loaded');
+} catch(e) { console.error('Courses route error:', e.message); }
+
+try {
+  app.use('/api/gallery', require('./routes/gallery'));
+  console.log('Gallery route loaded');
+} catch(e) { console.error('Gallery route error:', e.message); }
+
+try {
+  app.use('/api/settings', require('./routes/settings'));
+  console.log('Settings route loaded');
+} catch(e) { console.error('Settings route error:', e.message); }
+
+try {
+  app.use('/api/contact', require('./routes/contact'));
+  console.log('Contact route loaded');
+} catch(e) { console.error('Contact route error:', e.message); }
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
