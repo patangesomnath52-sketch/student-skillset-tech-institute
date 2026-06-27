@@ -2,7 +2,6 @@
 const router = express.Router();
 const SiteSettings = require('../models/SiteSettings');
 
-// GET settings (creates default if none exist)
 router.get('/', async (req, res) => {
   try {
     let settings = await SiteSettings.findOne();
@@ -15,7 +14,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// PUT update settings
 router.put('/', async (req, res) => {
   try {
     const settings = await SiteSettings.findOneAndUpdate(

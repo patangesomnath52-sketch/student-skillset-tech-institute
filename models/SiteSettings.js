@@ -1,5 +1,4 @@
 ﻿const mongoose = require('mongoose');
-
 const siteSettingsSchema = new mongoose.Schema({
   heroTitle: { type: String, default: 'Student Skillset Computer Academy' },
   heroSubtitle: { type: String, default: 'Learn. Build. Grow.' },
@@ -18,5 +17,4 @@ const siteSettingsSchema = new mongoose.Schema({
   googleMapsEmbed: { type: String, default: '' },
   updatedAt: { type: Date, default: Date.now }
 });
-
 module.exports = mongoose.model('SiteSettings', siteSettingsSchema);
