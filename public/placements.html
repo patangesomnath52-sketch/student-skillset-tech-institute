@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Placements – Student Skillset</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    /* ========== FOOTER ========== */
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 3rem 1.5rem 1.5rem;
+  margin-top: 5rem;
+  transition: background 0.3s;
+}
+
+.footer-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.footer-brand h4 {
+  color: var(--heading);
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+}
+
+.footer-brand p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+}
+
+.footer-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--neon);
+}
+
+.footer-social {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+
+.footer-social a:hover {
+  background: var(--neon);
+  color: var(--neon-dark-text);
+  border-color: var(--neon);
+  box-shadow: 0 0 15px var(--neon-glow);
+  transform: translateY(-2px);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer-bottom p {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-grid {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .footer-links {
+    justify-content: center;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <nav id="navbar">
+    <a href="index.html" class="logo">SKILLSET</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li >
+        <a href="courses.html" >Courses</a>
+       
+      </li>
+      <li><a href="placements.html">Placements</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="admissions.html">Register</a></li>
+      <li><a href="contacts.html">Contact</a></li>
+      <li>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <i id="themeIcon" class="fas fa-moon"></i>
+        </button>
+      </li>
+     
+    </ul>
+  </nav>
+ <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="courses.html">Courses</a>
+    <a href="placements.html">Placements</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contacts.html">Contact</a>
+    <a href="admissions.html" >Register</a>
+  </div>
+  <main class="container" style="padding-top:130px;">
+    <h1 class="section-title"><span>Placement Assistance</span></h1>
+    <p style="max-width:700px; margin:0 auto 2rem; text-align:center; color:var(--text-dim);">
+      We prepare you for the job market with resume building, mock interviews, and portfolio development.
+    </p>
+
+    <div class="card-grid">
+      <div class="card">
+        <i class="fas fa-file-alt"></i>
+        <h3>Resume Building</h3>
+        <p>Craft a professional CV that stands out.</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-comments"></i>
+        <h3>Interview Preparation</h3>
+        <p>Mock interviews & communication skills.</p>
+      </div>
+      <div class="card">
+        <i class="fas fa-briefcase"></i>
+        <h3>Portfolio Development</h3>
+        <p>Showcase your projects and skills.</p>
+      </div>
+    </div>
+
+    
+  </main>
+
+  <footer>
+  <div class="container footer-grid">
+    <!-- Brand -->
+    <div class="footer-brand">
+      <h4>Student Skillset Tech Institute</h4>
+      <p>Practical Computer Education for Career Success</p>
+    </div>
+
+    <!-- Quick Links -->
+    
+
+    <!-- Social Media Icons -->
+    <div class="footer-social">
+      <a href="https://www.instagram.com/studn.skillset_tech__institute?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://www.facebook.com/yourinstitutehandle" target="_blank" rel="noopener" aria-label="Facebook">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://www.youtube.com/@yourinstitutehandle" target="_blank" rel="noopener" aria-label="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+   
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer-bottom">
+    <p>&copy; 2025 Student Skillset Tech Institute. All rights reserved.</p>
+  </div>
+</footer>
+
+  <a href="https://wa.me/+91 96049 95068" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  <script>
+  (async function() {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+
+      // Apply custom CSS
+      if (data.customCss) {
+        const style = document.createElement('style');
+        style.id = 'admin-custom-css';
+        style.textContent = data.customCss;
+        document.head.appendChild(style);
+      }
+
+      // If you want to update hero text or counters, you can target specific elements here
+      // Example: document.querySelector('.hero h1').textContent = data.heroTitle;
+    } catch (err) {
+      console.log('Settings not loaded, using defaults');
+    }
+  })();
+</script>
+  <script src="js/main.js"></script>
+</body>
+</html>

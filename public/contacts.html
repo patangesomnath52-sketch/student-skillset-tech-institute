@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us – Student Skillset</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    /* ========== FOOTER ========== */
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 3rem 1.5rem 1.5rem;
+  margin-top: 5rem;
+  transition: background 0.3s;
+}
+
+.footer-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.footer-brand h4 {
+  color: var(--heading);
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+}
+
+.footer-brand p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+}
+
+.footer-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--neon);
+}
+
+.footer-social {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+
+.footer-social a:hover {
+  background: var(--neon);
+  color: var(--neon-dark-text);
+  border-color: var(--neon);
+  box-shadow: 0 0 15px var(--neon-glow);
+  transform: translateY(-2px);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer-bottom p {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 878px) {
+  .footer-grid {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .footer-links {
+    justify-content: center;
+  }
+}
+.page-content {
+      padding-top: 140px; /* clear fixed navbar */
+      padding-bottom: 4rem;
+    }
+      .mobile-menu.open { transform: translateX(0); }
+    .mobile-menu a {
+      color: var(--text); font-size: 1.3rem; font-weight: 600; text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <nav id="navbar">
+    <a href="index.html" class="logo">SKILLSET</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li >
+        <a href="courses.html" >Courses</a>
+       
+      </li>
+      <li><a href="placements.html">Placements</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="admissions.html">Register</a></li>
+      <li><a href="contacts.html">Contact</a></li>
+      <li>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <i id="themeIcon" class="fas fa-moon"></i>
+        </button>
+      </li>
+      
+    </ul>
+  </nav>
+ <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+   
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="courses.html">Courses</a>
+    <a href="placements.html">Placements</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contacts.html">Contact</a>
+    <a href="admissions.html" >Register</a>
+   
+  </div>
+  <main class="container" style="padding-top:130px;">
+    <h1 class="section-title"><span>Get in Touch</span></h1>
+    <p style="text-align:center; max-width:600px; margin:0 auto 2rem; color:var(--text-dim);">
+      Have questions about courses, admissions, or anything else? Reach out to us!
+    </p>
+
+    <div class="contact-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:2rem;">
+      <div class="glass-card">
+        <h2>Our Institute</h2>
+        <div style="display:flex; align-items:center; gap:15px; margin:1.5rem 0; padding:1rem; background:var(--surface); border-radius:12px;">
+          <i class="fas fa-map-marker-alt" style="color:var(--secondary);"></i>
+          <div>
+            <strong>Address:</strong><br>
+          Workshop Rd, behind Palak Jewelers, Nizam Colony, Kohinor City, Shri Nagar, Nanded, Maharashtra 431605
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:15px; margin:1.5rem 0; padding:1rem; background:var(--surface); border-radius:12px;">
+          <i class="fas fa-phone-alt" style="color:var(--secondary);"></i>
+          <div>
+            <strong>Phone:</strong><br>
+            <a href="tel:+91 96049 95068" style="color:var(--text);">+91 96049 95068</a>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:15px; margin:1.5rem 0; padding:1rem; background:var(--surface); border-radius:12px;">
+          <i class="fas fa-envelope" style="color:var(--secondary);"></i>
+          <div>
+            <strong>Email:</strong><br>
+            <a href="mailto:studentskillsettechinstitute@gmail.com" style="color:var(--text);">studentskillsettechinstitute@gmail.com</a>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:15px; margin:1.5rem 0; padding:1rem; background:var(--surface); border-radius:12px;">
+          <i class="fab fa-whatsapp" style="color:var(--secondary);"></i>
+          <div>
+            <strong>WhatsApp:</strong><br>
+            <a href="https://wa.me/+91 96049 95068" target="_blank" style="color:var(--text);">Chat on WhatsApp</a>
+          </div>
+        </div>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d60294.45077871662!2d77.2320626216797!3d19.177585100000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd1d74ef2fa7177%3A0xe5509e0000d2b6dd!2sThe%20Raymond%20shop!5e0!3m2!1sen!2sin!4v1782590621674!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+
+      <div class="glass-card">
+        <h2>Send an Inquiry</h2>
+        <form id="inquiryForm">
+          <div class="form-group">
+            <label for="inqName">Your Name *</label>
+            <input type="text" id="inqName" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="inqEmail">Email Address *</label>
+            <input type="email" id="inqEmail" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="inqPhone">Phone Number</label>
+            <input type="tel" id="inqPhone" name="phone">
+          </div>
+          <div class="form-group">
+            <label for="inqCourse">Course Interest</label>
+            <select id="inqCourse" name="course">
+              <option value="">-- Select --</option>
+              <option>CCC</option><option>Tally Prime</option><option>DTP</option>
+              <option>DTE</option><option>Web Development</option><option>Digital Marketing</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inqMessage">Message *</label>
+            <textarea id="inqMessage" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn" style="width:100%;">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div><h4>Student Skillset</h4><p>Practical Computer Education</p></div>
+      <div><a href="index.html">Home</a> | <a href="courses.html">Courses</a> | <a href="admissions.html">Admissions</a></div>
+      <div><i class="fab fa-instagram fa-2x"></i><i class="fab fa-facebook fa-2x"></i><i class="fab fa-youtube fa-2x"></i></div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/+91 96049 95068" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  <script>
+  (async function() {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+
+      // Apply custom CSS
+      if (data.customCss) {
+        const style = document.createElement('style');
+        style.id = 'admin-custom-css';
+        style.textContent = data.customCss;
+        document.head.appendChild(style);
+      }
+
+      // If you want to update hero text or counters, you can target specific elements here
+      // Example: document.querySelector('.hero h1').textContent = data.heroTitle;
+    } catch (err) {
+      console.log('Settings not loaded, using defaults');
+    }
+  })();
+</script>
+  <script src="js/main.js">
+    // ===== LOAD SETTINGS FROM API =====
+  </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard – Skillset</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .dashboard { max-width:900px; margin:0 auto; padding:100px 16px 40px; }
+    .profile-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:20px;
+      padding:2rem; text-align:center; margin-bottom:1.5rem;
+    }
+    .profile-card img { width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:1rem; }
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+    .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.5rem; text-align:center; }
+    .stat-card h3 { font-size:2rem; color:var(--secondary); }
+    .course-list { list-style:none; }
+    .course-list li {
+      background:var(--surface); border:1px solid var(--border); border-radius:12px;
+      padding:1rem; margin-bottom:0.8rem; display:flex; justify-content:space-between; align-items:center;
+    }
+    .badge { padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:600; }
+    .badge-active { background:#28a745; color:white; }
+    .badge-pending { background:#ffc107; color:#000; }
+    .logout-btn { background:red; color:white; border:none; padding:12px 24px; border-radius:50px; cursor:pointer; margin-top:1rem; }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="profile-card">
+      <img src="https://ui-avatars.com/api/?name=Student&background=ff2d95&color=fff&size=100" id="profilePic" alt="Profile">
+      <h2 id="studentName">Welcome!</h2>
+      <p id="studentEmail" style="color:var(--text-dim);"></p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card"><h3 id="totalCourses">0</h3><p>Enrolled Courses</p></div>
+      <div class="stat-card"><h3 id="attendance">0%</h3><p>Attendance</p></div>
+      <div class="stat-card"><h3 id="certificates">0</h3><p>Certificates</p></div>
+    </div>
+
+    <h3 style="margin-bottom:1rem;">My Courses</h3>
+    <ul class="course-list" id="courseList">
+      <li style="color:var(--text-dim);">Loading courses...</li>
+    </ul>
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script>
+   const firebaseConfig = {
+  apiKey: "AIzaSyAsKJHRE1kzAdlVBXhRxcZF3yXAbdHRCrc",
+  authDomain: "wallpaperfeed-577a7.firebaseapp.com",
+  databaseURL: "https://wallpaperfeed-577a7-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "wallpaperfeed-577a7",
+  storageBucket: "wallpaperfeed-577a7.firebasestorage.app",
+  messagingSenderId: "560156190506",
+  appId: "1:560156190506:web:cbc8482e912b05805ee053",
+  measurementId: "G-H8K993NRGN"
+};
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    auth.onAuthStateChanged(async (user) => {
+      if (!user) { window.location.href = 'login.html'; return; }
+      
+      document.getElementById('studentName').textContent = user.displayName || 'Student';
+      document.getElementById('studentEmail').textContent = user.email;
+
+      const token = await user.getIdToken();
+      try {
+        const res = await fetch('/api/student/profile', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        document.getElementById('totalCourses').textContent = data.enrolledCourses?.length || 0;
+        document.getElementById('attendance').textContent = (data.attendance || 0) + '%';
+        document.getElementById('certificates').textContent = data.certificates?.length || 0;
+        
+        const courseList = document.getElementById('courseList');
+        courseList.innerHTML = (data.enrolledCourses || []).map(c => `
+          <li>
+            <span>${c.courseName}</span>
+            <span class="badge badge-active">${c.status}</span>
+          </li>
+        `).join('') || '<li style="color:var(--text-dim);">No courses yet</li>';
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    function logout() {
+      auth.signOut().then(() => window.location.href = 'login.html');
+    }
+  </script>
+</body>
+</html>

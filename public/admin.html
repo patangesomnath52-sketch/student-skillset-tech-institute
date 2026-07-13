@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel – Student Skillset</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --bg: #0a0f1f;
+      --surface: rgba(19, 27, 46, 0.7);
+      --border: #1e2d4a;
+      --heading: #F8FAFC;
+      --text: #CBD5E1;
+      --text-dim: #94A3B8;
+      --secondary: #00cec9;
+      --neon: #00FFFF;
+      --neon-glow: rgba(0, 255, 255, 0.35);
+      --radius: 16px;
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.25);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.6);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .admin-layout { display: flex; min-height: 100vh; padding-top: 80px; }
+    .sidebar {
+      width: 260px;
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      position: fixed;
+      top: 80px;
+      left: 0;
+      bottom: 0;
+      overflow-y: auto;
+      z-index: 100;
+      transition: transform 0.3s;
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: var(--text-dim);
+      text-decoration: none;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: rgba(255,255,255,0.08);
+      color: var(--neon);
+    }
+    .sidebar i { width: 20px; text-align: center; }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      padding: 2rem;
+      overflow-x: auto;
+    }
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .stat-card { text-align: center; padding: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+    .stat-card h2 { font-size: 2.5rem; color: var(--neon); }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: var(--surface); border-radius: var(--radius); overflow: hidden; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); color: var(--text); }
+    th { background: rgba(255,255,255,0.05); color: var(--neon); font-weight: 600; }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: border 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--neon);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0,255,255,0.1);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.65rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      background: var(--neon);
+      color: #0A0F1F;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 15px var(--neon-glow);
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      background: #00E5E5;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,255,255,0.5);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+    .close {
+      float: right;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; margin-bottom: 0.4rem; color: var(--neon); font-weight: 500; font-size: 0.9rem; }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: 0;
+        left: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 1rem;
+      }
+      .sidebar a { padding: 10px 14px; margin: 4px; }
+      .main-content { margin-left: 0; }
+      .admin-layout { flex-direction: column; padding-top: 60px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav id="navbar" style="position:fixed; top:10px; left:50%; transform:translateX(-50%); width:95%; max-width:1200px; background:rgba(10,15,31,0.8); backdrop-filter:blur(20px); border:1px solid var(--border); border-radius:60px; padding:0.6rem 1.5rem; display:flex; align-items:center; justify-content:space-between; z-index:1000;">
+    <a href="index.html" class="logo" style="font-weight:800; color:var(--heading); text-decoration:none; font-size:1.3rem;">SKILL<span style="color:var(--neon);">SET</span></a>
+    <button class="hamburger" id="hamburger" style="display:none; background:none; border:none; color:var(--text); font-size:1.5rem;"><i class="fas fa-bars"></i></button>
+    <ul class="nav-links" id="navLinks" style="display:flex; gap:1.5rem; list-style:none;">
+      <li><a href="index.html" style="color:var(--text-dim); text-decoration:none;">Site Home</a></li>
+      <li><a href="admin.html" style="color:var(--neon); text-decoration:none; font-weight:600;">Admin</a></li>
+    </ul>
+  </nav>
+
+  <!-- Login Screen -->
+  <div id="loginScreen" style="display:flex; justify-content:center; align-items:center; min-height:100vh; padding-top:100px;">
+    <div class="card" style="max-width:400px; width:90%; text-align:center; padding:2rem;">
+      <h2 style="color:var(--heading); margin-bottom:1.5rem;">Admin Login</h2>
+      <div class="form-group">
+        <input type="password" id="adminPassword" placeholder="Enter admin password">
+      </div>
+      <button class="btn" onclick="login()" style="width:100%;">Login</button>
+      <p id="loginError" style="color:#EF4444; margin-top:1rem; display:none;">Wrong password</p>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" style="display:none;">
+    <div class="admin-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <a href="#" class="active" data-section="overview"><i class="fas fa-tachometer-alt"></i> Overview</a>
+        <a href="#" data-section="admissions"><i class="fas fa-users"></i> Admissions</a>
+        <a href="#" data-section="courses"><i class="fas fa-book"></i> Courses</a>
+        <a href="#" data-section="paidCourses"><i class="fas fa-lock"></i> Paid Courses</a>
+        <a href="#" data-section="gallery"><i class="fas fa-images"></i> Gallery</a>
+        <a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Overview -->
+        <section id="overview" class="section active">
+          <h2 style="color:var(--heading); margin-bottom:1.5rem;">Dashboard Overview</h2>
+          <div class="card-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem;">
+            <div class="card stat-card"><i class="fas fa-user-graduate fa-2x" style="color:var(--neon);"></i><h2 id="totalStudents">0</h2><p>Students</p></div>
+            <div class="card stat-card"><i class="fas fa-book-open fa-2x" style="color:var(--neon);"></i><h2 id="totalCourses">0</h2><p>Courses</p></div>
+            <div class="card stat-card"><i class="fas fa-images fa-2x" style="color:var(--neon);"></i><h2 id="totalImages">0</h2><p>Gallery</p></div>
+          </div>
+        </section>
+
+        <!-- Admissions -->
+        <section id="admissions" class="section">
+          <h2 style="color:var(--heading); margin-bottom:1rem;">Manage Admissions</h2>
+          <div class="card">
+            <div style="display:flex; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
+              <input type="text" id="admSearch" placeholder="Search name/mobile/email" oninput="loadAdmissions()" style="flex:1;">
+              <select id="admStatus" onchange="loadAdmissions()">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="reviewed">Reviewed</option>
+                <option value="approved">Approved</option>
+              </select>
+            </div>
+            <div style="overflow-x:auto;">
+              <table id="admTable">
+                <thead><tr><th>Name</th><th>Mobile</th><th>Course</th><th>Status</th><th>Docs</th><th>Actions</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Courses -->
+        <section id="courses" class="section">
+          <h2 style="color:var(--heading); margin-bottom:1rem;">Manage Courses</h2>
+          <button class="btn" onclick="openCourseModal()">+ Add New Course</button>
+          <div class="card" style="margin-top:1rem;">
+            <table id="courseTable">
+              <thead><tr><th>Title</th><th>Duration</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Paid Courses -->
+        <section id="paidCourses" class="section">
+          <h2 style="color:var(--heading); margin-bottom:1rem;">Manage Paid Courses</h2>
+          <button class="btn" onclick="openPaidCourseModal()">+ Add New Paid Course</button>
+          <div class="card" style="margin-top:1rem;">
+            <table id="paidCourseTable">
+              <thead><tr><th>Title</th><th>Price (₹)</th><th>Published</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Gallery -->
+        <section id="gallery" class="section">
+          <h2 style="color:var(--heading); margin-bottom:1rem;">Gallery Management</h2>
+          <button class="btn" onclick="openGalleryModal()">+ Upload Image</button>
+          <div class="card" style="margin-top:1rem;">
+            <div id="galleryGrid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:1rem;"></div>
+          </div>
+        </section>
+
+        <!-- Settings -->
+        <section id="settings" class="section">
+          <h2 style="color:var(--heading); margin-bottom:1rem;">Site Settings</h2>
+          <form id="settingsForm" class="card">
+            <h3 style="color:var(--neon); margin-bottom:1rem;">Homepage Hero</h3>
+            <div class="form-group"><label>Hero Title</label><input type="text" id="heroTitle"></div>
+            <div class="form-group"><label>Hero Subtitle</label><input type="text" id="heroSubtitle"></div>
+            <div class="form-group"><label>Hero Description</label><input type="text" id="heroDescription"></div>
+
+            <h3 style="color:var(--neon); margin-top:1.5rem;">Stats</h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
+              <div class="form-group"><label>Students Trained</label><input type="number" id="studentsTrained"></div>
+              <div class="form-group"><label>Certificates Issued</label><input type="number" id="certificatesIssued"></div>
+              <div class="form-group"><label>Projects Completed</label><input type="number" id="projectsCompleted"></div>
+            </div>
+
+            <h3 style="color:var(--neon); margin-top:1.5rem;">About Page</h3>
+            <div class="form-group"><label>Vision</label><textarea id="vision" rows="2"></textarea></div>
+            <div class="form-group"><label>Mission</label><textarea id="mission" rows="2"></textarea></div>
+            <div class="form-group"><label>Facilities</label><textarea id="facilities" rows="2"></textarea></div>
+
+            <h3 style="color:var(--neon); margin-top:1.5rem;">Contact Info</h3>
+            <div class="form-group"><label>Address</label><textarea id="address" rows="2"></textarea></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+              <div class="form-group"><label>Phone</label><input type="text" id="phone"></div>
+              <div class="form-group"><label>Email</label><input type="email" id="email"></div>
+            </div>
+            <div class="form-group"><label>WhatsApp Number</label><input type="text" id="whatsapp"></div>
+            <div class="form-group"><label>Office Hours</label><input type="text" id="officeHours"></div>
+            <div class="form-group"><label>Google Maps Embed URL</label><textarea id="googleMapsEmbed" rows="2"></textarea></div>
+
+            <!-- Demo Video Section -->
+            <h3 style="color:var(--neon); margin-top:1.5rem;">🎥 Demo Class Video</h3>
+            <div class="form-group">
+              <label>Upload Video (MP4, WebM) – replaces current demo video</label>
+              <input type="file" id="demoVideoFile" accept="video/*">
+            </div>
+            <div class="form-group">
+              <label>Or enter YouTube Video ID</label>
+              <input type="text" id="youtubeVideoId" placeholder="e.g. dQw4w9WgXcQ">
+            </div>
+
+            <!-- Custom CSS -->
+            <h3 style="color:var(--neon); margin-top:1.5rem;">🎨 Custom CSS</h3>
+            <div class="form-group">
+              <label>Paste your own CSS to override site styles</label>
+              <textarea id="customCss" rows="5" style="font-family:monospace;"></textarea>
+            </div>
+
+            <button type="submit" class="btn" style="width:100%; margin-top:1.5rem;">Save Settings</button>
+          </form>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Course Modal -->
+  <div class="modal" id="courseModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeCourseModal()">&times;</span>
+      <h3 id="courseModalTitle" style="color:var(--heading); margin-bottom:1rem;">Add Course</h3>
+      <form id="courseForm">
+        <input type="hidden" id="courseId">
+        <div class="form-group"><label>Title</label><input type="text" id="courseTitle" required></div>
+        <div class="form-group"><label>Slug</label><input type="text" id="courseSlug" required></div>
+        <div class="form-group"><label>Duration</label><input type="text" id="courseDuration"></div>
+        <div class="form-group"><label>Description</label><textarea id="courseDesc" rows="3"></textarea></div>
+        <div class="form-group"><label>Image</label><input type="file" id="courseImage" accept="image/*"></div>
+        <button type="submit" class="btn" style="width:100%;">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Gallery Modal -->
+  <div class="modal" id="galleryModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeGalleryModal()">&times;</span>
+      <h3 style="color:var(--heading); margin-bottom:1rem;">Upload Image</h3>
+      <form id="galleryForm">
+        <div class="form-group"><label>Category</label>
+          <select id="galleryCategory">
+            <option>Classroom</option><option>Lab</option><option>Students</option>
+            <option>Workshops</option><option>Certificates</option><option>Events</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Image</label><input type="file" id="galleryImageFile" accept="image/*" required></div>
+        <button type="submit" class="btn" style="width:100%;">Upload</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Paid Course Modal -->
+  <div class="modal" id="paidCourseModal">
+    <div class="modal-content">
+      <span class="close" onclick="closePaidCourseModal()">&times;</span>
+      <h3 id="paidCourseModalTitle" style="color:var(--heading); margin-bottom:1rem;">Add Paid Course</h3>
+      <form id="paidCourseForm">
+        <input type="hidden" id="paidCourseId">
+        <div class="form-group"><label>Title</label><input type="text" id="paidTitle" required></div>
+        <div class="form-group"><label>Description</label><textarea id="paidDesc" rows="2"></textarea></div>
+        <div class="form-group"><label>Price (₹)</label><input type="number" id="paidPrice" required></div>
+        <div class="form-group"><label>Thumbnail</label><input type="file" id="paidThumbnail" accept="image/*"></div>
+        <div class="form-group"><label>Video File (MP4)</label><input type="file" id="paidVideo" accept="video/*"></div>
+        <div class="form-group"><label>Or YouTube Video ID</label><input type="text" id="paidYoutubeId" placeholder="e.g. dQw4w9WgXcQ"></div>
+        <div class="form-group"><label>Published</label><select id="paidPublished"><option value="true">Yes</option><option value="false">No (draft)</option></select></div>
+        <button type="submit" class="btn" style="width:100%;">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    // ---------- AUTH ----------
+    const ADMIN_PASSWORD = 'skillset2024';
+
+    function login() {
+      if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        loadOverview();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('adminLoggedIn');
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+    }
+
+    if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadOverview();
+    }
+
+    // ---------- NAVIGATION ----------
+    document.querySelectorAll('.sidebar a[data-section]').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        const section = document.getElementById(this.dataset.section);
+        if (section) section.classList.add('active');
+        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
+
+        switch(this.dataset.section) {
+          case 'overview': loadOverview(); break;
+          case 'admissions': loadAdmissions(); break;
+          case 'courses': loadCourses(); break;
+          case 'paidCourses': loadPaidCourses(); break;
+          case 'gallery': loadGallery(); break;
+          case 'settings': loadSettings(); break;
+        }
+      });
+    });
+
+    // ---------- OVERVIEW ----------
+    async function loadOverview() {
+      try {
+        const [admRes, courseRes, galleryRes] = await Promise.all([
+          fetch('/api/admissions'), fetch('/api/courses'), fetch('/api/gallery')
+        ]);
+        const admissions = await admRes.json();
+        const courses = await courseRes.json();
+        const images = await galleryRes.json();
+        document.getElementById('totalStudents').textContent = (admissions && admissions.length) || 0;
+        document.getElementById('totalCourses').textContent = (courses && courses.length) || 0;
+        document.getElementById('totalImages').textContent = (images && images.length) || 0;
+      } catch (err) { console.error('Overview error:', err); }
+    }
+
+    // ---------- ADMISSIONS ----------
+    async function loadAdmissions() {
+      try {
+        const search = document.getElementById('admSearch').value;
+        const status = document.getElementById('admStatus').value;
+        const res = await fetch(`/api/admissions?search=${encodeURIComponent(search)}&status=${status}`);
+        const data = await res.json();
+        const tbody = document.querySelector('#admTable tbody');
+        if (!tbody) return;
+        tbody.innerHTML = (data || []).map(adm => `
+          <tr>
+            <td>${adm.fullName || ''}</td><td>${adm.mobile || ''}</td><td>${adm.course || ''}</td>
+            <td><select onchange="updateAdmissionStatus('${adm._id}', this.value)">
+              <option value="pending" ${adm.status==='pending'?'selected':''}>Pending</option>
+              <option value="reviewed" ${adm.status==='reviewed'?'selected':''}>Reviewed</option>
+              <option value="approved" ${adm.status==='approved'?'selected':''}>Approved</option>
+            </select></td>
+            <td>
+              ${adm.photo ? `<a href="${adm.photo}" target="_blank">Photo</a> ` : ''}
+              ${adm.aadhaar ? `<a href="${adm.aadhaar}" target="_blank">Aadhaar</a> ` : ''}
+              ${adm.marksheet ? `<a href="${adm.marksheet}" target="_blank">Marksheet</a>` : ''}
+            </td>
+            <td><button class="btn" onclick="deleteAdmission('${adm._id}')" style="background:#EF4444;">Delete</button></td>
+          </tr>
+        `).join('');
+      } catch (err) { console.error('Admissions error:', err); }
+    }
+
+    async function updateAdmissionStatus(id, status) {
+      await fetch(`/api/admissions/${id}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify({status}) });
+    }
+
+    async function deleteAdmission(id) {
+      if (confirm('Delete?')) { await fetch(`/api/admissions/${id}`, { method:'DELETE' }); loadAdmissions(); loadOverview(); }
+    }
+
+    // ---------- COURSES ----------
+    async function loadCourses() {
+      try {
+        const res = await fetch('/api/courses');
+        const courses = await res.json();
+        const tbody = document.querySelector('#courseTable tbody');
+        if (!tbody) return;
+        tbody.innerHTML = (courses || []).map(c => `
+          <tr>
+            <td>${c.title || ''}</td><td>${c.duration || ''}</td>
+            <td>
+              <button class="btn" onclick="editCourse('${c._id}')">Edit</button>
+              <button class="btn" onclick="deleteCourse('${c._id}')" style="background:#EF4444;">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) { console.error('Courses error:', err); }
+    }
+
+    function openCourseModal(course=null) {
+      document.getElementById('courseModal').classList.add('active');
+      if (course) {
+        document.getElementById('courseModalTitle').textContent='Edit Course';
+        document.getElementById('courseId').value=course._id;
+        document.getElementById('courseTitle').value=course.title;
+        document.getElementById('courseSlug').value=course.slug;
+        document.getElementById('courseDuration').value=course.duration;
+        document.getElementById('courseDesc').value=course.description;
+      } else {
+        document.getElementById('courseModalTitle').textContent='Add Course';
+        document.getElementById('courseForm').reset();
+        document.getElementById('courseId').value='';
+      }
+    }
+    function closeCourseModal(){ document.getElementById('courseModal').classList.remove('active'); }
+
+    document.getElementById('courseForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const id=document.getElementById('courseId').value;
+      const fd=new FormData();
+      fd.append('title',document.getElementById('courseTitle').value);
+      fd.append('slug',document.getElementById('courseSlug').value);
+      fd.append('duration',document.getElementById('courseDuration').value);
+      fd.append('description',document.getElementById('courseDesc').value);
+      const img=document.getElementById('courseImage').files[0];
+      if(img) fd.append('image',img);
+      await fetch(id?`/api/courses/${id}`:'/api/courses', {method:id?'PUT':'POST', body:fd});
+      closeCourseModal(); loadCourses(); loadOverview();
+    });
+
+    async function editCourse(id){
+      const res=await fetch('/api/courses'); const courses=await res.json();
+      const c=courses.find(x=>x._id===id); if(c) openCourseModal(c);
+    }
+
+    async function deleteCourse(id){
+      if(confirm('Delete?')){ await fetch(`/api/courses/${id}`,{method:'DELETE'}); loadCourses(); loadOverview(); }
+    }
+
+    // ---------- PAID COURSES ----------
+    async function loadPaidCourses() {
+      try {
+        const res = await fetch('/api/paid-courses');
+        const courses = await res.json();
+        const tbody = document.querySelector('#paidCourseTable tbody');
+        if (!tbody) return;
+        tbody.innerHTML = (courses || []).map(c => `
+          <tr>
+            <td>${c.title || ''}</td>
+            <td>₹${c.price || 0}</td>
+            <td>${c.isPublished ? '✅' : '❌'}</td>
+            <td>
+              <button class="btn" onclick="editPaidCourse('${c._id}')">Edit</button>
+              <button class="btn" onclick="deletePaidCourse('${c._id}')" style="background:#EF4444;">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) { console.error('Paid courses error:', err); }
+    }
+
+    function openPaidCourseModal(course = null) {
+      document.getElementById('paidCourseModal').classList.add('active');
+      if (course) {
+        document.getElementById('paidCourseModalTitle').textContent = 'Edit Paid Course';
+        document.getElementById('paidCourseId').value = course._id;
+        document.getElementById('paidTitle').value = course.title || '';
+        document.getElementById('paidDesc').value = course.description || '';
+        document.getElementById('paidPrice').value = course.price || 0;
+        document.getElementById('paidYoutubeId').value = course.youtubeId || '';
+        document.getElementById('paidPublished').value = course.isPublished ? 'true' : 'false';
+      } else {
+        document.getElementById('paidCourseModalTitle').textContent = 'Add Paid Course';
+        document.getElementById('paidCourseForm').reset();
+        document.getElementById('paidCourseId').value = '';
+      }
+    }
+
+    function closePaidCourseModal() { document.getElementById('paidCourseModal').classList.remove('active'); }
+
+    document.getElementById('paidCourseForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const id = document.getElementById('paidCourseId').value;
+      const fd = new FormData();
+      fd.append('title', document.getElementById('paidTitle').value);
+      fd.append('description', document.getElementById('paidDesc').value);
+      fd.append('price', document.getElementById('paidPrice').value);
+      fd.append('youtubeId', document.getElementById('paidYoutubeId').value);
+      fd.append('isPublished', document.getElementById('paidPublished').value);
+      const thumbnail = document.getElementById('paidThumbnail').files[0];
+      const video = document.getElementById('paidVideo').files[0];
+      if (thumbnail) fd.append('thumbnail', thumbnail);
+      if (video) fd.append('video', video);
+      const url = id ? `/api/paid-courses/${id}` : '/api/paid-courses';
+      const method = id ? 'PUT' : 'POST';
+      await fetch(url, { method, body: fd });
+      closePaidCourseModal();
+      loadPaidCourses();
+    });
+
+    async function editPaidCourse(id) {
+      const res = await fetch('/api/paid-courses');
+      const courses = await res.json();
+      const course = courses.find(c => c._id === id);
+      if (course) openPaidCourseModal(course);
+    }
+
+    async function deletePaidCourse(id) {
+      if (confirm('Delete?')) { await fetch(`/api/paid-courses/${id}`, { method:'DELETE' }); loadPaidCourses(); }
+    }
+
+    // ---------- GALLERY ----------
+    async function loadGallery(){
+      try {
+        const res=await fetch('/api/gallery'); const images=await res.json();
+        const grid=document.getElementById('galleryGrid');
+        if(!grid) return;
+        grid.innerHTML=(images||[]).map(img=>`
+          <div style="position:relative;border-radius:12px;overflow:hidden;">
+            <img src="${img.url}" width="100%" height="120" style="object-fit:cover;">
+            <button class="btn" onclick="deleteImage('${img._id}')" style="position:absolute;top:5px;right:5px;background:#EF4444;padding:4px 8px;font-size:.8rem;">X</button>
+          </div>
+        `).join('');
+      } catch(err){ console.error('Gallery error:',err); }
+    }
+
+    function openGalleryModal(){ document.getElementById('galleryModal').classList.add('active'); }
+    function closeGalleryModal(){ document.getElementById('galleryModal').classList.remove('active'); }
+
+    document.getElementById('galleryForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const fd=new FormData();
+      fd.append('image',document.getElementById('galleryImageFile').files[0]);
+      fd.append('category',document.getElementById('galleryCategory').value);
+      await fetch('/api/gallery',{method:'POST',body:fd});
+      closeGalleryModal(); loadGallery(); loadOverview();
+    });
+
+    async function deleteImage(id){
+      if(confirm('Delete?')){ await fetch(`/api/gallery/${id}`,{method:'DELETE'}); loadGallery(); loadOverview(); }
+    }
+
+    // ---------- SETTINGS ----------
+    async function loadSettings(){
+      try {
+        const res=await fetch('/api/settings'); const data=await res.json();
+        document.getElementById('heroTitle').value=data.heroTitle||'';
+        document.getElementById('heroSubtitle').value=data.heroSubtitle||'';
+        document.getElementById('heroDescription').value=data.heroDescription||'';
+        document.getElementById('studentsTrained').value=data.studentsTrained||0;
+        document.getElementById('certificatesIssued').value=data.certificatesIssued||0;
+        document.getElementById('projectsCompleted').value=data.projectsCompleted||0;
+        document.getElementById('vision').value=data.vision||'';
+        document.getElementById('mission').value=data.mission||'';
+        document.getElementById('facilities').value=data.facilities||'';
+        document.getElementById('address').value=data.address||'';
+        document.getElementById('phone').value=data.phone||'';
+        document.getElementById('email').value=data.email||'';
+        document.getElementById('whatsapp').value=data.whatsapp||'';
+        document.getElementById('officeHours').value=data.officeHours||'';
+        document.getElementById('googleMapsEmbed').value=data.googleMapsEmbed||'';
+        document.getElementById('youtubeVideoId').value=data.youtubeVideoId || '';
+        document.getElementById('customCss').value=data.customCss || '';
+      } catch(err){ console.error('Settings error:',err); }
+    }
+
+    document.getElementById('settingsForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+
+      const demoVideoFile = document.getElementById('demoVideoFile').files[0];
+
+      if (demoVideoFile) {
+        const fd = new FormData();
+        fd.append('heroTitle', document.getElementById('heroTitle').value);
+        fd.append('heroSubtitle', document.getElementById('heroSubtitle').value);
+        fd.append('heroDescription', document.getElementById('heroDescription').value);
+        fd.append('studentsTrained', document.getElementById('studentsTrained').value);
+        fd.append('certificatesIssued', document.getElementById('certificatesIssued').value);
+        fd.append('projectsCompleted', document.getElementById('projectsCompleted').value);
+        fd.append('vision', document.getElementById('vision').value);
+        fd.append('mission', document.getElementById('mission').value);
+        fd.append('facilities', document.getElementById('facilities').value);
+        fd.append('address', document.getElementById('address').value);
+        fd.append('phone', document.getElementById('phone').value);
+        fd.append('email', document.getElementById('email').value);
+        fd.append('whatsapp', document.getElementById('whatsapp').value);
+        fd.append('officeHours', document.getElementById('officeHours').value);
+        fd.append('googleMapsEmbed', document.getElementById('googleMapsEmbed').value);
+        fd.append('youtubeVideoId', document.getElementById('youtubeVideoId').value);
+        fd.append('customCss', document.getElementById('customCss').value);
+        fd.append('demoVideo', demoVideoFile);
+
+        try {
+          const res = await fetch('/api/settings', { method:'PUT', body: fd });
+          if (res.ok) alert('✅ Settings saved!');
+          else { const data = await res.json(); alert('❌ ' + (data.error || 'Failed')); }
+        } catch(err) { alert('❌ Network error'); }
+      } else {
+        const data = {
+          heroTitle: document.getElementById('heroTitle').value,
+          heroSubtitle: document.getElementById('heroSubtitle').value,
+          heroDescription: document.getElementById('heroDescription').value,
+          studentsTrained: parseInt(document.getElementById('studentsTrained').value) || 0,
+          certificatesIssued: parseInt(document.getElementById('certificatesIssued').value) || 0,
+          projectsCompleted: parseInt(document.getElementById('projectsCompleted').value) || 0,
+          vision: document.getElementById('vision').value,
+          mission: document.getElementById('mission').value,
+          facilities: document.getElementById('facilities').value,
+          address: document.getElementById('address').value,
+          phone: document.getElementById('phone').value,
+          email: document.getElementById('email').value,
+          whatsapp: document.getElementById('whatsapp').value,
+          officeHours: document.getElementById('officeHours').value,
+          googleMapsEmbed: document.getElementById('googleMapsEmbed').value,
+          youtubeVideoId: document.getElementById('youtubeVideoId').value,
+          customCss: document.getElementById('customCss').value,
+        };
+        try {
+          const res = await fetch('/api/settings', {
+            method:'PUT',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(data)
+          });
+          if (res.ok) alert('✅ Settings saved!');
+          else { const errData = await res.json(); alert('❌ ' + (errData.error || 'Failed')); }
+        } catch(err) { alert('❌ Network error'); }
+      }
+    });
+  </script>
+</body>
+</html>

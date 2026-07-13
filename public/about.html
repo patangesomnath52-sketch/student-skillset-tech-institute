@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <title>About Us – Student Skillset</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-content { padding-top: 100px; padding-bottom: 3rem; }
+    
+    /* Hero Banner */
+    .about-hero {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+      position: relative;
+    }
+    .about-hero h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .about-hero p {
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 1rem auto;
+      font-size: 1rem;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    .stats-bar .stat h3 {
+      font-size: 2rem;
+      color: var(--secondary);
+      font-family: 'Montserrat', sans-serif;
+    }
+    .stats-bar .stat p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    /* Section Title */
+    .section-title {
+      text-align: center;
+      margin: 3rem 0 1.5rem;
+    }
+    .section-title h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+    .section-title h2 span {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Founder Card - GitHub Style */
+    .founder-card {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+    .founder-card img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid var(--secondary);
+      object-fit: cover;
+      margin-bottom: 1rem;
+    }
+    .founder-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.4rem;
+    }
+    .founder-card .role {
+      color: var(--secondary);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    .founder-card .bio {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .founder-card .github-stats {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    .founder-card .github-stat {
+      text-align: center;
+    }
+    .founder-card .github-stat i {
+      color: var(--secondary);
+      font-size: 1.2rem;
+    }
+    .founder-card .github-stat span {
+      display: block;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .founder-card .github-stat small {
+      color: var(--text-dim);
+      font-size: 0.8rem;
+    }
+    .founder-card .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .founder-card .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.3s;
+      font-size: 1.1rem;
+    }
+    .founder-card .social-links a:hover {
+      background: var(--secondary);
+      color: #000;
+      border-color: var(--secondary);
+    }
+
+    /* Team Grid */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .team-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .team-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--secondary);
+    }
+    .team-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.8rem;
+    }
+    .team-card h4 {
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+    .team-card p {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    /* Why Us */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .why-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+    }
+    .why-card i {
+      font-size: 2rem;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+    }
+    .why-card h4 {
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem;
+    }
+    .why-card p {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 480px) {
+      .founder-card .github-stats { gap: 1rem; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+    }
+    /* ========== FOOTER ========== */
+footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 3rem 1.5rem 1.5rem;
+  margin-top: 5rem;
+  transition: background 0.3s;
+}
+
+.footer-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.footer-brand h4 {
+  color: var(--heading);
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+}
+
+.footer-brand p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+}
+
+.footer-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--neon);
+}
+
+.footer-social {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+
+.footer-social a:hover {
+  background: var(--neon);
+  color: var(--neon-dark-text);
+  border-color: var(--neon);
+  box-shadow: 0 0 15px var(--neon-glow);
+  transform: translateY(-2px);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.footer-bottom p {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-grid {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .footer-links {
+    justify-content: center;
+  }
+}
+    
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav id="navbar">
+    <a href="index.html" class="logo">SKILLSET</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li class="dropdown">
+        <a href="courses.html" >Courses</a>
+        <div >
+         
+      </li>
+      <li><a href="placements.html">Placements</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="admissions.html">Register</a></li>
+      <li><a href="contacts.html">Contact</a></li>
+      <li>
+        <button class="theme-toggle" aria-label="Toggle theme">
+          <i id="themeIcon" class="fas fa-moon"></i>
+        </button>
+      </li>
+     
+    </ul>
+  </nav>
+ <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="courses.html">Courses</a>
+    <a href="placements.html">Placements</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contacts.html">Contact</a>
+    <a href="admissions.html" >Register</a>
+  </div>
+  <!-- Main Content -->
+  <main class="container page-content">
+    
+    <!-- Hero -->
+    <div class="about-hero">
+      <h1>About Student Skillset</h1>
+      <p>We are a premier computer training institute dedicated to empowering students with practical, career-focused digital skills.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+     
+     
+      <div class="stat"><h3>6</h3><p>Career Courses</p></div>
+      <div class="stat"><h3>100%</h3><p>Placement Support</p></div>
+    </div>
+    <div class="founder-wrapper">
+  <div class="founder-card">
+    <!-- 👇 REPLACE "/images/owner.jpg" WITH YOUR ACTUAL PHOTO PATH -->
+    <img 
+      src="/images/owner.jpg" 
+      alt="Shailesh Prakash Magre" 
+      class="founder-avatar"
+      onerror="this.src='https://ui-avatars.com/api/?name=Shailesh+Magre&background=00FFFF&color=0A0F1F&size=260&bold=true'"
+    />
+
+    <div class="founder-info">
+      <h3 class="founder-name">Shailesh Prakash Magre</h3>
+      <p class="founder-title">Founder & Owner – Skillset Tech Institute</p>
+      <p class="founder-bio">
+        Visionary educator and entrepreneur dedicated to bridging the digital skills gap. 
+        Through Skillset Tech Institute, he empowers students with practical, career‑focused 
+        training. He also leads <strong>@booksplanetindia</strong> and <strong>booksplanet.in</strong>, 
+        fostering a culture of continuous learning.
+      </p>
+
+      <div class="founder-links">
+        <a href="index.html" class="founder-link">
+          <i class="fas fa-school"></i> Skillset Institute
+        </a>
+        <a href="https://www.instagram.com/booksplanetindia" target="_blank" rel="noopener" class="founder-link">
+          <i class="fab fa-instagram"></i> @booksplanetindia
+        </a>
+        <a href="https://booksplanet.in" target="_blank" rel="noopener" class="founder-link">
+          <i class="fas fa-globe"></i> booksplanet.in
+        </a>
+        <a href="https://github.com/patangesomnath52-sketch" target="_blank" rel="noopener" class="founder-link">
+          <i class="fab fa-github"></i> GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+    <!-- Founder - GitHub Profile -->
+    <div class="section-title">
+      <h2><span>👨‍💻 Meet Our  Lead Trainer</span></h2>
+    </div>
+
+    <div class="founder-card">
+      <img id="githubAvatar" src="https://avatars.githubusercontent.com/u/0?v=4" alt="Founder" onerror="this.src='https://ui-avatars.com/api/?name=PS&background=ff2d95&color=fff&size=200'">
+      <h3 id="githubName">Loading...</h3>
+      <p class="role"> Lead Technical Trainer</p>
+      <p class="bio" id="githubBio">Passionate about teaching and technology.Lead Trainer at Student Skillset Tech Institute | MERN Stack Developer | Passionate about teaching coding & computer skills | Building the next generation of tech talent 🚀 .</p>
+      
+      
+      <div class="github-stats">
+        <div class="github-stat">
+          <i class="fas fa-code-branch"></i>
+          <span id="githubRepos">0</span>
+          <small>Repositories</small>
+        </div>
+        <div class="github-stat">
+          <i class="fas fa-users"></i>
+          <span id="githubFollowers">0</span>
+          <small>Followers</small>
+        </div>
+        <div class="github-stat">
+          <i class="fas fa-user-plus"></i>
+          <span id="githubFollowing">0</span>
+          <small>Following</small>
+        </div>
+      </div>
+
+      <div class="social-links">
+        <a href="https://github.com/patangesomnath52-sketch" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+    
+       
+        <a href="mailto:patangesomnath52@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+
+    
+
+    
+
+    <!-- Faculty Team -->
+    <div class="section-title">
+      <h2><span>👥 Our Faculty Team</span></h2>
+    </div>
+
+    <!-- <div class="team-grid">
+      <div class="team-card">
+        <img src="" alt="Faculty">
+        <h4>Somnath Patange</h4>
+        <p>Web Development & MERN Stack</p>
+      </div> -->
+      
+      <!-- <div class="team-card">
+  <img src="https://ui-avatars.com/api/?name=Rajesh+Kumar&background=00cec9&color=fff&size=160" alt="Rajesh Kumar">
+  <h4>Rajesh Kumar</h4>
+  <p style="color:var(--secondary); font-weight:500; font-size:0.8rem;">Senior Faculty – Tally & Accounting</p>
+  <p style="color:var(--text-dim); font-size:0.8rem; margin-top:0.5rem;">
+    12+ years experience | 500+ students trained | Certified Tally Trainer
+  </p>
+</div> -->
+
+    <!-- Why Choose Us -->
+    <div class="section-title">
+      <h2><span>⭐ Why Choose Student Skillset?</span></h2>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <i class="fas fa-laptop-code"></i>
+        <h4>Practical Learning</h4>
+        <p>Hands-on projects, not just theory</p>
+      </div>
+      <div class="why-card">
+        <i class="fas fa-chalkboard-teacher"></i>
+        <h4>Expert Faculty</h4>
+        <p>Industry-experienced trainers</p>
+      </div>
+      <div class="why-card">
+        <i class="fas fa-certificate"></i>
+        <h4>Certification</h4>
+        <p>Government-recognized certificates</p>
+      </div>
+      <div class="why-card">
+        <i class="fas fa-briefcase"></i>
+        <h4>Placement Support</h4>
+        <p>Resume building & interview prep</p>
+      </div>
+      <div class="why-card">
+        <i class="fas fa-clock"></i>
+        <h4>Flexible Batches</h4>
+        <p>Morning & evening options</p>
+      </div>
+      <div class="why-card">
+        <i class="fas fa-rupee-sign"></i>
+        <h4>Affordable Fees</h4>
+        <p>Quality education at low cost</p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+  <div class="container footer-grid">
+    <!-- Brand -->
+    <div class="footer-brand">
+      <h4>Student Skillset Tech Institute</h4>
+      <p>Practical Computer Education for Career Success</p>
+    </div>
+
+    <!-- Quick Links -->
+    
+
+    <!-- Social Media Icons -->
+    <div class="footer-social">
+      <a href="https://www.instagram.com/studn.skillset_tech__institute?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://www.facebook.com/yourinstitutehandle" target="_blank" rel="noopener" aria-label="Facebook">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://www.youtube.com/@yourinstitutehandle" target="_blank" rel="noopener" aria-label="YouTube">
+        <i class="fab fa-youtube"></i>
+      </a>
+   
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer-bottom">
+    <p>&copy; 2025 Student Skillset Tech Institute. All rights reserved.</p>
+  </div>
+</footer>
+
+  <a href="https://wa.me/+919604995068" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+ <script src="js/main.js"></script>
+<script>
+    // ===== THEME TOGGLE (using class, no ID needed) =====
+    (function() {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    })();
+
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.className = next === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+
+    // Attach to the existing theme button
+    document.querySelector('.theme-toggle').addEventListener('click', toggleTheme);
+
+    // ===== HAMBURGER MENU (simplified, no mobile menu div needed) =====
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        // Close menu on link click
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+    }
+
+    // ===== FETCH GITHUB PROFILE =====
+    async function loadGitHubProfile() {
+        const username = 'patangesomnath52-sketch';
+        try {
+            const res = await fetch(`https://api.github.com/users/${username}`);
+            if (!res.ok) throw new Error('GitHub API limit');
+            const data = await res.json();
+            
+            document.getElementById('githubAvatar').src = data.avatar_url;
+            document.getElementById('githubName').textContent = data.name || data.login;
+            if (data.bio) document.getElementById('githubBio').textContent = data.bio;
+            document.getElementById('githubRepos').textContent = data.public_repos || 0;
+            document.getElementById('githubFollowers').textContent = data.followers || 0;
+            document.getElementById('githubFollowing').textContent = data.following || 0;
+        } catch (err) {
+            // Keep defaults (they're already in the HTML)
+            document.getElementById('githubName').textContent = 'Somnath Patange';
+            document.getElementById('githubRepos').textContent = '25+';
+            document.getElementById('githubFollowers').textContent = '50+';
+            document.getElementById('githubFollowing').textContent = '30+';
+        }
+    }
+
+    // Run after page loads
+    loadGitHubProfile();
+</script>
+<script>
+  (async function() {
+    try {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+
+      // Apply custom CSS
+      if (data.customCss) {
+        const style = document.createElement('style');
+        style.id = 'admin-custom-css';
+        style.textContent = data.customCss;
+        document.head.appendChild(style);
+      }
+
+      // If you want to update hero text or counters, you can target specific elements here
+      // Example: document.querySelector('.hero h1').textContent = data.heroTitle;
+    } catch (err) {
+      console.log('Settings not loaded, using defaults');
+    }
+  })();
+</script>
+</body>
+</html>

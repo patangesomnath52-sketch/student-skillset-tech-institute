@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Student Skillset Tech Institute | Learn. Build. Grow.</title>
+  <meta name="description" content="Practical computer education for career success." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ============ CORE VARIABLES ============ */
+    :root {
+      --bg: #0a0f1f;
+      --surface: rgba(19, 27, 46, 0.7);
+      --border: #1e2d4a;
+      --heading: #F8FAFC;
+      --text: #CBD5E1;
+      --text-dim: #94A3B8;
+      --text-muted: #64748B;
+      --link: #38BDF8;
+      --link-hover: #60A5FA;
+      --neon: #00FFFF;
+      --neon-glow: rgba(0,255,255,0.35);
+      --neon-hover: #00E5E5;
+      --neon-dark-text: #0A0F1F;
+      --primary: #0066ff;
+      --primary-glow: rgba(0,102,255,0.5);
+      --shadow: 0 8px 32px rgba(0,0,0,0.5);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.6);
+      --radius: 18px;
+      --radius-lg: 28px;
+      --nav-bg: rgba(10, 15, 31, 0.8);
+      --hero-gradient: radial-gradient(circle at 30% 30%, #0f1a3a 0%, #0a0f1f 80%);
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --surface: rgba(255,255,255,0.85);
+      --border: #cbd5e1;
+      --heading: #0f172a;
+      --text: #1e293b;
+      --text-dim: #475569;
+      --text-muted: #64748b;
+      --link: #0284c7;
+      --link-hover: #0369a1;
+      --neon: #00FFFF;
+      --neon-glow: rgba(0,255,255,0.4);
+      --neon-hover: #00E5E5;
+      --neon-dark-text: #0A0F1F;
+      --primary: #2563eb;
+      --primary-glow: rgba(37,99,235,0.3);
+      --shadow: 0 8px 24px rgba(0,0,0,0.06);
+      --shadow-lg: 0 16px 40px rgba(0,0,0,0.08);
+      --nav-bg: rgba(248,250,252,0.8);
+      --hero-gradient: radial-gradient(circle at 30% 30%, #0f1a3a 0%, #0a0f1f 80%);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+      transition: background 0.4s, color 0.4s;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1280px; margin:0 auto; padding:0 1.5rem; position:relative; z-index:1; }
+
+    /* Cursor & effects */
+    .cursor { width:20px; height:20px; border:2px solid var(--neon); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transition:transform 0.1s; mix-blend-mode:difference; }
+    .cursor-dot { width:6px; height:6px; background:var(--neon); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transition:0.05s; }
+    #progress-bar { position:fixed; top:0; left:0; height:3px; background:linear-gradient(to right, var(--neon), var(--primary)); z-index:10000; width:0%; transition:width 0.1s; }
+    #loader { position:fixed; inset:0; background:var(--bg); z-index:10001; display:flex; align-items:center; justify-content:center; flex-direction:column; transition:opacity 0.6s, visibility 0.6s; }
+    #loader.hidden { opacity:0; visibility:hidden; }
+    .spinner { width:50px; height:50px; border:3px solid var(--border); border-top:3px solid var(--neon); border-radius:50%; animation:spin 0.8s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* Navbar */
+    nav {
+      position:fixed; top:1rem; left:50%; transform:translateX(-50%);
+      width:92%; max-width:1200px;
+      background:var(--nav-bg); backdrop-filter:blur(24px);
+      border:1px solid var(--border); border-radius:60px;
+      padding:0.7rem 2rem;
+      display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+      z-index:1000; transition:all 0.4s;
+    }
+    nav.scrolled { background:rgba(10,15,31,0.9); box-shadow:0 10px 40px rgba(0,0,0,0.5); }
+    .logo { font-weight:800; font-size:1.4rem; color:var(--heading); text-decoration:none; letter-spacing:-0.5px; justify-self:start; }
+    .logo span { color:var(--neon); }
+    .nav-links { display:flex; list-style:none; gap:1.5rem; align-items:center; justify-self:center; }
+    .nav-links a { color:var(--text-dim); text-decoration:none; font-weight:500; font-size:0.9rem; transition:color 0.2s; }
+    .nav-links a:hover { color:var(--link-hover); }
+    .dropdown { position:relative; }
+    .dropdown-toggle::after { content:"▾"; font-size:0.7rem; margin-left:4px; }
+    .dropdown-menu {
+      position:absolute; top:100%; left:0;
+      background:var(--nav-bg); backdrop-filter:blur(24px);
+      border:1px solid var(--border); border-radius:16px;
+      padding:0.6rem 0; min-width:210px;
+      display:none; flex-direction:column;
+      box-shadow:var(--shadow-lg); z-index:1001;
+    }
+    .dropdown:hover .dropdown-menu { display:flex; }
+    .dropdown-menu a { padding:0.65rem 1.5rem; color:var(--text-dim); white-space:nowrap; }
+    .dropdown-menu a:hover { background:rgba(255,255,255,0.05); color:var(--link-hover); }
+    .theme-toggle { background:transparent; border:1px solid var(--border); border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-dim); transition:0.2s; justify-self:end; }
+    .theme-toggle:hover { background:var(--surface); color:var(--link-hover); border-color:var(--link-hover); }
+    .hamburger { display:none; flex-direction:column; cursor:pointer; gap:5px; background:none; border:none; padding:10px; justify-self:end; }
+    .hamburger span { width:26px; height:3px; background:var(--text); border-radius:3px; transition:0.3s; }
+
+    /* Mobile menu */
+    .mobile-menu {
+      position:fixed; top:0; right:0; left:auto;
+      width:100%; height:100vh;
+      background:var(--bg); z-index:999;
+      display:flex; flex-direction:column;
+      justify-content:flex-start; align-items:center; gap:1.8rem;
+      transform:translateX(100%); transition:0.4s ease;
+      padding:6rem 2rem 2rem; overflow-y:auto;
+    }
+    .mobile-menu.open { transform:translateX(0); }
+    .mobile-menu a { color:var(--text); font-size:1.3rem; font-weight:600; text-decoration:none; }
+
+    /* Buttons */
+    .btn-neon {
+      position:relative; overflow:hidden;
+      display:inline-block; padding:0.8rem 2rem;
+      border-radius:50px; font-weight:600; font-size:0.95rem;
+      background:var(--neon); color:var(--neon-dark-text);
+      border:none; cursor:pointer; text-decoration:none;
+      box-shadow:0 4px 15px var(--neon-glow), 0 0 0 1px rgba(255,255,255,0.15);
+      transition:all 0.35s ease; letter-spacing:0.3px;
+    }
+    .btn-neon:hover { transform:translateY(-3px); box-shadow:0 0 25px var(--neon-glow), 0 0 50px var(--neon-glow), 0 0 0 2px rgba(255,255,255,0.3); background:var(--neon-hover); }
+
+    /* Hero */
+    .hero { position:relative; overflow:hidden; min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; background:var(--hero-gradient); padding:6rem 1.5rem 3rem; }
+    #particleCanvas { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+    .hero h1 { font-size:clamp(2.5rem, 7vw, 4.8rem); font-weight:900; line-height:1.1; margin-bottom:1.5rem; background:linear-gradient(135deg, #F8FAFC, var(--neon)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .hero p { font-size:1.2rem; color:var(--text-dim); max-width:600px; margin:0 auto 2.5rem; }
+
+    /* Trust Banner, Cards, FAQ, Footer */
+    .trust-banner { background:var(--surface); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:var(--radius); padding:2rem 1.5rem; max-width:900px; margin:-3rem auto 3rem; display:flex; justify-content:space-around; flex-wrap:wrap; gap:2rem; position:relative; z-index:2; }
+    .trust-item { text-align:center; }
+    .trust-item i { font-size:2rem; color:var(--neon); margin-bottom:0.5rem; }
+    .trust-item h3 { font-size:2rem; color:var(--heading); }
+    .trust-item p { font-size:0.85rem; color:var(--text-dim); }
+    .section-title { font-size:clamp(2rem, 5vw, 2.8rem); text-align:center; margin:5rem 0 2.5rem; font-weight:800; color:var(--heading); }
+    .section-title::after { content:''; display:block; width:70px; height:4px; background:linear-gradient(to right, var(--neon), var(--primary)); margin:0.8rem auto 0; border-radius:4px; }
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:1.8rem; }
+    .card { background:var(--surface); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; transition:all 0.35s; position:relative; overflow:hidden; }
+    .card:hover { transform:translateY(-8px); box-shadow:var(--shadow-lg); border-color:var(--neon); }
+    .card i { font-size:2.5rem; color:var(--neon); margin-bottom:1rem; }
+    .card h3 { font-size:1.4rem; margin-bottom:0.5rem; color:var(--heading); }
+    .card p { color:var(--text-dim); }
+    .coming-soon-badge { position:absolute; top:10px; right:10px; background:var(--neon); color:var(--neon-dark-text); font-size:0.7rem; font-weight:700; padding:4px 12px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; pointer-events:none; z-index:2; }
+    details { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1.2rem 1.5rem; margin-bottom:1rem; cursor:pointer; transition:all 0.3s; }
+    details:hover { border-color:var(--neon); }
+    summary { font-weight:600; color:var(--heading); outline:none; list-style:none; display:flex; justify-content:space-between; }
+    summary::-webkit-details-marker { display:none; }
+    summary::after { content:"+"; font-size:1.5rem; color:var(--neon); }
+    details[open] summary::after { content:"−"; }
+    details p { margin-top:1rem; color:var(--text-dim); }
+    footer { background:var(--surface); border-top:1px solid var(--border); padding:3rem 1.5rem 1.5rem; margin-top:5rem; }
+    .footer-grid { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:2rem; max-width:1280px; margin:0 auto; }
+    .footer-brand h4 { color:var(--heading); font-weight:800; margin-bottom:0.3rem; }
+    .footer-brand p { color:var(--text-dim); font-size:0.9rem; }
+    .footer-social { display:flex; gap:1rem; align-items:center; }
+    .footer-social a { display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-dim); font-size:1.1rem; transition:all 0.3s; }
+    .footer-social a:hover { background:var(--neon); color:var(--neon-dark-text); border-color:var(--neon); box-shadow:0 0 15px var(--neon-glow); transform:translateY(-2px); }
+    .footer-bottom { text-align:center; margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border); }
+    .footer-bottom p { color:var(--text-muted); font-size:0.85rem; }
+
+    .float-demo { position:fixed; bottom:2rem; left:2rem; z-index:998; }
+    .whatsapp-float { position:fixed; bottom:2rem; right:2rem; background:#25D366; color:white; width:58px; height:58px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.6rem; box-shadow:0 8px 25px rgba(37,211,102,0.4); z-index:998; transition:transform 0.3s; }
+    .whatsapp-float:hover { transform:scale(1.1); }
+    .mouse-glow { position:fixed; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle, var(--neon-glow) 0%, transparent 70%); pointer-events:none; z-index:-1; transform:translate(-50%, -50%); opacity:0.5; }
+
+    @media (max-width:768px) {
+      nav { grid-template-columns:1fr auto auto; padding:0.7rem 1.5rem; }
+      .nav-links { display:none; }
+      .hamburger { display:flex; }
+      .hero h1 { font-size:2.3rem; }
+      .card-grid { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:480px) {
+      .card-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader, cursor, progress bar, glow -->
+  <div id="loader"><div class="spinner"></div><p style="margin-top:1rem; color:var(--text-dim);">Loading...</p></div>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div id="progress-bar"></div>
+  <div class="mouse-glow" id="mouseGlow"></div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a href="index.html" class="logo">SKILL<span>SET</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li class="dropdown">
+        <a href="courses.html">Courses</a>
+      </li>
+      <li><a href="placements.html">Placements</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contacts.html">Contact</a></li>
+      <li><a href="admissions.html">Register</a></li>
+      <li><a href="signup.html">Sign Up</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle"><i id="themeIcon" class="fas fa-moon"></i></button>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="courses.html">Courses</a>
+    <a href="placements.html">Placements</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="contacts.html">Contact</a>
+    <a href="admissions.html">Register</a>
+    <a href="signup.html">Sign Up</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <canvas id="particleCanvas"></canvas>
+    <div class="hero-content">
+      <h1>Student Skillset<br>Tech Institute</h1>
+      <p>Practical Computer Education for Career Success</p>
+      <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+        <a href="courses.html" class="btn-neon">Explore Courses</a>
+        <a href="admissions.html" class="btn-neon">Apply Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DEMO VIDEO (YOUTUBE EMBED) ===== -->
+  <section class="container">
+    <h2 class="section-title">Watch a Free Demo Class</h2>
+    <p style="text-align:center; color:var(--text-dim); max-width:600px; margin:0 auto 2rem;">
+      See how we teach – a real recorded session from our Web Development course.
+    </p>
+
+    <div style="max-width:800px; margin:0 auto; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-lg);">
+      <div style="position:relative; padding-bottom:56.25%; height:0;">
+        <!-- 👇 Replace YOUR_VIDEO_ID with your actual YouTube video ID -->
+        <iframe 
+          src="https://www.youtube.com/embed/3zu6kwOJqPY?si=5set1xB9dlF-PS1r" 
+          title="Demo Class" 
+          style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+    <p style="text-align:center; margin-top:1rem;">
+      <a href="admissions.html" class="btn-neon">Enroll Now</a>
+    </p>
+  </section>
+
+  <!-- FEATURED COURSES -->
+  <section class="container">
+    <h2 class="section-title">Featured Courses</h2>
+    <div class="card-grid">
+      <div class="card" style="position:relative;">
+        <span class="coming-soon-badge">Coming Soon</span>
+        <i class="fas fa-chart-pie"></i><h3>Data Analyst</h3><p>Excel, SQL, Power BI & Python</p>
+        <a href="https://wa.me/+919604995068?text=I'm%20interested%20in%20Data%20Analyst" target="_blank" class="btn-neon" style="margin-top:1rem; font-size:0.85rem; padding:0.5rem 1.4rem;">Register Interest</a>
+      </div>
+      <div class="card" style="position:relative;">
+        <span class="coming-soon-badge">Coming Soon</span>
+        <i class="fas fa-project-diagram"></i><h3>DSA</h3><p>Data Structures & Algorithms (C++)</p>
+        <a href="https://wa.me/+919604995068?text=I'm%20interested%20in%20DSA" target="_blank" class="btn-neon" style="margin-top:1rem; font-size:0.85rem; padding:0.5rem 1.4rem;">Register Interest</a>
+      </div>
+      <div class="card" style="position:relative;">
+        <span class="coming-soon-badge">Coming Soon</span>
+        <i class="fas fa-code"></i><h3>C++ Programming</h3><p>Object-Oriented Programming</p>
+        <a href="https://wa.me/+919604995068?text=I'm%20interested%20in%20C++" target="_blank" class="btn-neon" style="margin-top:1rem; font-size:0.85rem; padding:0.5rem 1.4rem;">Register Interest</a>
+      </div>
+      <div class="card" style="position:relative;">
+        <span class="coming-soon-badge">Coming Soon</span>
+        <i class="fab fa-python"></i><h3>Python</h3><p>Automation & Data Science</p>
+        <a href="https://wa.me/+919604995068?text=I'm%20interested%20in%20Python" target="_blank" class="btn-neon" style="margin-top:1rem; font-size:0.85rem; padding:0.5rem 1.4rem;">Register Interest</a>
+      </div>
+      <div class="card"><i class="fas fa-code"></i><h3>Web Development</h3><p>MERN Stack</p><a href="admissions.html" class="btn-neon" style="margin-top:1rem; font-size:0.85rem; padding:0.5rem 1.4rem;">Register Now</a></div>
+      <div class="card"><i class="fas fa-chart-line"></i><h3>Digital Marketing</h3><p>SEO, Ads & Social</p><a href="admissions.html" class="btn-neon" style="margin-top:1rem; font-size:0.85rem; padding:0.5rem 1.4rem;">Register Now</a></div>
+      <div class="card"><i class="fas fa-laptop-code"></i><h3>CCC</h3><p>Computer Concepts</p><a href="admissions.html" class="btn-neon" style="margin-top:1rem; font-size:0.85rem; padding:0.5rem 1.4rem;">Register Now</a></div>
+      <div class="card"><i class="fas fa-calculator"></i><h3>Tally Prime</h3><p>GST & Accounting</p><a href="admissions.html" class="btn-neon" style="margin-top:1rem; font-size:0.85rem; padding:0.5rem 1.4rem;">Register Now</a></div>
+      <div class="card"><i class="fas fa-paint-brush"></i><h3>DTP</h3><p>Desktop Publishing</p><a href="admissions.html" class="btn-neon" style="margin-top:1rem; font-size:0.85rem; padding:0.5rem 1.4rem;">Register Now</a></div>
+      <div class="card"><i class="fas fa-keyboard"></i><h3>DTE</h3><p>Data Entry & Typing</p><a href="admissions.html" class="btn-neon" style="margin-top:1rem; font-size:0.85rem; padding:0.5rem 1.4rem;">Register Now</a></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="container">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <details><summary>What is the duration of courses?</summary><p>Most courses range from 3 to 6 months, with flexible batch timings.</p></details>
+    <details><summary>Do you provide certificates?</summary><p>Yes, all courses include a government‑recognized certificate.</p></details>
+    <details><summary>Is there placement assistance?</summary><p>Absolutely! Resume building, mock interviews, and placement support.</p></details>
+    <details><summary>Can I pay fees in installments?</summary><p>Yes, we offer easy EMI options and installment plans.</p></details>
+  </section>
+
+  <!-- REFERRAL BANNER -->
+  <div class="container" style="text-align:center; margin:4rem 0;">
+    <div class="card" style="background:var(--primary); color:white; border:none;">
+      <h3 style="color:white;">💰 Refer & Earn</h3>
+      <p>Share your unique referral link with friends. When they enroll, you both get a <strong>10% discount</strong>!</p>
+      <a href="https://wa.me/+919604995068?text=Hey!%20I%20enrolled%20at%20Student%20Skillset%20Tech%20Institute.%20Use%20my%20referral%20code%20STUDENT10%20for%20a%20discount!" target="_blank" class="btn-neon" style="background:white; color:var(--primary); margin-top:1rem;"><i class="fab fa-whatsapp"></i> Share & Earn</a>
+      <p style="font-size:0.85rem; opacity:0.9; margin-top:0.8rem;">Or send them to: <strong>https://student-skillset-tech-institute.onrender.com/admissions.html</strong></p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <h4>Student Skillset Tech Institute</h4>
+        <p>Practical Computer Education for Career Success</p>
+      </div>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/studn.skillset_tech__institute" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Student Skillset Tech Institute. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- FLOATING BUTTONS -->
+  <a href="https://wa.me/+919604995068" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    // Loader, cursor, scroll progress
+    window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('hidden'), 600));
+    const cursor = document.getElementById('cursor'), cursorDot = document.getElementById('cursorDot');
+    if (window.innerWidth > 768) {
+      document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+        cursorDot.style.left = e.clientX + 'px'; cursorDot.style.top = e.clientY + 'px';
+      });
+    } else {
+      cursor.style.display = 'none'; cursorDot.style.display = 'none'; document.body.style.cursor = 'auto';
+    }
+    const glow = document.getElementById('mouseGlow');
+    if (glow && window.innerWidth > 768) document.addEventListener('mousemove', e => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
+    window.addEventListener('scroll', () => {
+      const scrolled = (document.documentElement.scrollTop / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      document.getElementById('progress-bar').style.width = scrolled + '%';
+      document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Theme toggle
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    function updateThemeIcon(th) { const icon = document.getElementById('themeIcon'); if(icon) icon.className = th === 'dark' ? 'fas fa-sun' : 'fas fa-moon'; }
+    updateThemeIcon(savedTheme);
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcon(next);
+    });
+
+    // Hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => { mobileMenu.classList.toggle('open'); hamburger.classList.toggle('active'); });
+    mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { mobileMenu.classList.remove('open'); hamburger.classList.remove('active'); }));
+
+    // Particle network
+    (function(){
+      const canvas = document.getElementById('particleCanvas'), ctx = canvas.getContext('2d');
+      let w, h, particles = [];
+      const maxP = 70, dist = 130;
+      function resize() { w = canvas.width = canvas.offsetWidth; h = canvas.height = canvas.offsetHeight; }
+      window.addEventListener('resize', resize); resize();
+      class Particle {
+        constructor(){ this.x = Math.random()*w; this.y = Math.random()*h; this.vx = (Math.random()-0.5)*0.5; this.vy = (Math.random()-0.5)*0.5; this.r = Math.random()*2.2+0.8; }
+        update(){ this.x += this.vx; this.y += this.vy; if(this.x<0||this.x>w) this.vx*=-1; if(this.y<0||this.y>h) this.vy*=-1; }
+        draw(){ ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI*2); ctx.fillStyle='rgba(0,255,255,0.7)'; ctx.fill(); }
+      }
+      for(let i=0;i<maxP;i++) particles.push(new Particle());
+      function connect(){
+        for(let i=0;i<particles.length;i++)
+          for(let j=i+1;j<particles.length;j++){
+            const dx = particles[i].x-particles[j].x, dy = particles[i].y-particles[j].y, d = Math.sqrt(dx*dx+dy*dy);
+            if(d<dist){ ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.strokeStyle=`rgba(0,255,255,${1-d/dist})`; ctx.lineWidth=0.5; ctx.stroke(); }
+          }
+      }
+      function animate(){ ctx.clearRect(0,0,w,h); particles.forEach(p=>{p.update();p.draw();}); connect(); requestAnimationFrame(animate); }
+      animate();
+    })();
+  </script>
+</body>
+</html>

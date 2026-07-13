@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <link rel="stylesheet" href="style.css">
+  <form action="/api/admissions" method="POST" enctype="multipart/form-data">
+    <input type="text" name="fullName" value="Test" required>
+    <input type="text" name="mobile" value="1234567890" required>
+    <input type="email" name="email" value="test@test.com" required>
+    <input type="file" name="photo" required>
+    <input type="file" name="aadhaar" required>
+    <input type="file" name="marksheet" required>
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>
