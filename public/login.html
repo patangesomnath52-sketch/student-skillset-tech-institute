@@ -30,10 +30,12 @@
       width: 100%;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      transition: all 0.3s;
     }
     .logo-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
     h2 { font-weight: 800; font-size: 1.5rem; color: var(--heading); margin-bottom: 0.3rem; }
     .subtitle { color: var(--text-dim); margin-bottom: 1.8rem; font-size: 0.9rem; }
+
     .form-group { margin-bottom: 1.1rem; text-align: left; }
     .form-group label {
       display: flex; align-items: center; gap: 6px;
@@ -49,6 +51,7 @@
       border-color: var(--neon);
       box-shadow: 0 0 0 3px rgba(0,255,255,0.1);
     }
+
     .btn-neon {
       width: 100%; padding: 14px; border-radius: 50px;
       font-weight: 600; font-size: 1rem;
@@ -61,11 +64,13 @@
     }
     .btn-neon:hover { background: var(--neon-hover); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,255,255,0.5); }
     .btn-neon:disabled { opacity: 0.6; cursor: not-allowed; }
+
     .divider {
       display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0;
       color: var(--text-dim); font-size: 0.85rem;
     }
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
     .google-btn {
       width: 100%; padding: 14px; border-radius: 50px;
       border: 2px solid var(--border); background: transparent;
@@ -74,6 +79,7 @@
       transition: all 0.3s; margin-bottom: 1.5rem;
     }
     .google-btn:hover { background: var(--surface-hover); border-color: var(--neon); color: var(--neon); }
+
     .error-msg { color: #EF4444; font-size: 0.85rem; margin-top: 0.5rem; display: none; }
     .auth-link { margin-top: 1.5rem; color: var(--text-dim); font-size: 0.9rem; }
     .auth-link a { color: var(--neon); text-decoration: none; font-weight: 600; }
@@ -113,59 +119,57 @@
     <p style="text-align:right; margin:0.8rem 0 0;">
       <a href="#" id="forgotPassword" style="color:var(--neon); font-size:0.85rem; text-decoration:none;">Forgot password?</a>
     </p>
-    <p class="auth-link">Don't have an account? <a href="registrations.html">Create one</a></p>
+    <p class="auth-link">Don't have an account? <a href="signup.html">Create one</a></p>
   </div>
 
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyAsKJHRE1kzAdlVBXhRxcZF3yXAbdHRCrc",
-      authDomain: "wallpaperfeed-577a7.firebaseapp.com",
-      databaseURL: "https://wallpaperfeed-577a7-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "wallpaperfeed-577a7",
-      storageBucket: "wallpaperfeed-577a7.firebasestorage.app",
-      messagingSenderId: "560156190506",
-      appId: "1:560156190506:web:cbc8482e912b05805ee053",
-      measurementId: "G-H8K993NRGN"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    // Redirect if already logged in
+    auth.onAuthStateChanged(user => {
+      if (user) window.location.href = 'student-dashboard.html';
+    });
 
+    // Google sign‑in
     function signInWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider)
         .then(() => window.location.href = 'student-dashboard.html')
-        .catch(err => alert('Google Sign-In failed: ' + err.message));
+        .catch(err => alert('Google Sign‑In failed: ' + err.message));
     }
 
-    auth.onAuthStateChanged(user => { if (user) window.location.href = 'student-dashboard.html'; });
-
+    // Email/password login
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
+
       document.getElementById('loginText').classList.add('hidden');
       document.getElementById('loginLoader').classList.remove('hidden');
       document.getElementById('loginError').style.display = 'none';
+
       try {
         await auth.signInWithEmailAndPassword(email, password);
         window.location.href = 'student-dashboard.html';
       } catch (err) {
         document.getElementById('loginError').style.display = 'block';
         document.getElementById('loginError').textContent = err.message;
+      } finally {
         document.getElementById('loginText').classList.remove('hidden');
         document.getElementById('loginLoader').classList.add('hidden');
       }
     });
 
+    // Forgot password
     document.getElementById('forgotPassword').addEventListener('click', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value || prompt('Enter your email:');
       if (email) {
         try {
           await auth.sendPasswordResetEmail(email);
-          alert('✅ Password reset email sent!');
+          alert('✅ Password reset email sent! Check your inbox.');
         } catch (err) { alert('Error: ' + err.message); }
       }
     });

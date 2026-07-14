@@ -2,100 +2,137 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Dashboard – Skillset</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <title>Student Dashboard – Skillset Tech Institute</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    .dashboard { max-width:900px; margin:0 auto; padding:100px 16px 40px; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-top: 100px;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
     .profile-card {
-      background:var(--surface); border:1px solid var(--border); border-radius:20px;
-      padding:2rem; text-align:center; margin-bottom:1.5rem;
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-lg);
     }
-    .profile-card img { width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:1rem; }
-    .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1rem; margin-bottom:1.5rem; }
-    .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.5rem; text-align:center; }
-    .stat-card h3 { font-size:2rem; color:var(--secondary); }
-    .course-list { list-style:none; }
+    .profile-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid var(--neon);
+      box-shadow: 0 0 20px var(--neon-glow);
+      margin-bottom: 1rem;
+    }
+    .course-list {
+      list-style: none;
+      padding: 0;
+    }
     .course-list li {
-      background:var(--surface); border:1px solid var(--border); border-radius:12px;
-      padding:1rem; margin-bottom:0.8rem; display:flex; justify-content:space-between; align-items:center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(12px);
     }
-    .badge { padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:600; }
-    .badge-active { background:#28a745; color:white; }
-    .badge-pending { background:#ffc107; color:#000; }
-    .logout-btn { background:red; color:white; border:none; padding:12px 24px; border-radius:50px; cursor:pointer; margin-top:1rem; }
+    .status-badge {
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .status-pending { background: #F59E0B; color: #000; }
+    .status-reviewed { background: #3B82F6; color: #fff; }
+    .status-approved { background: #10B981; color: #fff; }
+
+    .logout-btn {
+      display: inline-block;
+      padding: 0.7rem 2rem;
+      border-radius: 50px;
+      background: #EF4444;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 2rem;
+    }
+    .logout-btn:hover { background: #DC2626; }
   </style>
 </head>
 <body>
-  <div class="dashboard">
+  <div class="container">
     <div class="profile-card">
-      <img src="https://ui-avatars.com/api/?name=Student&background=ff2d95&color=fff&size=100" id="profilePic" alt="Profile">
-      <h2 id="studentName">Welcome!</h2>
+      <img id="profilePic" src="https://ui-avatars.com/api/?name=Student&background=00FFFF&color=0A0F1F&size=200" alt="Profile">
+      <h2 id="studentName" style="color:var(--heading);">Welcome!</h2>
       <p id="studentEmail" style="color:var(--text-dim);"></p>
     </div>
 
-    <div class="stats-grid">
-      <div class="stat-card"><h3 id="totalCourses">0</h3><p>Enrolled Courses</p></div>
-      <div class="stat-card"><h3 id="attendance">0%</h3><p>Attendance</p></div>
-      <div class="stat-card"><h3 id="certificates">0</h3><p>Certificates</p></div>
-    </div>
-
-    <h3 style="margin-bottom:1rem;">My Courses</h3>
+    <h3 style="color:var(--heading); margin-bottom:1rem;">📚 My Enrollments</h3>
     <ul class="course-list" id="courseList">
       <li style="color:var(--text-dim);">Loading courses...</li>
     </ul>
 
-    <button class="logout-btn" onclick="logout()">Logout</button>
+    <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
   </div>
 
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
   <script>
-   const firebaseConfig = {
-  apiKey: "AIzaSyAsKJHRE1kzAdlVBXhRxcZF3yXAbdHRCrc",
-  authDomain: "wallpaperfeed-577a7.firebaseapp.com",
-  databaseURL: "https://wallpaperfeed-577a7-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "wallpaperfeed-577a7",
-  storageBucket: "wallpaperfeed-577a7.firebasestorage.app",
-  messagingSenderId: "560156190506",
-  appId: "1:560156190506:web:cbc8482e912b05805ee053",
-  measurementId: "G-H8K993NRGN"
-};
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
+    // Redirect to login if not authenticated
     auth.onAuthStateChanged(async (user) => {
-      if (!user) { window.location.href = 'login.html'; return; }
-      
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Display user info
       document.getElementById('studentName').textContent = user.displayName || 'Student';
       document.getElementById('studentEmail').textContent = user.email;
 
+      // Fetch enrollments from backend
       const token = await user.getIdToken();
       try {
         const res = await fetch('/api/student/profile', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
-        document.getElementById('totalCourses').textContent = data.enrolledCourses?.length || 0;
-        document.getElementById('attendance').textContent = (data.attendance || 0) + '%';
-        document.getElementById('certificates').textContent = data.certificates?.length || 0;
-        
+
         const courseList = document.getElementById('courseList');
-        courseList.innerHTML = (data.enrolledCourses || []).map(c => `
-          <li>
-            <span>${c.courseName}</span>
-            <span class="badge badge-active">${c.status}</span>
-          </li>
-        `).join('') || '<li style="color:var(--text-dim);">No courses yet</li>';
+        courseList.innerHTML = (data.enrollments || []).length > 0
+          ? data.enrollments.map(c => `
+              <li>
+                <span>${c.courseTitle}</span>
+                <span class="status-badge status-${c.status || 'pending'}">${c.status || 'pending'}</span>
+              </li>
+            `).join('')
+          : '<li style="color:var(--text-dim);">No enrollments yet. <a href="admissions.html" style="color:var(--neon);">Register for a course</a></li>';
       } catch (err) {
-        console.error(err);
+        document.getElementById('courseList').innerHTML = '<li style="color:red;">Failed to load courses.</li>';
       }
     });
 
     function logout() {
-      auth.signOut().then(() => window.location.href = 'login.html');
+      auth.signOut().then(() => {
+        window.location.href = 'login.html';
+      });
     }
   </script>
 </body>

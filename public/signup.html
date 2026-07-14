@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
-  <title>Sign Up – Skillset Tech Institute</title>
+  <title>Create Account – Skillset Tech Institute</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -34,6 +34,7 @@
     .logo-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
     h2 { font-weight: 800; font-size: 1.5rem; color: var(--heading); margin-bottom: 0.3rem; }
     .subtitle { color: var(--text-dim); margin-bottom: 1.8rem; font-size: 0.9rem; }
+
     .form-group { margin-bottom: 1.1rem; text-align: left; }
     .form-group label {
       display: flex; align-items: center; gap: 6px;
@@ -50,6 +51,7 @@
       box-shadow: 0 0 0 3px rgba(0,255,255,0.1);
     }
     select option { background: var(--bg); color: var(--text); }
+
     .btn-neon {
       width: 100%; padding: 14px; border-radius: 50px;
       font-weight: 600; font-size: 1rem;
@@ -62,6 +64,7 @@
     }
     .btn-neon:hover { background: var(--neon-hover); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,255,255,0.5); }
     .btn-neon:disabled { opacity: 0.6; cursor: not-allowed; }
+
     .auth-link { margin-top: 1.5rem; color: var(--text-dim); font-size: 0.9rem; }
     .auth-link a { color: var(--neon); text-decoration: none; font-weight: 600; }
     .auth-link a:hover { text-decoration: underline; }
@@ -111,21 +114,15 @@
     <p class="auth-link">Already have an account? <a href="login.html">Sign in</a></p>
   </div>
 
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyAsKJHRE1kzAdlVBXhRxcZF3yXAbdHRCrc",
-      authDomain: "wallpaperfeed-577a7.firebaseapp.com",
-      databaseURL: "https://wallpaperfeed-577a7-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "wallpaperfeed-577a7",
-      storageBucket: "wallpaperfeed-577a7.firebasestorage.app",
-      messagingSenderId: "560156190506",
-      appId: "1:560156190506:web:cbc8482e912b05805ee053",
-      measurementId: "G-H8K993NRGN"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    // Redirect if already logged in
+    auth.onAuthStateChanged(user => {
+      if (user) window.location.href = 'student-dashboard.html';
+    });
 
     document.getElementById('signupForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -148,12 +145,12 @@
       document.getElementById('signupBtn').disabled = true;
 
       try {
-        // 1. Create Firebase account (this also logs the user in)
+        // Create Firebase account (auto‑login)
         const userCred = await auth.createUserWithEmailAndPassword(email, password);
         await userCred.user.updateProfile({ displayName: fullName });
         const token = await userCred.user.getIdToken();
 
-        // 2. Save to backend
+        // Save to backend
         await fetch('/api/admissions', {
           method: 'POST',
           headers: {
@@ -167,7 +164,7 @@
           })
         });
 
-        // 3. Success → go directly to dashboard (already logged in)
+        // Success – go to dashboard (already logged in)
         window.location.href = 'student-dashboard.html';
       } catch (err) {
         if (err.code === 'auth/email-already-in-use') {
