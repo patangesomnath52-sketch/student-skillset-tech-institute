@@ -47,10 +47,7 @@ try {
   app.use('/api/paid-courses', require('./routes/paidCourses'));
   console.log('Paid Courses route loaded');
 } catch (e) { console.error('Paid Courses route error:', e.message); }
-try {
-  app.use('/api/settings', require('./routes/settings'));
-  console.log('Settings route loaded');
-} catch (e) { console.error('Settings route error:', e.message); }
+
 try {
   app.use('/api/gallery', require('./routes/gallery'));
   console.log('Gallery route loaded');
