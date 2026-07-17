@@ -9,4 +9,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping URL
-        run: curl -I https://your-render-app-name.onrender.com
+        run: curl -I https://student-skillset-tech-institute-6jpd.onrender.com
+
