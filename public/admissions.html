@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Registration page specific */
     body {
       font-family: 'Inter', sans-serif;
       background: var(--bg);
@@ -21,7 +20,6 @@
       margin: 0;
       padding: 100px 16px 40px;
     }
-
     .container {
       background: var(--surface);
       backdrop-filter: blur(20px);
@@ -32,63 +30,42 @@
       width: 100%;
       box-shadow: var(--shadow-lg);
     }
-
     .logo-icon { text-align: center; font-size: 2.8rem; margin-bottom: 0.5rem; }
     h1 { text-align: center; font-weight: 800; font-size: 1.6rem; margin-bottom: 0.2rem; color: var(--heading); }
     .subtitle { text-align: center; color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem; }
 
     label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin: 1rem 0 0.3rem;
-      color: var(--secondary);
-      font-weight: 500;
-      font-size: 0.85rem;
+      display: flex; align-items: center; gap: 6px;
+      margin: 1rem 0 0.3rem; color: var(--secondary); font-weight: 500; font-size: 0.85rem;
     }
     label i { width: 16px; font-size: 0.85rem; }
 
     input, select {
-      width: 100%;
-      padding: 14px 16px;
-      background: var(--bg);
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.95rem;
-      transition: all 0.3s;
-      outline: none;
-      appearance: none;
+      width: 100%; padding: 14px 16px;
+      background: var(--bg); border: 2px solid var(--border);
+      border-radius: 12px; color: var(--text); font-family: inherit; font-size: 0.95rem;
+      transition: all 0.3s; outline: none; appearance: none;
     }
     select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px;
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
     }
     input:focus, select:focus {
-      border-color: var(--neon);
-      box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.2);
+      border-color: var(--neon); box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.2);
     }
     select option { background: var(--bg); color: var(--text); }
 
-    /* Neon button */
     .btn-neon {
       position: relative; overflow: hidden;
-      display: block; width: 100%; padding: 15px;
-      border-radius: 50px; font-weight: 600; font-size: 1.05rem;
-      background: var(--neon, #00FFFF);
-      color: var(--neon-dark-text, #0A0F1F);
+      display: block; width: 100%; padding: 15px; border-radius: 50px;
+      font-weight: 600; font-size: 1.05rem;
+      background: var(--neon, #00FFFF); color: var(--neon-dark-text, #0A0F1F);
       border: none; cursor: pointer; text-decoration: none;
       box-shadow: 0 4px 15px var(--neon-glow, rgba(0,255,255,0.3));
-      transition: all 0.35s ease; letter-spacing: 0.3px;
-      margin-top: 1.5rem;
+      transition: all 0.35s ease; letter-spacing: 0.3px; margin-top: 1.5rem;
     }
     .btn-neon::before {
-      content: "";
-      position: absolute;
-      top: 0; left: -100%;
+      content: ""; position: absolute; top: 0; left: -100%;
       width: 100%; height: 100%;
       background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
       transition: left 0.5s ease;
@@ -103,11 +80,7 @@
 
     .hidden { display: none !important; }
 
-    .success-box {
-      display: none;
-      text-align: center;
-      padding: 2rem 1rem;
-    }
+    .success-box { display: none; text-align: center; padding: 2rem 1rem; }
     .success-box .check { font-size: 3.5rem; margin-bottom: 1rem; }
     .success-box h2 { font-weight: 800; font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--heading); }
     .success-box p { color: var(--text-dim); font-size: 0.9rem; }
@@ -115,16 +88,26 @@
 </head>
 <body>
 
-  <!-- ========== NAVBAR (same as index) ========== -->
+  <!-- ========== NAVBAR ========== -->
   <nav id="navbar">
     <a href="index.html" class="logo">SKILL<span>SET</span></a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li class="dropdown">
-        <a href="courses.html" >Courses</a>
-        <div >
-      
+        <a href="courses.html">Courses</a>
+        <div class="dropdown-menu">
+          <a href="courses.html?course=ccc">CCC</a>
+          <a href="courses.html?course=tally">Tally Prime</a>
+          <a href="courses.html?course=dtp">DTP</a>
+          <a href="courses.html?course=dte">DTE</a>
+          <a href="courses.html?course=web">Web Development</a>
+          <a href="courses.html?course=digital">Digital Marketing</a>
+          <a href="courses.html?course=da">Data Analyst</a>
+          <a href="courses.html?course=dsa">DSA</a>
+          <a href="courses.html?course=cpp">C++</a>
+          <a href="courses.html?course=python">Python</a>
+        </div>
       </li>
       <li><a href="placements.html">Placements</a></li>
       <li><a href="gallery.html">Gallery</a></li>
@@ -145,7 +128,7 @@
     <a href="gallery.html">Gallery</a>
     <a href="contacts.html">Contact</a>
     <a href="admissions.html">Register</a>
-    
+    <a href="signup.html">Sign Up</a>
   </div>
 
   <!-- ========== REGISTRATION FORM ========== -->
@@ -206,33 +189,73 @@
   </div>
 
   <a href="https://wa.me/+919604995068" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-<script>
-  (async function() {
-    try {
-      const res = await fetch('/api/settings');
-      const data = await res.json();
 
-      // Apply custom CSS
-      if (data.customCss) {
-        const style = document.createElement('style');
-        style.id = 'admin-custom-css';
-        style.textContent = data.customCss;
-        document.head.appendChild(style);
+  <!-- Firebase & Auth (for navbar state, not required for this form) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+
+  <!-- Form submission handler -->
+  <script>
+    // ===== FORM SUBMISSION =====
+    document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const fullName = document.getElementById('fullName').value.trim();
+      const mobile = document.getElementById('mobile').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const course = document.getElementById('course').value;
+      const qualification = document.getElementById('qualification').value;
+
+      if (!fullName || !mobile || !email || !course) {
+        alert('⚠️ Please fill all required fields');
+        return;
       }
 
-      // If you want to update hero text or counters, you can target specific elements here
-      // Example: document.querySelector('.hero h1').textContent = data.heroTitle;
-    } catch (err) {
-      console.log('Settings not loaded, using defaults');
+      const submitText = document.getElementById('submitText');
+      const submitLoader = document.getElementById('submitLoader');
+      const submitBtn = document.getElementById('submitBtn');
+      submitText.classList.add('hidden');
+      submitLoader.classList.remove('hidden');
+      submitBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/admissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fullName,
+            mobile,
+            email,
+            course,
+            qualification,
+            status: 'pending'
+          })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          document.getElementById('formSection').style.display = 'none';
+          document.getElementById('successBox').style.display = 'block';
+        } else {
+          alert('❌ ' + (data.error || 'Registration failed. Please try again.'));
+        }
+      } catch (err) {
+        alert('❌ Network error. Please check your connection and try again.');
+      } finally {
+        submitText.classList.remove('hidden');
+        submitLoader.classList.add('hidden');
+        submitBtn.disabled = false;
+      }
+    });
+
+    function resetForm() {
+      document.getElementById('registrationForm').reset();
+      document.getElementById('formSection').style.display = 'block';
+      document.getElementById('successBox').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  })();
-</script>
-  <!-- ========== SCRIPTS ========== -->
- <!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-<script src="js/firebase-config.js"></script>
-<script src="js/auth.js"></script>
- 
+  </script>
 </body>
 </html>
