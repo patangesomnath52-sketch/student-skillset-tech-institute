@@ -1,0 +1,13 @@
+name: Keep Alive
+on:
+  schedule:
+    - cron: '*/10 * * * *' # यह हर 10 मिनट में आपकी साइट को पिंग करेगा
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping URL
+        run: curl -I https://student-skillset-tech-institute-6jpd.onrender.com
+
